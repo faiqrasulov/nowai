@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NowAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300..700&display=swap">
+<style>
+  :root { --green: #0E5A3C; --ink: #1B2420; --grey: #5A635E; --rule: #D9DEDA; --paper: #FAFAF7; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Onest', Arial, sans-serif; font-size: 18px; line-height: 1.5; }
+  main { max-width: 760px; margin: 0 auto; padding: 64px max(20px, env(safe-area-inset-left, 0px)) 48px; }
+  h1 { font-size: clamp(38px, 7vw, 60px); font-weight: 400; line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 20px; text-wrap: balance; }
+  h1 span { color: var(--green); }
+  .lead { font-size: 21px; color: var(--grey); margin: 0 0 16px; }
+  .note { font-size: 16px; color: var(--grey); margin: 0 0 44px; }
+  h2 { font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); margin: 40px 0 8px; }
+  a.row { display: flex; justify-content: space-between; gap: 20px; align-items: baseline; padding: 15px 0; border-top: 1px solid var(--rule); color: inherit; text-decoration: none; }
+  a.row:hover b, a.row:focus-visible b { color: var(--green); }
+  a.row b { font-weight: 600; }
+  a.row span { color: var(--grey); font-size: 16px; text-align: right; }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 15px; color: var(--grey); }
+  @media (max-width: 560px) { a.row { flex-direction: column; gap: 2px; } a.row span { text-align: left; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Clients send photos. The books write themselves. <span>The accountant approves.</span></h1>
+  <p class="lead">NowAI: a planned AI back office for Azerbaijani small firms, run by their accountant.</p>
+  <p class="note">Draft, November 2026. There is no product, customer or revenue yet. The demo is a scripted prototype, and every company, person and number in it is fictional.</p>
+
+  <h2>See it</h2>
+  <a class="row" href="demo.html"><b>Product demo</b><span>What it would do for an accounting practice</span></a>
+  <a class="row" href="blueprint.html"><b>Blueprint</b><span>The backend, one receipt, and the route to $1B</span></a>
+  <a class="row" href="deck.html"><b>Investor deck</b><span>27 slides on the web</span></a>
+
+  <h2>Read it</h2>
+  <a class="row" href="NowAI_Investor_Deck.pdf"><b>Investor deck</b><span>PDF</span></a>
+  <a class="row" href="NowAI_Six_Pager.pdf"><b>Six-pager</b><span>PDF, the full argument in prose</span></a>
+  <a class="row" href="NowAI_Investment_Memo.pdf"><b>Investment memo</b><span>PDF, with the evidence and risks</span></a>
+  <a class="row" href="NowAI_Model_Summary.pdf"><b>Financial model summary</b><span>PDF, results and the path to $1B</span></a>
+  <a class="row" href="Latest_1B_Companies.pdf"><b>The latest $1B companies</b><span>PDF, figures checked 6 November 2026</span></a>
+  <a class="row" href="NowAI_Backend_Design.pdf"><b>Backend design note</b><span>PDF</span></a>
+
+  <h2>Keep it</h2>
+  <a class="row" href="NowAI_Share_Pack.zip"><b>Everything above</b><span>Zip file</span></a>
+
+  <footer>The live reading test in the demo only works when the page is opened inside Claude. Everywhere else it shows the scripted films.</footer>
+</main>
+</body>
+</html>

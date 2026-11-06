@@ -1,0 +1,2776 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>NowAI Demo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300..700&display=swap">
+<style>
+/* Layout concept: a white page of huge light type, with dark cinema panels that carry the product. */
+:root {
+  --bg: #FFFFFF;
+  --bar: #FFFFFFEB;
+  --ink: #0F1C18;
+  --ink-2: #33423D;
+  --mute: #5E6D68;
+  --mute-2: #8B9893;
+  --line: #E2E8E5;
+  --soft: #F3F6F4;
+  --white: #FFFFFF;
+
+  --green: #0E5A3C;
+  --act: #12A06A;
+  --act-2: #0C8456;
+  --act-soft: #E2F4EB;
+  --blue-soft: #E7F0FB;
+  --blue-line: #CFE0F5;
+  --blue-ink: #24446B;
+  --amber: #A9650C;
+  --amber-dot: #E0A030;
+  --amber-soft: #FBF0DC;
+  --red: #B23A1E;
+  --red-soft: #FAE8E2;
+  --stamp: #B23A1E;
+
+  --film-a: #6D7E84;
+  --film-b: #40525A;
+  --film-c: #1A3A32;
+  --film-d: #07201A;
+  --film-text: #E8EFEC;
+  --film-text-2: #FFFFFFA6;
+  --film-glass: #FFFFFF1F;
+  --film-glass-2: #FFFFFF3D;
+  --bezel: #0B1512;
+  --chat-bg: #EEF2F0;
+  --bub-me: #D9F2E4;
+  --mark-dot: #3DDC97;
+  --photo-a: #9AA8A1;
+  --photo-b: #75857D;
+  --paper-ink: #1B2421;
+  --paper-2: #4A5551;
+  --paper-3: #6A7570;
+  --paper-line: #D5DBD8;
+  --film-glow: #93A6AD;
+  --film-glow-0: #93A6AD00;
+  --bezel-edge: #FFFFFF14;
+  --act-0: #12A06A00;
+  --act-17: #12A06A2B;
+  --act-20: #12A06A33;
+  --act-35: #12A06A59;
+  --act-40: #12A06A66;
+  --sh-soft: #0F1C1826;
+  --sh-30: #02120D4D;
+  --sh-35: #02120D59;
+  --sh-40: #02120D66;
+  --sh-50: #02120D80;
+  --sh-70: #02120DB3;
+  --sh-80: #02120DCC;
+  --backdrop: #06140FE6;
+
+  --font: "Onest", "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --page: 1240px;
+  --r-film: 28px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+html.film-open { overflow: hidden; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+h1, h2, h3, p, figure { margin: 0; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+/* ---------- Top bar ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bar); backdrop-filter: blur(12px); }
+.top-in {
+  max-width: calc(var(--page) + 64px); margin: 0 auto; height: 62px;
+  display: flex; align-items: center; gap: 28px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; font-weight: 600; font-size: 18px; letter-spacing: -.01em; }
+.mark { display: block; flex: none; }
+.mk-a { fill: var(--green); }
+.mk-b { fill: none; stroke: var(--white); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+.mk-c { fill: var(--mark-dot); stroke: var(--green); stroke-width: 0; }
+.links { display: flex; gap: 22px; margin-right: auto; }
+.links a { text-decoration: none; color: var(--mute); font-size: 14.5px; }
+.links a:hover { color: var(--ink); }
+.tag {
+  font-size: 12.5px; color: var(--amber); background: var(--amber-soft);
+  padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+}
+.lang { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--soft); }
+.lang button {
+  border: 0; background: transparent; padding: 4px 11px; border-radius: 999px; cursor: pointer;
+  font-size: 12.5px; font-weight: 500; color: var(--mute);
+}
+.lang button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 1px 3px var(--sh-soft); }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, label:focus-visible {
+  outline: 2px solid var(--act); outline-offset: 2px; border-radius: 6px;
+}
+
+/* ---------- Page ---------- */
+.page {
+  display: block; max-width: calc(var(--page) + 64px); margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 900px) {
+  .page, .top-in {
+    padding-left: max(32px, env(safe-area-inset-left, 0px));
+    padding-right: max(32px, env(safe-area-inset-right, 0px));
+  }
+}
+.hero { padding-block: clamp(28px, 3.4vw, 48px) 0; display: flex; flex-direction: column; }
+h1 {
+  font-size: clamp(40px, 5.4vw, 74px); font-weight: 300; line-height: 1.05; letter-spacing: -.028em;
+  text-wrap: balance; max-width: 15.5em;
+}
+h1 .you { color: var(--green); }
+.lead { margin-top: 14px; font-size: clamp(18px, 2vw, 23px); font-weight: 300; color: var(--mute); max-width: 44em; line-height: 1.35; }
+.hero .cinema { margin-top: clamp(24px, 2.6vw, 34px); }
+.problem { padding-block: clamp(56px, 8vw, 104px); }
+.problem p { font-size: clamp(25px, 3.5vw, 44px); font-weight: 300; line-height: 1.16; letter-spacing: -.018em; max-width: 25em; text-wrap: pretty; }
+.problem .dim { color: var(--mute-2); }
+
+/* ---------- Cinema panel ---------- */
+[data-film="hero"] { --ww: 1120; --wh: 610; }
+.cinema { position: relative; width: 100%; min-width: 0; border-radius: var(--r-film); container-type: inline-size; }
+.screen {
+  position: relative; overflow: hidden; isolation: isolate; border-radius: inherit;
+  aspect-ratio: var(--ww) / var(--wh); max-width: 100%;
+  background:
+    radial-gradient(120% 80% at 16% -12%, var(--film-glow) 0%, var(--film-glow-0) 62%),
+    linear-gradient(180deg, var(--film-a) 0%, var(--film-b) 28%, var(--film-c) 68%, var(--film-d) 100%);
+}
+.screen::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .34; mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.stage {
+  position: absolute; left: 0; top: 0; z-index: 3; transform-origin: 0 0;
+  width: calc(var(--ww) * 1px); height: calc(var(--wh) * 1px);
+  transform: scale(tan(atan2(100cqw, calc(var(--ww) * 1px))));
+  font-size: 14.5px; line-height: 1.42; color: var(--ink);
+}
+.chrome {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; pointer-events: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 0 12px 11px 18px; color: var(--film-text-2); font-size: 12px;
+}
+.ctl { display: inline-flex; gap: 6px; pointer-events: auto; }
+.rb {
+  width: 30px; height: 30px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+  display: grid; place-items: center; background: var(--film-glass); color: var(--white);
+}
+.rb:hover { background: var(--film-glass-2); }
+.rb:focus-visible { outline: 2px solid var(--white); outline-offset: 1px; border-radius: 50%; }
+.cinema.expanded {
+  position: fixed; inset: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+  width: auto; z-index: 100; box-shadow: 0 0 0 100vmax var(--backdrop);
+}
+.cinema.expanded .screen { height: 100%; aspect-ratio: auto; }
+
+/* Film cursor. The tip of the arrow is the logical point. */
+.cur { position: absolute; left: -3px; top: -2px; width: 26px; height: 30px; opacity: 0; z-index: 40; pointer-events: none; transform-origin: 3px 2px; filter: drop-shadow(0 3px 4px var(--sh-40)); }
+.cur svg { display: block; }
+.cur-a { fill: var(--white); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.ring { position: absolute; left: -24px; top: -24px; width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--act); opacity: 0; z-index: 39; pointer-events: none; }
+.tr { opacity: 0; visibility: hidden; }
+.ghost { visibility: hidden; }
+.caret { display: inline-block; width: 1.5px; height: 1.05em; margin: 0 -1.5px -.16em 0; background: currentColor; }
+
+/* ---------- Shared film parts ---------- */
+.card {
+  position: absolute; background: var(--white); border-radius: 20px; overflow: hidden;
+  box-shadow: 0 44px 80px -34px var(--sh-70), 0 14px 30px -14px var(--sh-50);
+}
+.c-head { display: flex; align-items: center; gap: 9px; height: 52px; padding: 0 18px; border-bottom: 1px solid var(--line); font-size: 14.5px; white-space: nowrap; }
+.c-head b { font-weight: 600; }
+.c-sub { color: var(--mute); }
+.c-tag { margin-left: auto; font-size: 12.5px; color: var(--green); background: var(--act-soft); padding: 3px 10px; border-radius: 999px; }
+.c-chip { font-size: 11px; color: var(--green); background: var(--act-soft); padding: 1px 7px; border-radius: 6px; font-weight: 500; }
+.c-foot { display: flex; align-items: center; justify-content: flex-end; gap: 14px; padding: 12px 18px 16px; }
+.tick { display: inline-block; vertical-align: -2px; flex: none; }
+.tick path { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.btn {
+  display: inline-grid; grid-template-columns: auto auto; align-items: center; column-gap: 7px;
+  height: 38px; padding: 0 17px; border-radius: 10px; font-weight: 600; font-size: 14px;
+  background: var(--green); color: var(--white); white-space: nowrap;
+}
+.btn .b-t { display: none; line-height: 0; }
+.btn .t-a, .btn .t-b { grid-area: 1 / 2; }
+.btn .t-b { visibility: hidden; }
+.btn.done { background: var(--act-soft); color: var(--green); }
+.btn.done .b-t { display: block; grid-area: 1 / 1; }
+.btn.done .t-a { visibility: hidden; }
+.btn.done .t-b { visibility: visible; }
+.btn.press { transform: scale(.96); filter: brightness(.9); }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--act); flex: none; }
+.dot.warn { background: var(--amber-dot); }
+.av { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; flex: none; font-weight: 600; font-size: 14px; color: var(--white); background: var(--film-b); }
+.av .mark { width: 34px; height: 34px; }
+.at { color: var(--green); font-weight: 600; background: var(--act-soft); border-radius: 4px; padding: 0 3px; }
+.gloss { font-size: 11px; color: var(--mute); line-height: 1.25; }
+[lang="az"] .gloss { display: none; }
+
+/* Phone */
+.phone { position: absolute; background: var(--bezel); border-radius: 42px; padding: 9px; box-shadow: 0 44px 80px -30px var(--sh-80), 0 0 0 1px var(--bezel-edge); }
+.ph-scr { position: relative; width: 100%; height: 100%; border-radius: 34px; background: var(--chat-bg); overflow: hidden; display: flex; flex-direction: column; }
+.ph-head { display: flex; align-items: center; gap: 9px; padding: 15px 14px 9px; background: var(--white); border-bottom: 1px solid var(--line); }
+.ph-head .av, .ph-head .av .mark { width: 30px; height: 30px; }
+.ph-who { display: flex; flex-direction: column; line-height: 1.2; font-size: 13.5px; }
+.ph-who b { font-weight: 600; }
+.ph-who span { font-size: 11px; color: var(--mute); }
+.ph-chat { flex: 1; min-height: 0; padding: 8px 11px; display: flex; flex-direction: column; gap: 7px; }
+.ph-date { align-self: center; font-size: 10.5px; color: var(--mute); background: var(--white); padding: 1px 9px; border-radius: 8px; }
+.m-r { align-self: flex-end; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; max-width: 92%; }
+.m-l { align-self: flex-start; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; max-width: 92%; }
+.bub { border-radius: 14px; padding: 6px 9px; font-size: 13.5px; line-height: 1.3; }
+.bub.me { background: var(--bub-me); border-bottom-right-radius: 5px; padding: 4px; }
+.bub.them { background: var(--white); border-bottom-left-radius: 5px; display: flex; align-items: baseline; gap: 8px; }
+.bub-t { display: flex; justify-content: space-between; gap: 10px; padding: 4px 5px 1px; }
+.time { font-size: 10px; color: var(--mute); }
+.aldim { font-weight: 500; }
+.aldim .tick { color: var(--act); }
+.ph-input { display: flex; align-items: center; gap: 8px; margin: 0 9px 11px; padding: 7px 11px; border-radius: 18px; background: var(--white); color: var(--mute-2); font-size: 12.5px; }
+.ln { fill: none; stroke: var(--mute); stroke-width: 1.6; stroke-linejoin: round; }
+
+/* Sample document */
+.photo { --dfs: 6px; padding: 9px 9px; border-radius: 10px; background: linear-gradient(140deg, var(--photo-a), var(--photo-b)); overflow: hidden; }
+.photo .doc { transform: rotate(-1.6deg); width: 78%; margin: 0 auto; }
+.doc { position: relative; background: var(--white); color: var(--paper-ink); font-size: var(--dfs, 7px); line-height: 1.34; padding: 1.3em 1.3em 1em; border-radius: 2px; box-shadow: 0 1px 5px var(--sh-30); overflow: hidden; }
+.doc:not(.eq) { aspect-ratio: 210 / 297; padding: 1.1em 1em .8em; }
+.d-top { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .4em; }
+.d-logo { display: inline-flex; align-items: baseline; gap: .4em; white-space: nowrap; justify-self: start; }
+.d-logo b { font-weight: 700; font-size: 1em; letter-spacing: .04em; }
+.d-logo i { font-style: normal; font-size: .62em; letter-spacing: .08em; color: var(--paper-3); border: .07em solid var(--paper-3); padding: 0 .3em; }
+.d-ttl { font-weight: 700; font-size: 1.15em; white-space: nowrap; }
+.d-dt { justify-self: end; font-size: .68em; line-height: 1.2; text-align: right; color: var(--paper-2); }
+.d-dt b { display: block; font-weight: 400; }
+.d-rule { margin: .55em 0 .5em; border-top: .07em solid var(--paper-ink); }
+.d-hr { display: flex; gap: 1.1em; align-items: flex-end; margin-bottom: .4em; font-size: .86em; white-space: nowrap; }
+.d-hr span { display: flex; flex-direction: column; font-weight: 600; }
+.d-hr i { font-style: normal; font-weight: 400; font-size: .76em; color: var(--paper-3); }
+.d-hr .d-cur { margin-left: auto; font-weight: 700; }
+.d-table { margin-top: .6em; border: .07em solid var(--paper-ink); }
+.d-r { display: grid; grid-template-columns: 1.1em 5.8em minmax(0, 1fr) 2.3em 2.8em 3.2em 3.4em; gap: .3em; padding: .3em .3em; min-height: 1.6em; border-bottom: .07em solid var(--paper-line); font-size: .8em; align-items: center; }
+.d-r span { white-space: nowrap; overflow: hidden; }
+.d-r span:nth-child(n+4) { text-align: right; }
+.d-bc { font-size: .8em; letter-spacing: -.01em; }
+.d-h { color: var(--paper-3); border-bottom: .07em solid var(--paper-ink); font-size: .74em; }
+.d-y { font-weight: 700; border-top: .07em solid var(--paper-ink); border-bottom: 0; }
+
+/* e-qaimə, landscape */
+.doc.eq { aspect-ratio: 297 / 210; padding: 1.4em 1.8em 1.2em; display: flex; flex-direction: column; font-size: var(--dfs, 9px); }
+.q-h { text-align: center; font-weight: 700; font-size: 1.12em; line-height: 1.25; text-wrap: balance; }
+.q-s { text-align: center; margin-top: .45em; font-size: .92em; }
+.q-s b, .q-w b { font-weight: 600; }
+.q-p { display: flex; align-items: center; gap: .6em; margin-top: .75em; font-size: .92em; white-space: nowrap; }
+.q-k { font-weight: 600; min-width: 5.6em; }
+.q-bx { display: inline-flex; gap: .22em; }
+.q-bx i { font-style: normal; width: 1.5em; height: 1.7em; display: grid; place-items: center; border: .08em solid var(--paper-ink); }
+.q-p u { text-decoration: none; border-bottom: .08em solid var(--paper-ink); padding: 0 .6em .1em .2em; min-width: 14em; }
+.q-t { margin-top: .9em; border: .08em solid var(--paper-ink); font-size: .9em; }
+.q-r { display: grid; grid-template-columns: 3.6em minmax(0, 1fr) 5.6em 4.6em 6.2em 6.4em 5.8em 6em; border-bottom: .08em solid var(--paper-ink); }
+.q-r:last-child { border-bottom: 0; }
+.q-r span { padding: .38em .5em; border-right: .08em solid var(--paper-ink); }
+.q-r span:last-child { border-right: 0; }
+.q-r span:nth-child(n+4) { text-align: right; }
+.q-hd { font-weight: 600; font-size: .86em; text-align: center; }
+.q-hd span { text-align: center !important; display: grid; place-items: center; line-height: 1.15; }
+.q-tot { font-weight: 700; }
+.q-w { margin-top: .8em; font-size: .95em; }
+.q-f { margin-top: auto; display: flex; align-items: flex-end; gap: 1.6em; }
+.q-my { display: grid; place-items: center; width: 4.4em; height: 4.4em; border-radius: 50%; border: .08em solid var(--paper-ink); font-weight: 600; font-size: .9em; }
+.q-sg { flex: 1; height: 4.4em; border: .08em solid var(--paper-ink); padding: .4em .6em; font-size: .86em; max-width: 17em; }
+.doc.eq .stamp { top: 62%; left: 66%; font-size: 4.6em; }
+
+/* Run film: delivery note and e-qaimə, matched */
+.r-match { position: absolute; left: 0; right: 0; top: 52px; bottom: 0; z-index: 12; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; align-items: center; gap: 0 26px; background: var(--white); }
+.rm-note { --dfs: 10px; width: 244px; }
+.rm-eq { --dfs: 9.6px; width: 570px; }
+.rm-note .doc, .rm-eq .doc { box-shadow: 0 0 0 1px var(--line), 0 6px 16px -8px var(--sh-30); }
+.rm-link { position: relative; width: 74px; height: 2px; border-radius: 1px; background: var(--line); }
+.rm-link i { position: absolute; inset: 0; border-radius: 1px; background: var(--act); transform-origin: 0 0; }
+.rm-tag { flex-basis: 100%; display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 16px; }
+.rm-tag .mt { font-size: 15px; padding: 5px 14px 5px 10px; }
+.rm-sub { font-size: 14px; color: var(--mute); }
+.stage[data-mode="narrow"] .r-match { flex-direction: column; flex-wrap: nowrap; gap: 0; }
+.stage[data-mode="narrow"] .rm-note { --dfs: 6.2px; width: 150px; }
+.stage[data-mode="narrow"] .rm-eq { --dfs: 6.2px; width: 368px; }
+.stage[data-mode="narrow"] .rm-link { width: 2px; height: 34px; margin: 10px 0; }
+.stage[data-mode="narrow"] .rm-tag { flex-basis: auto; flex-direction: column; gap: 6px; margin-top: 14px; }
+.stamp {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-16deg);
+  font-weight: 700; font-size: 2.5em; letter-spacing: .1em; color: var(--stamp);
+  border: .14em solid var(--stamp); border-radius: .28em; padding: .06em .42em; opacity: .5; white-space: nowrap; pointer-events: none;
+}
+
+/* ---------- Hero film ---------- */
+.hs { position: absolute; left: 0; right: 0; top: 18px; display: flex; justify-content: center; gap: 8px; z-index: 6; color: var(--film-text-2); font-size: 13.5px; }
+.hs-i { display: inline-flex; align-items: center; gap: 7px; padding: 4px 13px 4px 5px; border-radius: 999px; }
+.hs-i b { display: grid; place-items: center; width: 21px; height: 21px; border-radius: 50%; font-size: 11.5px; font-weight: 600; background: var(--film-glass); color: var(--film-text); }
+.hs-i.on { background: var(--film-glass); color: var(--white); }
+.hs-i.on b { background: var(--white); color: var(--green); }
+
+.h-phone { left: 56px; top: 58px; width: 276px; height: 500px; }
+.h-review { left: 382px; top: 72px; width: 684px; opacity: .5; transform: translateY(-14px) scale(.95); }
+.h-team { left: 436px; top: 214px; width: 630px; }
+.h-fly { position: absolute; z-index: 8; transform-origin: 0 0; --dfs: 7px; }
+.rv-wait { position: absolute; left: 0; right: 0; top: 46%; text-align: center; font-size: 15px; color: var(--mute); }
+.rv-body { display: grid; grid-template-columns: 170px 1fr; gap: 22px; padding: 16px 18px 12px; }
+.rv-doc { --dfs: 7px; }
+.rv-fields { display: grid; grid-template-columns: 1fr; align-content: start; }
+.fl { display: grid; grid-template-columns: 112px 1fr 8px; align-items: center; gap: 8px; height: 31px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.fl > span:first-child { color: var(--mute); }
+.fl b { font-weight: 500; font-variant-numeric: tabular-nums; }
+.fl-t b { font-weight: 600; }
+.rv-entry { padding: 2px 18px 0; }
+.je { display: grid; grid-template-columns: 1fr 88px 88px; align-items: center; height: 29px; font-size: 13.5px; font-variant-numeric: tabular-nums; border-bottom: 1px solid var(--line); }
+.je > span:nth-child(n+2) { text-align: right; }
+.je em { font-style: normal; font-weight: 600; margin-right: 8px; color: var(--green); }
+.je-h { color: var(--mute); font-size: 12.5px; height: 26px; }
+.sent { display: inline-flex; align-items: center; gap: 6px; color: var(--green); font-weight: 500; font-size: 13.5px; }
+
+.t-head .hash { color: var(--mute-2); font-weight: 500; font-size: 17px; }
+.avs { margin-left: auto; display: inline-flex; }
+.avs i { width: 26px; height: 26px; margin-left: 4px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 11.5px; font-weight: 600; color: var(--white); background: var(--film-b); box-shadow: 0 0 0 2px var(--white); }
+.avs i + i { background: var(--film-a); }
+.t-msg { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 16px 20px 18px 18px; }
+.t-meta { display: flex; align-items: center; gap: 7px; }
+.t-meta b { font-weight: 600; }
+.t-meta time { color: var(--mute-2); font-size: 12px; }
+.t-body p { margin-top: 3px; font-size: 16px; line-height: 1.42; }
+.t-body p b { font-weight: 600; }
+.t-rx { margin-top: 9px; min-height: 26px; display: flex; gap: 6px; }
+.rx { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 9px; border-radius: 999px; background: var(--act-soft); box-shadow: inset 0 0 0 1px var(--act-35); color: var(--green); font-size: 12.5px; }
+.rx b { font-weight: 600; }
+.rx-s { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
+
+.stage[data-mode="narrow"] .hs-i:not(.on) { display: none; }
+.stage[data-mode="narrow"] .h-phone { left: 72px; top: 62px; }
+.stage[data-mode="narrow"] .h-review { left: 12px; top: 110px; width: 396px; }
+.stage[data-mode="narrow"] .h-team { left: 12px; top: 318px; width: 396px; }
+.stage[data-mode="narrow"] .rv-body { grid-template-columns: 112px 1fr; gap: 12px; padding: 12px 14px 8px; }
+.stage[data-mode="narrow"] .rv-doc { --dfs: 4.6px; }
+.stage[data-mode="narrow"] .fl { grid-template-columns: 74px 1fr 8px; gap: 5px; font-size: 12.5px; height: 27px; }
+.stage[data-mode="narrow"] .rv-entry { padding: 0 14px; }
+.stage[data-mode="narrow"] .je { grid-template-columns: 1fr 58px 58px; font-size: 12.5px; }
+.stage[data-mode="narrow"] .c-head { padding: 0 14px; font-size: 13.5px; }
+.stage[data-mode="narrow"] .h-review .c-sub, .stage[data-mode="narrow"] .r-card .c-sub { display: none; }
+
+/* ---------- Sections ---------- */
+[data-film="build"], [data-film="test"], [data-film="improve"], [data-film="cash"] { --ww: 720; --wh: 640; }
+[data-film="run"] { --ww: 1120; --wh: 560; }
+.sec { padding-block: clamp(60px, 8.5vw, 112px); }
+.sec-grid {
+  display: grid; column-gap: clamp(36px, 5vw, 72px); row-gap: 28px;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7.2fr); grid-template-rows: auto 1fr;
+  grid-template-areas: "head film" "feats film";
+}
+.sec-grid.flip { grid-template-columns: minmax(0, 7.2fr) minmax(0, 4fr); grid-template-areas: "film head" "film feats"; }
+.sec-head { grid-area: head; min-width: 0; }
+.sec-grid .feats { grid-area: feats; align-self: start; padding-top: clamp(0px, 1.6vw, 22px); }
+.sec-grid .cinema { grid-area: film; align-self: start; }
+.sec-grid .cinema.expanded { align-self: stretch; }
+h2 { font-size: clamp(52px, 7.2vw, 96px); font-weight: 300; line-height: 1; letter-spacing: -.03em; }
+[lang="az"] #improve h2 { font-size: clamp(42px, 4.7vw, 62px); }
+.sec-line { margin-top: 14px; font-size: clamp(17px, 1.6vw, 20px); font-weight: 300; color: var(--mute); line-height: 1.35; max-width: 26em; }
+.feats { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.feats li { display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: 13px; }
+.ic { width: 22px; height: 22px; margin-top: 1px; fill: none; stroke: var(--green); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.feats b { display: block; font-weight: 600; font-size: 15.5px; line-height: 1.3; }
+.feats span { display: block; margin-top: 2px; font-size: 14.5px; line-height: 1.42; color: var(--mute); }
+.sec-wtop .sec-head, .sec-wtop .feats { grid-area: auto; }
+.sec-wtop { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7.2fr); column-gap: clamp(36px, 5vw, 72px); align-items: end; margin-bottom: 32px; }
+.feats-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* ---------- Film parts: Build ---------- */
+.mi { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.b-card { left: 30px; top: 22px; width: 660px; height: 552px; display: flex; flex-direction: column; }
+.b-approve { margin-left: auto; height: 32px; padding: 0 14px; font-size: 13px; background: var(--soft); color: var(--mute-2); grid-template-columns: auto; }
+.b-approve .t-a { grid-area: auto; }
+.b-approve.ready { background: var(--green); color: var(--white); }
+.b-main { flex: 1; min-height: 0; padding: 15px 20px 4px; display: flex; flex-direction: column; gap: 12px; }
+.b-prompt { background: var(--blue-soft); border: 1px solid var(--blue-line); border-radius: 14px; padding: 13px 14px 11px; color: var(--blue-ink); }
+.b-text { font-size: 16.5px; line-height: 1.36; }
+.b-row { display: flex; align-items: flex-end; gap: 10px; margin-top: 11px; }
+.b-chips { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { display: inline-flex; align-items: center; gap: 4px; height: 27px; padding: 0 6px; border-radius: 8px; background: var(--white); border: 1px solid var(--blue-line); font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+.chip .mi { color: var(--mute); }
+.chip .x { width: 12px; height: 12px; color: var(--mute-2); }
+.b-send { width: 34px; height: 34px; border-radius: 50%; background: var(--act); color: var(--white); display: grid; place-items: center; flex: none; }
+.b-send .mi { width: 17px; height: 17px; }
+.b-send .s-tick { display: none; line-height: 0; }
+.b-send.gone { background: var(--act-soft); color: var(--green); }
+.b-send.gone .up { display: none; }
+.b-send.gone .s-tick { display: block; }
+.b-send.press { transform: scale(.88); }
+.b-using { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 11px; font-size: 13px; color: var(--mute); }
+.u { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-2); }
+.u .mi { color: var(--green); }
+.b-say { font-size: 16px; line-height: 1.4; }
+.b-list { display: grid; gap: 2px; }
+.ck { display: grid; grid-template-columns: 26px 1fr; align-items: center; height: 33px; font-size: 15px; }
+.ck-i { position: relative; width: 18px; height: 18px; display: grid; place-items: center; }
+.sp { position: absolute; inset: 1px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--act); display: none; }
+.ck .tick { display: none; color: var(--act); }
+.ck.run .sp { display: block; }
+.ck.ok .tick { display: block; }
+.ck.run .ck-t { color: var(--mute); }
+.b-box { display: flex; align-items: center; justify-content: space-between; margin: 6px 20px 18px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 12px; color: var(--mute-2); font-size: 14.5px; }
+.stage[data-mode="narrow"] .b-card { left: 12px; top: 14px; width: 396px; height: auto; }
+.stage[data-mode="narrow"] .b-main { padding: 13px 14px 4px; }
+.stage[data-mode="narrow"] .b-box { margin: 10px 14px 14px; }
+.stage[data-mode="narrow"] .c-head { padding: 0 14px; }
+
+/* ---------- Film parts: Test ---------- */
+.x-card { left: 24px; top: 22px; width: 672px; }
+.x-top { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; align-items: start; gap: 14px; padding: 20px 24px 15px; }
+.x-left { align-self: end; }
+.x-big { font-size: 62px; font-weight: 300; line-height: 1; letter-spacing: -.025em; }
+.x-pct { color: var(--green); }
+.x-lab { margin-top: 6px; font-size: 13px; color: var(--mute); }
+.x-left { font-size: 13px; font-weight: 500; color: var(--amber); background: var(--amber-soft); padding: 5px 11px; border-radius: 999px; white-space: nowrap; }
+.x-bar { height: 5px; margin: 0 24px; border-radius: 3px; background: var(--soft); overflow: hidden; }
+.x-bar i { display: block; height: 100%; background: var(--act); transform-origin: 0 0; }
+.x-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding: 17px 24px 24px; }
+.x-list { display: flex; flex-direction: column; gap: 7px; }
+.x-lh { font-size: 13px; color: var(--mute); font-weight: 500; }
+.x-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 56px; padding: 6px 13px; border: 1px solid var(--line); border-radius: 11px; font-size: 15px; line-height: 1.25; }
+.x-row.sel { background: var(--act-soft); border-color: var(--act-40); }
+.x-row.press { transform: scale(.985); }
+.x-t { display: none; color: var(--act); line-height: 0; }
+.x-row.fixed .x-t { display: block; }
+.x-side { display: flex; flex-direction: column; gap: 11px; background: var(--soft); border-radius: 12px; padding: 13px 14px 14px; }
+.x-side h4 { margin: 0 0 3px; font-size: 12.5px; font-weight: 500; color: var(--mute); }
+.x-side p { margin: 0; font-size: 15px; line-height: 1.38; }
+.x-rule { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px 10px; }
+.x-ok { align-self: flex-end; height: 34px; font-size: 13px; padding: 0 13px; }
+.stage[data-mode="narrow"] .x-card { left: 12px; top: 14px; width: 396px; height: auto; }
+.stage[data-mode="narrow"] .x-top { grid-template-columns: 96px minmax(0, 1fr); padding: 14px 16px 12px; row-gap: 10px; }
+.stage[data-mode="narrow"] .x-big { font-size: 42px; }
+.stage[data-mode="narrow"] .x-left { grid-column: 1 / -1; justify-self: start; }
+.stage[data-mode="narrow"] .x-bar { margin: 0 16px; }
+.stage[data-mode="narrow"] .x-cols { grid-template-columns: minmax(0, 1fr); padding: 13px 16px 16px; gap: 12px; }
+.stage[data-mode="narrow"] .x-row { min-height: 38px; padding: 4px 10px; font-size: 14px; }
+
+/* ---------- Film parts: Run ---------- */
+.r-card { left: 26px; top: 20px; width: 1068px; }
+.r-tally { margin-left: auto; font-size: 13.5px; color: var(--mute); border-radius: 6px; padding: 2px 6px; }
+.r-tally.bump { background: var(--act-soft); color: var(--green); }
+.r-cols { display: grid; grid-template-columns: 235px minmax(0, 1fr) minmax(0, 1.12fr); gap: 30px; padding: 13px 22px 16px; }
+.r-lab { display: flex; align-items: center; gap: 7px; height: 22px; margin-bottom: 7px; font-size: 13px; font-weight: 500; color: var(--mute); }
+.r-lab i { display: grid; place-items: center; width: 19px; height: 19px; border-radius: 50%; font-style: normal; font-size: 11px; font-weight: 600; color: var(--ink-2); background: var(--soft); }
+.r-paper { position: relative; --dfs: 9.7px; }
+.r-paper .doc { box-shadow: 0 0 0 1px var(--line), 0 6px 16px -8px var(--sh-30); }
+.r-scan { position: absolute; left: -7px; right: -7px; top: 0; height: 56px; background: linear-gradient(180deg, var(--act-0), var(--act-17)); border-bottom: 2px solid var(--act); }
+.doc [data-f] { border-radius: .22em; }
+.doc [data-f].hit { background: var(--act-20); box-shadow: 0 0 0 .22em var(--act-20); }
+.r-gloss { margin-top: 7px; }
+.r-c2 .fl { grid-template-columns: 92px minmax(0, 1fr) 8px; height: 31px; font-size: 13.5px; }
+.r-legend { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11.5px; color: var(--mute); }
+.r-legend .dot { width: 6px; height: 6px; }
+.r-legend span { margin-right: 9px; }
+.r-learn { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--green); background: var(--act-soft); padding: 3px 9px 3px 7px; border-radius: 8px; margin-bottom: 7px; }
+.r-c3 .je { grid-template-columns: minmax(0, 1fr) 72px 72px; }
+.je-s { font-weight: 600; border-bottom: 0; }
+.r-act { display: flex; justify-content: flex-end; margin-top: 9px; }
+.r-strip { border-top: 1px solid var(--line); background: var(--soft); padding: 6px 22px 8px; }
+.r-line { display: grid; grid-template-columns: 62px 86px 142px 62px minmax(40px, 1fr) 172px 106px; align-items: center; column-gap: 12px; height: 40px; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.r-src { font-size: 12.5px; color: var(--mute); font-weight: 500; }
+.r-dt { color: var(--mute); }
+.r-name, .r-amt { font-weight: 500; }
+.r-amt { text-align: right; }
+.r-link { position: relative; height: 2px; border-radius: 1px; background: var(--line); }
+.r-link i { position: absolute; inset: 0; border-radius: 1px; background: var(--act); transform-origin: 0 0; }
+.r-inv { color: var(--ink-2); white-space: nowrap; }
+.mt { justify-self: end; display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px 3px 7px; border-radius: 999px; font-size: 12.5px; font-weight: 500; color: var(--green); background: var(--act-soft); white-space: nowrap; }
+.stage[data-mode="narrow"] .r-card { left: 12px; top: 14px; width: 396px; }
+.stage[data-mode="narrow"] .r-cols { display: block; height: auto; padding: 10px 14px 0; }
+.stage[data-mode="narrow"] .r-c1 { float: left; width: 134px; margin-right: 12px; }
+.stage[data-mode="narrow"] .r-paper { --dfs: 5.6px; }
+.stage[data-mode="narrow"] .r-c2 { margin-left: 146px; }
+.stage[data-mode="narrow"] .r-gloss { margin-top: 7px; }
+.r-c2 .fl { grid-template-columns: 58px minmax(0, 1fr) 7px; height: 24px; font-size: 11.5px; gap: 3px; }
+.stage[data-mode="narrow"] .r-c2 .fl > span:first-child { white-space: nowrap; overflow: hidden; }
+.stage[data-mode="narrow"] .r-legend { font-size: 10.5px; margin-top: 6px; }
+.stage[data-mode="narrow"] .r-c3 { clear: both; padding-top: 10px; }
+.stage[data-mode="narrow"] .r-strip { padding: 6px 14px 8px; }
+.stage[data-mode="narrow"] .r-line { grid-template-columns: 54px minmax(0, 1fr) 62px; grid-auto-rows: 24px; height: 76px; column-gap: 8px; align-content: center; }
+.stage[data-mode="narrow"] .r-dt { display: none; }
+.stage[data-mode="narrow"] .r-link { display: none; }
+.stage[data-mode="narrow"] .r-inv { grid-column: 1 / 3; font-size: 12.5px; }
+.stage[data-mode="narrow"] .mt { grid-column: 3; justify-self: end; }
+
+/* ---------- Film parts: Improve ---------- */
+.i-card { left: 24px; top: 18px; width: 672px; padding-bottom: 18px; }
+.i-thread { padding: 8px 0 0; }
+.i-thread .t-msg { grid-template-columns: 34px minmax(0, 1fr); gap: 11px; padding: 8px 22px 8px 18px; }
+.i-thread .t-body p { margin-top: 1px; font-size: 16px; line-height: 1.38; }
+.i-thread .t-rx { margin-top: 6px; }
+.i-1 .rx { order: 2; }
+.rx-add { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: var(--mute-2); box-shadow: inset 0 0 0 1px var(--line); }
+.rx-add .mi { width: 15px; height: 15px; }
+.rx-add.press { transform: scale(.9); }
+.i-later { margin: 9px 22px 0 63px; padding-top: 9px; border-top: 1px dashed var(--line); font-size: 14.5px; color: var(--mute); }
+.stage[data-mode="narrow"] .i-card { left: 12px; top: 14px; width: 396px; height: auto; padding-bottom: 14px; }
+.stage[data-mode="narrow"] .i-thread .t-msg { padding: 7px 14px 6px 12px; gap: 9px; }
+.stage[data-mode="narrow"] .i-later { margin: 7px 14px 0 55px; }
+
+/* ---------- Film parts: Cash ---------- */
+.k-phone { left: 196px; top: 12px; width: 328px; height: 592px; }
+.k-scr { background: var(--white); }
+.k-scr .ph-head { padding-top: 15px; }
+.k-scr .ph-head .av { font-size: 13px; }
+.k-week { margin: 10px 12px 0; padding: 9px 12px 10px; border-radius: 14px; background: var(--soft); }
+.k-wk { font-size: 12px; font-weight: 500; color: var(--mute); }
+.k-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 5px; }
+.k-two span { font-size: 12px; color: var(--mute); display: block; }
+.k-two b span { display: inline; font-size: inherit; color: inherit; }
+.k-two b { display: block; font-size: 18.5px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
+.k-two em { font-style: normal; font-size: 12px; color: var(--mute); }
+.k-two em.late { color: var(--amber); font-weight: 500; }
+.k-chart { margin: 11px 12px 0; }
+.k-chart svg { display: block; width: 100%; height: auto; margin-top: 3px; overflow: visible; }
+.k-lab { font-size: 12px; font-weight: 500; color: var(--mute); padding: 0 2px; }
+.k-neg { fill: var(--red-soft); }
+.k-zero { stroke: var(--mute-2); stroke-width: 1; stroke-dasharray: 3 3; }
+.k-tx { font-size: 10px; fill: var(--mute); font-family: var(--font); }
+.k-red { fill: var(--red); font-weight: 600; }
+.k-ok { fill: var(--act-2); font-weight: 600; }
+.k-before { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.k-chart.after .k-before { stroke: var(--mute-2); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.k-after { fill: none; stroke: var(--act); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.k-dot { fill: var(--red); stroke: var(--white); stroke-width: 1.5; }
+.k-cap { min-height: 17px; margin-top: 2px; font-size: 12px; color: var(--act-2); font-weight: 500; padding: 0 2px; }
+.k-act { display: flex; margin: 9px 12px 0; }
+.k-send { flex: 1; justify-content: center; grid-template-columns: auto auto; height: 40px; }
+.k-note { margin: 9px 14px 0; font-size: 11.5px; line-height: 1.34; color: var(--mute); }
+.stage[data-mode="narrow"] .k-phone { left: 46px; top: 12px; }
+
+/* ---------- Try it live ---------- */
+.h2-s { font-size: clamp(38px, 5vw, 64px); font-weight: 300; line-height: 1.05; letter-spacing: -.025em; }
+.live-head { max-width: 46em; }
+.live-off { margin-top: 12px; font-size: 16.5px; font-weight: 500; color: var(--green); }
+.live-cost { margin-top: 8px; font-size: 14.5px; color: var(--mute); }
+.live[data-live="off"] .only-on { display: none !important; }
+.live[data-live="on"] .only-off, .live[data-live="wait"] .only-off, .live[data-live="wait"] .only-on { display: none !important; }
+.tool { margin-top: 28px; padding: clamp(18px, 2.6vw, 30px); border: 1px solid var(--line); border-radius: 22px; background: var(--white); }
+.tool h3 { font-size: 22px; font-weight: 500; letter-spacing: -.012em; line-height: 1.2; }
+.tool-top p { margin-top: 3px; color: var(--mute); font-size: 15px; }
+.tool h4 { margin: 20px 0 8px; font-size: 13.5px; font-weight: 500; color: var(--mute); }
+.tool h4 b { font-weight: 600; color: var(--ink); }
+.tool-grid { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 320px) minmax(0, 1fr); gap: 28px; margin-top: 20px; align-items: start; }
+.live[data-live="off"] .tool-grid { grid-template-columns: minmax(0, 780px); }
+.samples { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: end; }
+.smp { display: flex; flex-direction: column; gap: 6px; padding: 0; border: 0; background: transparent; text-align: left; font-size: 12.5px; line-height: 1.25; color: var(--ink-2); cursor: pointer; }
+.smp:disabled { cursor: default; color: var(--ink-2); }
+.smp canvas { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 0 0 1px var(--line); }
+.smp[aria-pressed="true"]:not(:disabled) canvas { box-shadow: 0 0 0 2px var(--act); }
+.own { position: relative; display: inline-flex; align-items: center; gap: 7px; margin-top: 12px; padding: 7px 12px; border: 1px dashed var(--mute-2); border-radius: 10px; font-size: 13.5px; color: var(--ink-2); cursor: pointer; }
+.own.on { border-style: solid; border-color: var(--act); background: var(--act-soft); }
+.own:focus-within { outline: 2px solid var(--act); outline-offset: 2px; }
+.own input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.live-warn { margin-top: 11px; font-size: 13.5px; line-height: 1.4; color: var(--mute); }
+.act-row { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 14px; }
+.act { height: 42px; padding: 0 18px; border: 0; border-radius: 11px; background: var(--green); color: var(--white); font-weight: 600; font-size: 14.5px; cursor: pointer; }
+.act:hover:not(:disabled) { background: var(--act-2); }
+.act:disabled { background: var(--line); color: var(--mute); cursor: default; }
+.act.done, .act.done:disabled { background: var(--act-soft); color: var(--green); }
+.act-2 { height: 42px; padding: 0 15px; border: 1px solid var(--line); border-radius: 11px; background: var(--white); font-size: 14px; font-weight: 500; cursor: pointer; }
+.act-2:hover { background: var(--soft); }
+.status { font-size: 14px; color: var(--mute); }
+.status.bad { color: var(--red); }
+.doc-view { display: block; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 0 0 1px var(--line), 0 14px 28px -20px var(--sh-35); }
+.lf-list { display: grid; }
+.lf { display: grid; grid-template-columns: 118px minmax(0, 1fr) 38px; align-items: center; gap: 8px; min-height: 31px; padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.lf > span { color: var(--mute); }
+.lf b { font-weight: 500; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.lf b.blank { display: block; width: 62%; height: 10px; border-radius: 4px; background: var(--soft); }
+.lf b.unread { color: var(--amber); font-weight: 400; }
+.cf { font-style: normal; font-size: 11.5px; text-align: right; font-variant-numeric: tabular-nums; color: var(--act-2); }
+.cf.mid, .cf.lo { color: var(--amber); }
+.li { display: grid; grid-template-columns: minmax(0, 1fr) auto 70px; gap: 10px; padding: 3px 0; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.li span:last-child { text-align: right; }
+.chks { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 12px; }
+.chk { padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.chk.good { background: var(--act-soft); color: var(--green); }
+.chk.warn { background: var(--amber-soft); color: var(--amber); }
+.entry { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line); }
+.lj { display: grid; grid-template-columns: minmax(0, 1fr) 96px 96px; align-items: center; min-height: 32px; border-bottom: 1px solid var(--line); font-size: 14px; font-variant-numeric: tabular-nums; }
+.lj span:nth-child(n+2) { text-align: right; }
+.lj em { font-style: normal; font-weight: 600; margin-right: 9px; color: var(--green); }
+.lj-h { color: var(--mute); font-size: 13px; }
+.entry-why { margin: 10px 0 12px; font-size: 14px; color: var(--mute); max-width: 60em; }
+.tx-label { display: block; margin-top: 16px; font-size: 13.5px; font-weight: 500; color: var(--mute); }
+textarea { display: block; width: 100%; margin-top: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; font: inherit; font-size: 15.5px; line-height: 1.45; color: var(--ink); background: var(--white); resize: vertical; }
+.rule { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.rule > i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-style: normal; font-size: 12px; font-weight: 600; background: var(--soft); color: var(--ink-2); }
+.rule p { font-size: 14.5px; line-height: 1.4; }
+.rule p span { color: var(--mute); }
+.rule p b { font-weight: 500; }
+.rule .rule-why { margin-top: 2px; font-size: 13.5px; color: var(--mute); }
+.risk { font-style: normal; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 7px; align-self: start; white-space: nowrap; background: var(--act-soft); color: var(--green); }
+.risk.medium { background: var(--amber-soft); color: var(--amber); }
+.risk.high { background: var(--red-soft); color: var(--red); }
+.tr-row { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) 76px; gap: 10px; align-items: center; min-height: 34px; padding: 4px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.tr-h { color: var(--mute); font-size: 13px; }
+.tr-doc { color: var(--ink); }
+.tr-row em { font-style: normal; font-size: 12.5px; font-weight: 500; justify-self: end; padding: 2px 8px; border-radius: 7px; }
+.tr-row.pass em { background: var(--act-soft); color: var(--green); }
+.tr-row.fail em { background: var(--amber-soft); color: var(--amber); }
+.tr-fix { padding: 6px 10px; margin: 6px 0; border-radius: 8px; background: var(--soft); font-size: 13.5px; color: var(--ink-2); }
+
+/* ---------- Agents, calculator, start, footer ---------- */
+#agents, #volume, #start { padding-block: clamp(44px, 6vw, 80px); }
+.agents { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 26px; }
+.ag-t { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.ag-t b { font-size: 20px; font-weight: 500; letter-spacing: -.01em; }
+.st { font-style: normal; font-size: 12px; padding: 1px 8px; border-radius: 7px; background: var(--soft); color: var(--mute); white-space: nowrap; }
+.st.now { background: var(--act-soft); color: var(--green); font-weight: 500; }
+.agents p { margin-top: 6px; font-size: 14.5px; line-height: 1.42; color: var(--mute); }
+.calc { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+.calc-q { display: block; margin-top: 22px; font-size: 15px; color: var(--ink-2); }
+.calc-row { display: flex; align-items: center; gap: 16px; margin-top: 8px; }
+.calc-row input { flex: 1; min-width: 0; accent-color: var(--green); height: 28px; }
+.calc-row output { min-width: 58px; text-align: right; font-size: 34px; font-weight: 300; }
+.calc-label { margin-top: 18px; font-size: 14.5px; font-weight: 500; color: var(--amber); }
+.calc-basis { margin-top: 6px; font-size: 13.5px; line-height: 1.45; color: var(--mute); }
+.calc-out { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px clamp(20px, 3vw, 40px); }
+.calc-out dt { font-size: 14px; color: var(--mute); }
+.calc-out dd { margin: 3px 0 0; font-size: clamp(36px, 4.4vw, 54px); font-weight: 300; letter-spacing: -.02em; line-height: 1.1; white-space: nowrap; }
+.calc-sub { display: block; margin-top: 3px; font-size: 13.5px; color: var(--mute); }
+.steps { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+.steps li { display: flex; flex-direction: column; gap: 12px; font-size: clamp(20px, 2.3vw, 26px); font-weight: 300; line-height: 1.22; letter-spacing: -.01em; }
+.steps i { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; font-style: normal; font-size: 14px; font-weight: 600; letter-spacing: 0; color: var(--white); background: var(--green); }
+.foot { margin-top: clamp(32px, 5vw, 64px); background: var(--soft); }
+.foot-in {
+  max-width: calc(var(--page) + 64px); margin: 0 auto; padding-block: 28px 36px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.foot p { max-width: 64em; font-size: 13.5px; line-height: 1.5; color: var(--mute); }
+@media (min-width: 900px) {
+  .foot-in { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
+}
+@media (max-width: 1100px) {
+  .tool-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .tool-l { grid-column: 1 / -1; }
+  .samples { max-width: 460px; }
+  .agents { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .tool-grid { grid-template-columns: minmax(0, 1fr); }
+  .tool-m { max-width: 340px; }
+  .agents, .steps { grid-template-columns: minmax(0, 1fr); }
+  .calc { grid-template-columns: minmax(0, 1fr); }
+  .tr-row { grid-template-columns: minmax(0, 1fr) 70px; }
+  .tr-row > span:nth-child(2), .tr-row > span:nth-child(3) { grid-column: 1; font-size: 13px; color: var(--mute); }
+  .tr-row > em { grid-column: 2; grid-row: 1; }
+  .tr-h { display: none; }
+  .lj { grid-template-columns: minmax(0, 1fr) 76px 76px; }
+}
+
+@media (max-width: 999px) {
+  .sec-grid, .sec-grid.flip { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-template-areas: "head" "film" "feats"; }
+  #run { display: flex; flex-direction: column; gap: 28px; }
+  .sec-wtop { display: contents; }
+  #run .sec-head { order: 1; }
+  #run .cinema { order: 2; }
+  #run .feats { order: 3; }
+  .feats-row { grid-template-columns: minmax(0, 1fr); }
+  [lang="az"] #improve h2 { font-size: clamp(40px, 11.6vw, 62px); }
+}
+@media (max-width: 899px) {
+  .links { display: none; }
+  .tag { margin-left: auto; }
+  .top-in { gap: 10px; }
+  :root { --r-film: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-files" viewBox="0 0 24 24"><path d="M9 3.5h6.5l4 4V16a1.5 1.5 0 0 1-1.5 1.5H9A1.5 1.5 0 0 1 7.500 16V5A1.500 1.500 0 0 1 9 3.500z"/><path d="M15.500 3.500V8H19.500"/><path d="M4.500 7.500V19A1.500 1.500 0 0 0 6 20.500h9"/></symbol>
+<symbol id="i-rule" viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.500 6l1.400 1.400L7.500 4.800M3.500 12l1.400 1.400 2.600-2.600M3.500 18l1.400 1.400 2.600-2.600"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.500 2.700v5.600c0 4.600-3.100 8-7.500 9.700-4.400-1.700-7.500-5.100-7.500-9.700V5.700z"/><path d="M8.700 12l2.400 2.400 4.300-4.600"/></symbol>
+<symbol id="i-compare" viewBox="0 0 24 24"><rect x="3.500" y="4" width="7" height="16" rx="1.500"/><rect x="13.500" y="4" width="7" height="16" rx="1.500"/><path d="M6 9h2M6 13h2M16 9h2M16 13h2"/></symbol>
+<symbol id="i-explain" viewBox="0 0 24 24"><path d="M4 5.500A1.500 1.500 0 0 1 5.500 4h13A1.500 1.500 0 0 1 20 5.500v9a1.500 1.500 0 0 1-1.500 1.500H10l-4.500 4v-4A1.500 1.500 0 0 1 4 14.500z"/><path d="M8 8.500h8M8 12h5"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20l1-4.200L16.300 4.500a1.600 1.600 0 0 1 2.300 0l.900.900a1.600 1.600 0 0 1 0 2.300L8.200 19z"/><path d="M14.500 6.300l3.200 3.200"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5.500A1.500 1.500 0 0 1 5.500 4H8M16 4h2.500A1.500 1.500 0 0 1 20 5.500V8M20 16v2.500a1.500 1.500 0 0 1-1.500 1.500H16M8 20H5.500A1.500 1.500 0 0 1 4 18.500V16"/><path d="M3.500 12h17"/></symbol>
+<symbol id="i-journal" viewBox="0 0 24 24"><path d="M5 4.500A1.500 1.500 0 0 1 6.500 3H19v15H6.500A1.500 1.500 0 0 0 5 19.500z"/><path d="M5 19.500A1.500 1.500 0 0 0 6.500 21H19v-3"/><path d="M9 7.500h6M9 11h6"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1.200 1.200"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1.200-1.200"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.500" cy="10.500" r="6.500"/><path d="M15.500 15.500l5 5"/></symbol>
+<symbol id="i-note" viewBox="0 0 24 24"><rect x="3" y="6.500" width="18" height="11" rx="1.500"/><circle cx="12" cy="12" r="2.600"/><path d="M6.500 9.500v5M17.500 9.500v5"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.500" y="5.500" width="17" height="13" rx="1.500"/><path d="M4 7l8 6 8-6"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7.500A1.500 1.500 0 0 1 5.500 6H18v3"/><path d="M4 7.500v10A1.500 1.500 0 0 0 5.500 19H20V9H5.500A1.500 1.500 0 0 1 4 7.500z"/><circle cx="16.300" cy="14" r="1"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M7.500 9.500l3.500 3 3-2 4.500 6"/></symbol>
+<symbol id="i-tap" viewBox="0 0 24 24"><path d="M9.500 11.500V5a1.700 1.700 0 0 1 3.400 0v5l4.400 1a2 2 0 0 1 1.500 2.300L18 19.500h-7l-4.800-5a1.600 1.600 0 0 1 2.200-2.200z"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M6.500 3.500h7l4 4V19a1.500 1.500 0 0 1-1.500 1.500H6.500A1.500 1.500 0 0 1 5 19V5a1.500 1.500 0 0 1 1.500-1.500z"/><path d="M13 3.500V8h4.500"/></symbol>
+<symbol id="i-wave" viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V6M6 11.500l6-6 6 6"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.500C10 5 7.500 4.500 4 4.500v13c3.500 0 6 .500 8 2 2-1.500 4.500-2 8-2v-13c-3.500 0-6 .500-8 2zM12 6.500v13"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7.500 20h9M5 7.500h14M5 7.500L2.500 14a3 3 0 0 0 5 0zM19 7.500L16.500 14a3 3 0 0 0 5 0z"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><path d="M9 5L3.500 7v13L9 18l6 2 5.500-2V5L15 7z"/><path d="M9 5v13M15 7v13"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M4.500 12L20 4.500 15.500 20 12 13.500z"/></symbol>
+<symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.500"/><path d="M8.500 14.200c.900 1.300 2.100 1.900 3.500 1.900s2.600-.600 3.500-1.900M9 9.800v.1M15 9.800v.1"/></symbol>
+<symbol id="i-thumb" viewBox="0 0 16 16"><path d="M2.500 7h2.600v6.500H2.500zM5.100 7.200 8 2.600c.900 0 1.500.700 1.300 1.600L8.900 6.200h3.700c.900 0 1.500.800 1.300 1.700l-.900 4.200c-.200.800-.800 1.400-1.600 1.400H5.100"/></symbol>
+</defs></svg>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#top" aria-label="NowAI"><svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg><span>NowAI</span></a>
+    <nav class="links" data-ia="nav.label" aria-label="Sections">
+      <a href="#build" data-i="nav.build">Build</a>
+      <a href="#test" data-i="nav.test">Test</a>
+      <a href="#run" data-i="nav.run">Run</a>
+      <a href="#improve" data-i="nav.improve">Improve</a>
+      <a href="#cash" data-i="nav.cash">Cash</a>
+      <a href="#live" data-i="nav.live">Try it live</a>
+    </nav>
+    <span class="tag" data-i="tag">Scripted prototype</span>
+    <div class="lang" role="group" data-ia="lang.label" aria-label="Language">
+      <button type="button" id="lang-en" aria-pressed="true">EN</button>
+      <button type="button" id="lang-az" aria-pressed="false">AZ</button>
+    </div>
+  </div>
+</header>
+
+<main id="top" class="page">
+  <section class="hero">
+    <h1><span data-i="hero.h1a">Clients send photos.</span> <span data-i="hero.h1b">The books write themselves.</span> <span class="you" data-i="hero.h1c">You approve.</span></h1>
+    <p class="lead" data-i="hero.sub">The AI back office for Azerbaijani small firms, run by their accountant.</p>
+    <figure class="cinema film-wide" data-film="hero" id="film-hero" data-ia="hero.alt" aria-label="Scripted film. A client sends a photo of an invoice, the accountant approves the entry, and NowAI reports 18,420 AZN of late customer payments in the team chat.">
+  <div class="screen">
+    <div class="stage" aria-hidden="true">
+      <div class="hs">
+        <span class="hs-i" data-s="1"><b>1</b><span data-i="hero.s1">Client sends a photo</span></span>
+        <span class="hs-i" data-s="2"><b>2</b><span data-i="hero.s2">You approve</span></span>
+        <span class="hs-i on" data-s="3"><b>3</b><span data-i="hero.s3">NowAI finds what nobody tagged</span></span>
+      </div>
+
+      <div class="phone h-phone">
+        <div class="ph-scr">
+          <div class="ph-head">
+            <span class="av av-n"><svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg></span>
+            <div class="ph-who"><b>NowAI</b><span>Nümunə Mühasibat</span></div>
+          </div>
+          <div class="ph-chat">
+            <div class="ph-date">14 oktyabr</div>
+            <div class="m-r h-photo">
+              <div class="bub me">
+                <div class="photo"><div class="doc">
+  <div class="d-top"><span class="d-logo" data-f="seller"><b>ÖRNƏK SÜD</b><i>TOPDAN</i></span><span class="d-ttl">Satış Sənədi</span><span class="d-dt"><b>14.10.2026</b><b>09:02</b></span></div>
+  <div class="d-rule"></div>
+  <div class="d-hd">
+    <div class="d-hr"><span><i>Sənəd №</i>0000-14</span><span data-f="date"><i>Tarix</i>14.10.2026</span><span><i>Satıcı</i>Nümunə Satıcı</span><span class="d-cur">AZN</span></div>
+    <div class="d-hr"><span><i>Anbar</i>Mərkəz depo</span><span><i>Alıcı</i>NÜMUNƏ MARKET</span></div>
+  </div>
+  <div class="d-table">
+    <div class="d-r d-h"><span>№</span><span>Barkod</span><span>Ad</span><span>Qutu</span><span>Miqdar</span><span>Qiymət</span><span>Məbləğ</span></div>
+    <div class="d-r" data-f="l1"><span>1</span><span class="d-bc">0000000000011</span><span>Süd 1L</span><span>-</span><span>120</span><span>1.298</span><span>155.76</span></div>
+    <div class="d-r" data-f="l2"><span>2</span><span class="d-bc">0000000000012</span><span>Kefir 1L</span><span>-</span><span>60</span><span>1.416</span><span>84.96</span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r d-y" data-f="total"><span></span><span></span><span>Yekun</span><span></span><span></span><span></span><span>240.72</span></div>
+  </div>
+  <div class="stamp">NÜMUNƏ</div>
+</div></div>
+                <div class="bub-t">Bu günkü qaimə<span class="time">09:02</span></div>
+              </div>
+              <div class="gloss" data-i="hero.g1">Today's delivery note</div>
+            </div>
+            <div class="m-l h-reply">
+              <div class="bub them"><span class="aldim">Aldım <svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="time">09:02</span></div>
+              <div class="gloss" data-i="hero.g2">Received</div>
+            </div>
+          </div>
+          <div class="ph-input">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path class="ln" d="M4 8.5h3.2L8.8 6h6.4l1.6 2.5H20v10H4z"/><circle class="ln" cx="12" cy="13" r="3.4"/></svg>
+            <span>Mesaj yazın</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card h-review">
+        <div class="c-head">
+          <svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg>
+          <b>Nümunə Mühasibat</b>
+          <span class="c-sub" data-i="rev.title">Review queue</span>
+          <span class="c-tag">Nümunə Market</span>
+        </div>
+        <div class="rv-wait tr" data-i="rev.wait">Waiting for the next document</div>
+        <div class="rv-body">
+          <div class="rv-doc"><div class="doc">
+  <div class="d-top"><span class="d-logo" data-f="seller"><b>ÖRNƏK SÜD</b><i>TOPDAN</i></span><span class="d-ttl">Satış Sənədi</span><span class="d-dt"><b>14.10.2026</b><b>09:02</b></span></div>
+  <div class="d-rule"></div>
+  <div class="d-hd">
+    <div class="d-hr"><span><i>Sənəd №</i>0000-14</span><span data-f="date"><i>Tarix</i>14.10.2026</span><span><i>Satıcı</i>Nümunə Satıcı</span><span class="d-cur">AZN</span></div>
+    <div class="d-hr"><span><i>Anbar</i>Mərkəz depo</span><span><i>Alıcı</i>NÜMUNƏ MARKET</span></div>
+  </div>
+  <div class="d-table">
+    <div class="d-r d-h"><span>№</span><span>Barkod</span><span>Ad</span><span>Qutu</span><span>Miqdar</span><span>Qiymət</span><span>Məbləğ</span></div>
+    <div class="d-r" data-f="l1"><span>1</span><span class="d-bc">0000000000011</span><span>Süd 1L</span><span>-</span><span>120</span><span>1.298</span><span>155.76</span></div>
+    <div class="d-r" data-f="l2"><span>2</span><span class="d-bc">0000000000012</span><span>Kefir 1L</span><span>-</span><span>60</span><span>1.416</span><span>84.96</span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r d-y" data-f="total"><span></span><span></span><span>Yekun</span><span></span><span></span><span></span><span>240.72</span></div>
+  </div>
+  <div class="stamp">NÜMUNƏ</div>
+</div></div>
+          <div class="rv-fields">
+            <div class="fl"><span data-i="f.supplier">Supplier</span><b>Örnək Süd MMC</b><i class="dot"></i></div>
+            <div class="fl"><span>VÖEN</span><b>0000000000</b><i class="dot"></i></div>
+            <div class="fl"><span data-i="f.date">Date</span><b>14.10.2026</b><i class="dot"></i></div>
+            <div class="fl"><span data-i="f.net">Net</span><b data-n="204.00">204.00</b><i class="dot"></i></div>
+            <div class="fl"><span data-i="f.vat">ƏDV 18%</span><b data-n="36.72">36.72</b><i class="dot"></i></div>
+            <div class="fl fl-t"><span data-i="f.total">Total</span><b><span data-n="240.72">240.72</span> AZN</b><i class="dot"></i></div>
+          </div>
+        </div>
+        <div class="rv-entry">
+          <div class="je je-h"><span data-i="je.title">Proposed entry</span><span data-i="je.dr">Debit</span><span data-i="je.cr">Credit</span></div>
+          <div class="je"><span><em>205</em><span data-i="ac.205">Goods</span></span><span data-n="204.00">204.00</span><span></span></div>
+          <div class="je"><span><em>241</em><span data-i="ac.241">ƏDV to offset</span></span><span data-n="36.72">36.72</span><span></span></div>
+          <div class="je"><span><em>531</em><span data-i="ac.531">Payables to suppliers</span></span><span></span><span data-n="240.72">240.72</span></div>
+        </div>
+        <div class="c-foot">
+          <span class="sent"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg><span data-i="rev.sent">Sent to 1C</span></span>
+          <span class="btn go done"><span class="b-t"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="t-a" data-i="btn.approve">Approve</span><span class="t-b" data-i="btn.approved">Approved</span></span>
+        </div>
+      </div>
+
+      <div class="card h-team">
+        <div class="c-head t-head">
+          <span class="hash">#</span>
+          <b data-i="team.channel">Team chat</b>
+          <span class="c-sub">Nümunə Mühasibat</span>
+          <span class="avs"><i>L</i><i>R</i></span>
+        </div>
+        <div class="t-msg">
+          <span class="av av-n"><svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg></span>
+          <div class="t-body">
+            <div class="t-meta"><b>NowAI</b><span class="c-chip" data-i="team.agent">Agent</span><time>09:14</time></div>
+            <p data-ih="hero.alert">I read October for all 38 clients and found something nobody has tagged: Nümunə Market is owed <b>18,420 AZN</b> by 6 customers, all over 30 days late. <span class="at">@Leyla</span> shall I draft reminders?</p>
+            <div class="t-rx"><span class="rx"><svg class="rx-s"><use href="#i-thumb"/></svg><b>1</b></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-fly tr"><div class="doc">
+  <div class="d-top"><span class="d-logo" data-f="seller"><b>ÖRNƏK SÜD</b><i>TOPDAN</i></span><span class="d-ttl">Satış Sənədi</span><span class="d-dt"><b>14.10.2026</b><b>09:02</b></span></div>
+  <div class="d-rule"></div>
+  <div class="d-hd">
+    <div class="d-hr"><span><i>Sənəd №</i>0000-14</span><span data-f="date"><i>Tarix</i>14.10.2026</span><span><i>Satıcı</i>Nümunə Satıcı</span><span class="d-cur">AZN</span></div>
+    <div class="d-hr"><span><i>Anbar</i>Mərkəz depo</span><span><i>Alıcı</i>NÜMUNƏ MARKET</span></div>
+  </div>
+  <div class="d-table">
+    <div class="d-r d-h"><span>№</span><span>Barkod</span><span>Ad</span><span>Qutu</span><span>Miqdar</span><span>Qiymət</span><span>Məbləğ</span></div>
+    <div class="d-r" data-f="l1"><span>1</span><span class="d-bc">0000000000011</span><span>Süd 1L</span><span>-</span><span>120</span><span>1.298</span><span>155.76</span></div>
+    <div class="d-r" data-f="l2"><span>2</span><span class="d-bc">0000000000012</span><span>Kefir 1L</span><span>-</span><span>60</span><span>1.416</span><span>84.96</span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r d-y" data-f="total"><span></span><span></span><span>Yekun</span><span></span><span></span><span></span><span>240.72</span></div>
+  </div>
+  <div class="stamp">NÜMUNƏ</div>
+</div></div>
+    </div>
+    <div class="chrome"><span class="cap" data-i="film.caption">Scripted film. Sample data.</span><span class="ctl"></span></div>
+  </div>
+</figure>
+  </section>
+
+  <section class="problem">
+    <p><span data-i="problem.a">Accountants spend their month typing receipts and chasing rule changes.</span> <span class="dim" data-i="problem.b">Small firms cannot afford more staff.</span></p>
+  </section>
+
+  <section class="sec" id="build">
+    <div class="sec-grid">
+      <div class="sec-head">
+        <h2 data-i="build.h">Build</h2>
+        <p class="sec-line" data-i="build.line">Hand over last year's files. NowAI sets up the client.</p>
+      </div>
+      <ul class="feats">
+        <li><svg class="ic"><use href="#i-files"/></svg><div><b data-i="build.f1">Learns from your files</b><span data-i="build.f1t">Reads the cash book, bank statements, 1C exports and your voice notes.</span></div></li>
+        <li><svg class="ic"><use href="#i-rule"/></svg><div><b data-i="build.f2">Writes plain rules</b><span data-i="build.f2t">Each client gets rules you can read, change or reject.</span></div></li>
+        <li><svg class="ic"><use href="#i-shield"/></svg><div><b data-i="build.f3">Checks before going live</b><span data-i="build.f3t">It replays a past month, so you see the result before real books change.</span></div></li>
+      </ul>
+      <figure class="cinema" data-film="build" id="film-build" data-ia="build.alt" aria-label="Scripted film. NowAI Builder reads four files, learns 62 suppliers, writes 14 rules and starts replaying October.">
+  <div class="screen">
+    <div class="stage" aria-hidden="true">
+      <div class="card b-card">
+        <div class="c-head">
+          <svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg>
+          <b>NowAI Builder</b>
+          <span class="btn b-approve ready"><span class="t-a" data-i="btn.approve">Approve</span></span>
+        </div>
+        <div class="b-main">
+          <div class="b-prompt">
+            <div class="b-text" data-i="build.prompt">Set up Nümunə Market from these files. Follow Leyla's voice note.</div>
+            <div class="b-row">
+              <div class="b-chips">
+                <span class="chip"><svg class="mi"><use href="#i-file"/></svg>Kassa_2025.xlsx<svg class="mi x"><use href="#i-x"/></svg></span>
+                <span class="chip"><svg class="mi"><use href="#i-file"/></svg>Bank_oktyabr.pdf<svg class="mi x"><use href="#i-x"/></svg></span>
+                <span class="chip"><svg class="mi"><use href="#i-file"/></svg>1C_ixrac.xml<svg class="mi x"><use href="#i-x"/></svg></span>
+                <span class="chip"><svg class="mi"><use href="#i-wave"/></svg>Səs_qeydi.m4a<svg class="mi x"><use href="#i-x"/></svg></span>
+              </div>
+              <span class="b-send gone"><svg class="mi up"><use href="#i-up"/></svg><span class="s-tick"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span></span>
+            </div>
+          </div>
+          <div class="b-using">
+            <span data-i="build.using">Using</span>
+            <span class="u"><svg class="mi"><use href="#i-book"/></svg><span data-i="build.u1">Chart of accounts</span></span>
+            <span class="u"><svg class="mi"><use href="#i-scale"/></svg><span data-i="build.u2">Tax rules</span></span>
+            <span class="u"><svg class="mi"><use href="#i-map"/></svg><span data-i="build.u3">Supplier map</span></span>
+          </div>
+          <p class="b-say" data-i="build.say">Client is set up. I'm replaying last October before anything goes live.</p>
+          <div class="b-list">
+            <div class="ck ok"><span class="ck-i"><i class="sp"></i><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="ck-t" data-i="build.c1">Read 6,480 documents</span></div>
+            <div class="ck ok"><span class="ck-i"><i class="sp"></i><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="ck-t" data-i="build.c2">Learned 62 suppliers</span></div>
+            <div class="ck ok"><span class="ck-i"><i class="sp"></i><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="ck-t" data-i="build.c3">Wrote 14 rules</span></div>
+            <div class="ck ok"><span class="ck-i"><i class="sp"></i><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="ck-t" data-i="build.c4">Replaying October</span></div>
+          </div>
+        </div>
+        <div class="b-box"><span data-i="build.box">What should I change?</span><svg class="mi"><use href="#i-send"/></svg></div>
+      </div>
+    </div>
+    <div class="chrome"><span class="cap" data-i="film.caption">Scripted film. Sample data.</span><span class="ctl"></span></div>
+  </div>
+</figure>
+    </div>
+  </section>
+
+  <section class="sec" id="test">
+    <div class="sec-grid flip">
+      <div class="sec-head">
+        <h2 data-i="test.h">Test</h2>
+        <p class="sec-line" data-i="test.line">Replay a past month before anything goes live.</p>
+      </div>
+      <ul class="feats">
+        <li><svg class="ic"><use href="#i-compare"/></svg><div><b data-i="test.f1">Scored on your own work</b><span data-i="test.f1t">Every document is compared with the entry your accountant made.</span></div></li>
+        <li><svg class="ic"><use href="#i-explain"/></svg><div><b data-i="test.f2">Every difference explained</b><span data-i="test.f2t">See why each one failed, with the documents behind it.</span></div></li>
+        <li><svg class="ic"><use href="#i-edit"/></svg><div><b data-i="test.f3">Fix it in plain words</b><span data-i="test.f3t">Approve a rule, rerun the month and see the new score.</span></div></li>
+      </ul>
+      <figure class="cinema" data-film="test" id="film-test" data-ia="test.alt" aria-label="Scripted film. A replay of October matches 96.4% of 412 documents. One approved rule lifts the match to 98.5%, with 6 left for the accountant.">
+  <div class="screen">
+    <div class="stage" aria-hidden="true">
+      <div class="card x-card">
+        <div class="c-head">
+          <svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg>
+          <b data-i="test.title">Replay: October</b>
+          <span class="c-tag">Nümunə Market</span>
+        </div>
+        <div class="x-top">
+          <div class="x-stat">
+            <div class="x-big x-docs" data-n="412">412</div>
+            <div class="x-lab" data-i="test.docs">documents</div>
+          </div>
+          <div class="x-stat">
+            <div class="x-big x-pct" data-i="test.pct">98.5%</div>
+            <div class="x-lab x-of" data-i="test.of">406 of 412 match Leyla's own entries</div>
+          </div>
+          <span class="x-left" data-i="test.left">6 left for Leyla</span>
+        </div>
+        <div class="x-bar"><i></i></div>
+        <div class="x-cols">
+          <div class="x-list">
+            <div class="x-lh" data-i="test.diffs">15 differences</div>
+            <div class="x-row x-fuel sel fixed"><span data-i="test.r1">Fuel receipts with no VÖEN (9)</span><span class="x-t"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span></div>
+            <div class="x-row"><span data-i="test.r2">Sale booked to the wrong shop (3)</span></div>
+            <div class="x-row"><span data-i="test.r3">Supplier name spelled two ways (2)</span></div>
+            <div class="x-row"><span data-i="test.r4">Bank fee with no document (1)</span></div>
+          </div>
+          <div class="x-side">
+            <div class="x-why">
+              <h4 data-i="test.why">Why it failed</h4>
+              <p data-i="test.whyt">These 9 receipts have no tax number. Leyla held them and asked the driver. NowAI booked them.</p>
+            </div>
+            <div class="x-rule">
+              <h4 data-i="test.rule">Proposed rule</h4>
+              <p data-i="test.rulet">If a fuel receipt has no VÖEN, ask the driver on WhatsApp and hold the entry.</p>
+            </div>
+            <span class="btn x-ok done"><span class="b-t"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="t-a" data-i="test.ok">Approve rule</span><span class="t-b" data-i="test.oked">Rule approved</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chrome"><span class="cap" data-i="film.caption">Scripted film. Sample data.</span><span class="ctl"></span></div>
+  </div>
+</figure>
+    </div>
+  </section>
+
+  <section class="sec" id="run">
+    <div class="sec-wtop">
+      <div class="sec-head">
+        <h2 data-i="run.h">Run</h2>
+        <p class="sec-line" data-i="run.line">Every day, from photo to approved entry.</p>
+      </div>
+      <ul class="feats feats-row">
+        <li><svg class="ic"><use href="#i-scan"/></svg><div><b data-i="run.f1">Reads the document</b><span data-i="run.f1t">Each field carries a confidence dot, so you check only what needs checking.</span></div></li>
+        <li><svg class="ic"><use href="#i-journal"/></svg><div><b data-i="run.f2">Proposes the entry</b><span data-i="run.f2t">Debit and credit lines, with the suppliers it learned in Build.</span></div></li>
+        <li><svg class="ic"><use href="#i-link"/></svg><div><b data-i="run.f3">Matches the bank</b><span data-i="run.f3t">Links the payment to the invoice and checks the e-qaimə. Accountants match the delivery note (qara qaimə) to the e-qaimə by hand today; NowAI would do it line by line.</span></div></li>
+      </ul>
+    </div>
+    <figure class="cinema film-wide" data-film="run" id="film-run" data-ia="run.alt" aria-label="Scripted film. NowAI reads a supplier invoice of 240.72 AZN, proposes the entry, the accountant approves, and the bank line and e-qaimə both match.">
+  <div class="screen">
+    <div class="stage" aria-hidden="true">
+      <div class="card r-card">
+        <div class="c-head">
+          <svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg>
+          <b>Nümunə Market</b>
+          <span class="c-sub" data-i="rev.title">Review queue</span>
+          <span class="r-tally"><span class="r-q" data-i="run.queue">Queue: 41 left today</span></span>
+        </div>
+        <div class="r-cols">
+          <div class="r-col r-c1">
+            <div class="r-lab"><i>1</i><span data-i="run.l1">Document</span></div>
+            <div class="r-paper"><div class="doc">
+  <div class="d-top"><span class="d-logo" data-f="seller"><b>ÖRNƏK SÜD</b><i>TOPDAN</i></span><span class="d-ttl">Satış Sənədi</span><span class="d-dt"><b>14.10.2026</b><b>09:02</b></span></div>
+  <div class="d-rule"></div>
+  <div class="d-hd">
+    <div class="d-hr"><span><i>Sənəd №</i>0000-14</span><span data-f="date"><i>Tarix</i>14.10.2026</span><span><i>Satıcı</i>Nümunə Satıcı</span><span class="d-cur">AZN</span></div>
+    <div class="d-hr"><span><i>Anbar</i>Mərkəz depo</span><span><i>Alıcı</i>NÜMUNƏ MARKET</span></div>
+  </div>
+  <div class="d-table">
+    <div class="d-r d-h"><span>№</span><span>Barkod</span><span>Ad</span><span>Qutu</span><span>Miqdar</span><span>Qiymət</span><span>Məbləğ</span></div>
+    <div class="d-r" data-f="l1"><span>1</span><span class="d-bc">0000000000011</span><span>Süd 1L</span><span>-</span><span>120</span><span>1.298</span><span>155.76</span></div>
+    <div class="d-r" data-f="l2"><span>2</span><span class="d-bc">0000000000012</span><span>Kefir 1L</span><span>-</span><span>60</span><span>1.416</span><span>84.96</span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r d-y" data-f="total"><span></span><span></span><span>Yekun</span><span></span><span></span><span></span><span>240.72</span></div>
+  </div>
+  <div class="stamp">NÜMUNƏ</div>
+</div><div class="r-scan tr"></div></div>
+            <div class="gloss r-gloss" data-i="run.g1">Delivery note (qara qaimə), in Azerbaijani</div>
+          </div>
+          <div class="r-col r-c2">
+            <div class="r-lab"><i>2</i><span data-i="run.l2">Extracted fields</span></div>
+            <div class="fl"><span data-i="f.supplier">Supplier</span><b>Örnək Süd MMC</b><i class="dot"></i></div>
+            <div class="fl"><span>VÖEN</span><b>0000000000</b><i class="dot"></i></div>
+            <div class="fl"><span data-i="f.date">Date</span><b>14.10.2026</b><i class="dot"></i></div>
+            <div class="fl"><span>Süd 1L</span><b>120 × <span data-n="1.10">1.10</span> = <span data-n="132.00">132.00</span></b><i class="dot"></i></div>
+            <div class="fl"><span>Kefir 1L</span><b>60 × <span data-n="1.20">1.20</span> = <span data-n="72.00">72.00</span></b><i class="dot warn"></i></div>
+            <div class="fl"><span data-i="f.net">Net</span><b data-n="204.00">204.00</b><i class="dot"></i></div>
+            <div class="fl"><span data-i="f.vat">ƏDV 18%</span><b data-n="36.72">36.72</b><i class="dot"></i></div>
+            <div class="fl fl-t"><span data-i="f.total">Total</span><b><span data-n="240.72">240.72</span> AZN</b><i class="dot"></i></div>
+            <div class="r-legend"><i class="dot"></i><span data-i="run.sure">High confidence</span><i class="dot warn"></i><span data-i="run.check">Worth a look</span></div>
+          </div>
+          <div class="r-col r-c3">
+            <div class="r-lab"><i>3</i><span data-i="je.title">Proposed entry</span></div>
+            <div class="r-learn"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg><span data-i="run.learned">Örnək Süd MMC, learned in Build</span></div>
+            <div class="je je-h"><span data-i="run.acct">Account</span><span data-i="je.dr">Debit</span><span data-i="je.cr">Credit</span></div>
+            <div class="je"><span><em>205</em><span data-i="ac.205">Goods</span></span><span data-n="204.00">204.00</span><span></span></div>
+            <div class="je"><span><em>241</em><span data-i="ac.241">ƏDV to offset</span></span><span data-n="36.72">36.72</span><span></span></div>
+            <div class="je"><span><em>531</em><span data-i="ac.531">Payables to suppliers</span></span><span></span><span data-n="240.72">240.72</span></div>
+            <div class="je je-s"><span data-i="run.bal">Total</span><span data-n="240.72">240.72</span><span data-n="240.72">240.72</span></div>
+            <div class="r-act"><span class="btn go done"><span class="b-t"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="t-a" data-i="btn.approve">Approve</span><span class="t-b" data-i="btn.approved">Approved</span></span></div>
+          </div>
+        </div>
+        <div class="r-strip">
+          <div class="r-line r-bank">
+            <span class="r-src" data-i="run.bank">Bank</span>
+            <span class="r-dt">15.10.2026</span>
+            <b class="r-name">Örnək Süd MMC</b>
+            <b class="r-amt" data-n="240.72">240.72</b>
+            <span class="r-link"><i></i></span>
+            <span class="r-inv"><span data-i="run.inv">Delivery note 0000-14</span></span>
+            <span class="mt"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg><span data-i="run.match">Matched</span></span>
+          </div>
+          <div class="r-line r-eq">
+            <span class="r-src">e-qaimə</span>
+            <span class="r-dt">14.10.2026</span>
+            <b class="r-name">Örnək Süd MMC</b>
+            <b class="r-amt" data-n="240.72">240.72</b>
+            <span class="r-link"><i></i></span>
+            <span class="r-inv"><span data-i="run.vat">ƏDV 36.72</span></span>
+            <span class="mt"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg><span data-i="run.match">Matched</span></span>
+          </div>
+        </div>
+        <div class="r-match tr">
+          <div class="rm-note"><div class="doc">
+  <div class="d-top"><span class="d-logo" data-f="seller"><b>ÖRNƏK SÜD</b><i>TOPDAN</i></span><span class="d-ttl">Satış Sənədi</span><span class="d-dt"><b>14.10.2026</b><b>09:02</b></span></div>
+  <div class="d-rule"></div>
+  <div class="d-hd">
+    <div class="d-hr"><span><i>Sənəd №</i>0000-14</span><span data-f="date"><i>Tarix</i>14.10.2026</span><span><i>Satıcı</i>Nümunə Satıcı</span><span class="d-cur">AZN</span></div>
+    <div class="d-hr"><span><i>Anbar</i>Mərkəz depo</span><span><i>Alıcı</i>NÜMUNƏ MARKET</span></div>
+  </div>
+  <div class="d-table">
+    <div class="d-r d-h"><span>№</span><span>Barkod</span><span>Ad</span><span>Qutu</span><span>Miqdar</span><span>Qiymət</span><span>Məbləğ</span></div>
+    <div class="d-r" data-f="l1"><span>1</span><span class="d-bc">0000000000011</span><span>Süd 1L</span><span>-</span><span>120</span><span>1.298</span><span>155.76</span></div>
+    <div class="d-r" data-f="l2"><span>2</span><span class="d-bc">0000000000012</span><span>Kefir 1L</span><span>-</span><span>60</span><span>1.416</span><span>84.96</span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="d-r d-y" data-f="total"><span></span><span></span><span>Yekun</span><span></span><span></span><span></span><span>240.72</span></div>
+  </div>
+  <div class="stamp">NÜMUNƏ</div>
+</div></div>
+          <div class="rm-link"><i></i></div>
+          <div class="rm-eq"><div class="doc eq">
+  <div class="q-h">Malların, işlərin və xidmətlərin təqdim edilməsi barədə elektron qaimə-faktura</div>
+  <div class="q-s">Seriya: <b>NÜMUNƏ</b> &nbsp; Nömrə: <b>0000000</b> &nbsp; Tarix: <b>14.10.2026</b></div>
+  <div class="q-s">Növü: <b>Cari</b></div>
+  <div class="q-p"><span class="q-k">Göndərən:</span> VÖEN <span class="q-bx"><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i></span> <u>Örnək Süd MMC</u></div>
+  <div class="q-p"><span class="q-k">Qəbul edən:</span> VÖEN <span class="q-bx"><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i><i>0</i></span> <u>Nümunə Market</u></div>
+  <div class="q-p"><span class="q-k">Əsas:</span> <u>Satış Sənədi № 0000-14, 14.10.2026</u></div>
+  <div class="q-t">
+    <div class="q-r q-hd"><span>Sıra №</span><span>Malın adı</span><span>Ölçü vahidi</span><span>Miqdarı</span><span>Vahidinin qiyməti</span><span>ƏDV-siz dəyəri</span><span>ƏDV məbləği</span><span>Yekun məbləğ</span></div>
+    <div class="q-r" data-f="l1"><span>1</span><span>Süd 1L</span><span>ədəd</span><span>120</span><span>1.10</span><span>132.00</span><span>23.76</span><span>155.76</span></div>
+    <div class="q-r" data-f="l2"><span>2</span><span>Kefir 1L</span><span>ədəd</span><span>60</span><span>1.20</span><span>72.00</span><span>12.96</span><span>84.96</span></div>
+    <div class="q-r q-tot" data-f="total"><span></span><span>Cəmi</span><span></span><span></span><span></span><span>204.00</span><span>36.72</span><span>240.72</span></div>
+  </div>
+  <div class="q-w">Yekun məbləğ: <b>240 manat 72 qəpik</b></div>
+  <div class="q-f"><span class="q-my">M.Y.</span><span class="q-sg">Təhvil verdim</span><span class="q-sg">Təhvil aldım</span></div>
+  <div class="stamp">NÜMUNƏ</div>
+</div></div>
+          <div class="rm-tag"><span class="mt"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg><span data-i="run.eqtag">Delivery note matches e-qaimə</span></span><span class="rm-sub" data-i="run.eqsub">2 of 2 lines match</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="chrome"><span class="cap" data-i="film.caption">Scripted film. Sample data.</span><span class="ctl"></span></div>
+  </div>
+</figure>
+  </section>
+
+  <section class="sec" id="improve">
+    <div class="sec-grid">
+      <div class="sec-head">
+        <h2 data-i="imp.h">Improve</h2>
+        <p class="sec-line" data-i="imp.line">It reads across all your clients and speaks up.</p>
+      </div>
+      <ul class="feats">
+        <li><svg class="ic"><use href="#i-search"/></svg><div><b data-i="imp.f1">Finds what nobody tagged</b><span data-i="imp.f1t">Looks across every client for patterns a busy team misses.</span></div></li>
+        <li><svg class="ic"><use href="#i-note"/></svg><div><b data-i="imp.f2">Answers in money</b><span data-i="imp.f2t">Ask how big it is and get a figure in your team chat.</span></div></li>
+        <li><svg class="ic"><use href="#i-mail"/></svg><div><b data-i="imp.f3">Prepares the work</b><span data-i="imp.f3t">It drafts the reminders. You review them before anything is sent.</span></div></li>
+      </ul>
+      <figure class="cinema" data-film="improve" id="film-improve" data-ia="improve.alt" aria-label="Scripted film. NowAI tells the team that Nümunə Market is owed 18,420 AZN by 6 customers, sizes it at 61% of the bills due, and prepares 6 reminders. Nine days later 12,870 AZN is collected.">
+  <div class="screen">
+    <div class="stage" aria-hidden="true">
+      <div class="card i-card">
+        <div class="c-head t-head">
+          <span class="hash">#</span>
+          <b data-i="team.channel">Team chat</b>
+          <span class="c-sub">Nümunə Mühasibat</span>
+          <span class="avs"><i>L</i><i>R</i></span>
+        </div>
+        <div class="i-thread">
+          <div class="t-msg i-1">
+            <span class="av av-n"><svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg></span>
+            <div class="t-body">
+              <div class="t-meta"><b>NowAI</b><span class="c-chip" data-i="team.agent">Agent</span><time>09:14</time></div>
+              <p data-ih="imp.m1">New finding. I read October for all 38 clients and found something nobody has tagged: Nümunə Market is owed <b>18,420 AZN</b> by 6 customers, all over 30 days late. <span class="at">@Leyla</span> shall I draft reminders?</p>
+              <div class="t-rx">
+                <span class="rx-add"><svg class="mi"><use href="#i-smile"/></svg></span>
+                <span class="rx"><svg class="rx-s"><use href="#i-thumb"/></svg><b>1</b></span>
+              </div>
+            </div>
+          </div>
+          <div class="t-msg i-2">
+            <span class="av">L</span>
+            <div class="t-body">
+              <div class="t-meta"><b>Leyla</b><time>09:16</time></div>
+              <p data-ih="imp.m2">How big is that against what he has to pay this month?</p>
+            </div>
+          </div>
+          <div class="t-msg i-3">
+            <span class="av av-n"><svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg></span>
+            <div class="t-body">
+              <div class="t-meta"><b>NowAI</b><span class="c-chip" data-i="team.agent">Agent</span><time>09:17</time></div>
+              <p data-ih="imp.m3"><b>61%</b> of the 30,100 AZN in bills due by the 20th. Without it, cash goes below zero on day 19.</p>
+            </div>
+          </div>
+          <div class="t-msg i-4">
+            <span class="av">L</span>
+            <div class="t-body">
+              <div class="t-meta"><b>Leyla</b><time>09:21</time></div>
+              <p data-ih="imp.m4">This matters. <span class="at">@NowAI</span> draft them before my 2 o'clock with Elnur.</p>
+            </div>
+          </div>
+          <div class="t-msg i-5">
+            <span class="av av-n"><svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="7" class="mk-a"/><path class="mk-b" d="M7 17V7.4l10 9.2V7"/><circle class="mk-c" cx="19.3" cy="4.7" r="2.1"/></svg></span>
+            <div class="t-body">
+              <div class="t-meta"><b>NowAI</b><span class="c-chip" data-i="team.agent">Agent</span><time>13:40</time></div>
+              <p data-ih="imp.m5">6 reminders ready for your review.</p>
+            </div>
+          </div>
+          <div class="i-later" data-i="imp.later">9 days later: 4 of 6 paid, 12,870 AZN collected.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chrome"><span class="cap" data-i="film.caption">Scripted film. Sample data.</span><span class="ctl"></span></div>
+  </div>
+</figure>
+    </div>
+  </section>
+
+  <section class="sec" id="cash">
+    <div class="sec-grid flip">
+      <div class="sec-head">
+        <h2 data-i="cash.h">Cash</h2>
+        <p class="sec-line" data-i="cash.line">The owner sees what is coming, in plain numbers.</p>
+      </div>
+      <ul class="feats">
+        <li><svg class="ic"><use href="#i-wallet"/></svg><div><b data-i="cash.f1">What is owed and what is due</b><span data-i="cash.f1t">One card with the money coming in and the bills going out.</span></div></li>
+        <li><svg class="ic"><use href="#i-chart"/></svg><div><b data-i="cash.f2">The day cash runs out</b><span data-i="cash.f2t">A daily balance line shows the first day below zero.</span></div></li>
+        <li><svg class="ic"><use href="#i-tap"/></svg><div><b data-i="cash.f3">One tap to act</b><span data-i="cash.f3t">The owner sends the reminders the accountant reviewed.</span></div></li>
+      </ul>
+      <figure class="cinema" data-film="cash" id="film-cash" data-ia="cash.alt" aria-label="Scripted film. The owner&#x27;s phone shows 18,420 AZN owed and 30,100 AZN due, with cash below zero on day 19. After reminders the balance stays above zero.">
+  <div class="screen">
+    <div class="stage" aria-hidden="true">
+      <div class="phone k-phone">
+        <div class="ph-scr k-scr">
+          <div class="ph-head">
+            <span class="av">E</span>
+            <div class="ph-who"><b>Nümunə Market</b><span>Elnur</span></div>
+          </div>
+          <div class="k-week">
+            <div class="k-wk" data-i="cash.week">This week</div>
+            <div class="k-two">
+              <div class="k-a">
+                <span data-i="cash.owed">Owed to you</span>
+                <b><span data-n="18420">18,420</span> AZN</b>
+                <em class="late" data-i="cash.late">6 late</em>
+              </div>
+              <div class="k-b">
+                <span data-i="cash.owe">You owe</span>
+                <b><span data-n="30100">30,100</span> AZN</b>
+                <em data-i="cash.by">by the 20th</em>
+              </div>
+            </div>
+          </div>
+          <div class="k-chart after">
+            <div class="k-lab" data-i="cash.bal">Daily cash balance, by day of the month</div>
+            <svg viewBox="0 0 264 176" width="264" height="176" aria-hidden="true">
+              <defs>
+                <clipPath id="k-cb"><rect class="k-cbr" x="0" y="0" width="264" height="176"/></clipPath>
+                <clipPath id="k-ca"><rect class="k-car" x="0" y="0" width="264" height="176"/></clipPath>
+              </defs>
+              <rect class="k-neg" x="6" y="105.1" width="252" height="50.9"/>
+              <line class="k-zero" x1="6" y1="105.1" x2="258" y2="105.1"/>
+              <text class="k-tx" x="6" y="101.5">0</text>
+              <text class="k-tx" x="6" y="170">6</text>
+              <text class="k-tx" x="90" y="170" text-anchor="middle">12</text>
+              <text class="k-tx" x="174" y="170" text-anchor="middle">18</text>
+              <text class="k-tx" x="258" y="170" text-anchor="end">24</text>
+              <g clip-path="url(#k-cb)"><path class="k-before" d="M6.0 68.1 L20.0 64.0 L34.0 59.8 L48.0 55.6 L62.0 70.0 L76.0 65.8 L90.0 61.6 L104.0 57.5 L118.0 81.5 L132.0 77.4 L146.0 73.2 L160.0 101.4 L174.0 97.3 L188.0 127.8 L202.0 149.1 L216.0 144.9 L230.0 140.7 L244.0 136.6 L258.0 132.4"/></g>
+              <g clip-path="url(#k-ca)"><path class="k-after" d="M6.0 68.1 L20.0 64.0 L34.0 48.7 L48.0 44.5 L62.0 47.3 L76.0 43.1 L90.0 24.2 L104.0 20.0 L118.0 44.1 L132.0 17.9 L146.0 13.7 L160.0 41.9 L174.0 37.7 L188.0 68.3 L202.0 89.5 L216.0 85.4 L230.0 81.2 L244.0 77.1 L258.0 72.9"/></g>
+              <g class="k-mark tr"><circle class="k-dot" cx="188" cy="127.8" r="4.5"/><text class="k-tx k-red" x="180" y="134" text-anchor="end" data-i="cash.d19">Day 19: below zero</text></g>
+              <text class="k-tx k-ok" x="258" y="101" text-anchor="end" data-i="cash.above">Above zero</text>
+            </svg>
+            <div class="k-cap" data-i="cash.cap">With 4 of 6 paid: 12,870 AZN in 9 days</div>
+          </div>
+          <div class="k-act"><span class="btn k-send done"><span class="b-t"><svg class="tick" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8.6l3.2 3.1L13 4.6"/></svg></span><span class="t-a" data-i="cash.send">Send reminders</span><span class="t-b" data-i="cash.sent">Reminders sent</span></span></div>
+          <p class="k-note" data-i="cash.note">Paying suppliers and payment links would run through a licensed partner. Planned, not built.</p>
+        </div>
+      </div>
+    </div>
+    <div class="chrome"><span class="cap" data-i="film.caption">Scripted film. Sample data.</span><span class="ctl"></span></div>
+  </div>
+</figure>
+    </div>
+  </section>
+
+  <section class="sec live" id="live" data-live="off">
+  <div class="live-head">
+    <h2 data-i="live.h">Try it live</h2>
+    <p class="sec-line" data-i="live.line">This is real Claude reading a sample. It is a test, not the product.</p>
+    <p class="live-off only-off" id="live-off-text" data-i="live.off">Live reading works when this page is opened in Claude.</p>
+    <p class="live-cost only-on" data-i="live.cost">It runs on your own Claude usage. The first call asks for your consent.</p>
+  </div>
+
+  <div class="tool" id="tool-read">
+    <div class="tool-top">
+      <h3 data-i="live.t1">Read a document</h3>
+      <p data-i="live.t1s">Claude reads the document and proposes the entry. This page checks the arithmetic.</p>
+    </div>
+    <div class="tool-grid">
+      <div class="tool-l">
+        <div class="samples" role="group" data-ia="live.pick" aria-label="Sample documents">
+          <button type="button" class="smp" data-doc="invoice" aria-pressed="true"><canvas data-doc="invoice"></canvas><span data-i="live.s1">Invoice</span></button>
+          <button type="button" class="smp" data-doc="fuel" aria-pressed="false"><canvas data-doc="fuel"></canvas><span data-i="live.s2">Fuel receipt</span></button>
+          <button type="button" class="smp" data-doc="bank" aria-pressed="false"><canvas data-doc="bank"></canvas><span data-i="live.s3">Bank statement</span></button>
+        </div>
+        <div class="only-on">
+          <label class="own" id="own-wrap" hidden>
+            <input type="file" id="own-file" accept="image/jpeg,image/png,image/webp">
+            <svg class="mi" aria-hidden="true"><use href="#i-up"/></svg>
+            <span data-i="live.own">Use your own photo</span>
+          </label>
+          <p class="live-warn" data-i="live.warn">Use a sample or a document you are allowed to share. Nothing is saved.</p>
+          <p class="live-warn" id="read-mode" hidden data-i="live.textonly">This view cannot send images, so Claude reads the text of the sample.</p>
+          <div class="act-row">
+            <button type="button" class="act" id="read-go" data-i="live.go">Read this document</button>
+            <button type="button" class="act-2" id="read-stop" hidden data-i="live.stop">Stop</button>
+            <button type="button" class="act-2" id="read-retry" hidden data-i="live.retry">Try again</button>
+            <span class="status" id="read-status" role="status"></span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-m only-on">
+        <canvas id="doc-view" class="doc-view"></canvas>
+        <img id="own-view" class="doc-view" hidden alt="">
+      </div>
+      <div class="tool-r only-on">
+        <div class="lf-list" id="read-fields"></div>
+        <div id="read-items-wrap" hidden>
+          <h4 data-i="live.items">Line items</h4>
+          <div id="read-items"></div>
+        </div>
+        <div class="chks" id="read-checks"></div>
+      </div>
+    </div>
+    <div class="entry only-on" id="read-entry" hidden>
+      <div class="lj lj-h"><span data-i="live.entry">Proposed entry</span><span data-i="je.dr">Debit</span><span data-i="je.cr">Credit</span></div>
+      <div id="read-journal"></div>
+      <p class="entry-why" id="read-why"></p>
+      <button type="button" class="act" id="read-ok" data-i="live.approve">Approve</button>
+    </div>
+  </div>
+
+  <div class="tool" id="tool-rules">
+    <div class="tool-top">
+      <h3 data-i="live.t2">Set up a client</h3>
+      <p data-i="live.t2s">Describe how a client works. Claude writes rules, then tests them on 8 sample documents.</p>
+    </div>
+    <div class="only-on">
+      <label class="tx-label" for="rules-text" data-i="live.t2l">How this client works</label>
+      <textarea id="rules-text" rows="3" spellcheck="false"></textarea>
+      <div class="act-row">
+        <button type="button" class="act" id="rules-go" data-i="live.go2">Write rules and test them</button>
+        <button type="button" class="act-2" id="rules-stop" hidden data-i="live.stop">Stop</button>
+        <button type="button" class="act-2" id="rules-retry" hidden data-i="live.retry">Try again</button>
+        <span class="status" id="rules-status" role="status"></span>
+      </div>
+      <div id="rules-wrap" hidden>
+        <h4 data-i="live.rules">Rules</h4>
+        <div id="rules-list"></div>
+      </div>
+      <div id="test-wrap" hidden>
+        <h4><span data-i="live.res">Test on 8 sample documents:</span> <b id="test-sum"></b></h4>
+        <div class="tr-row tr-h"><span data-i="live.col1">Document</span><span data-i="live.col2">The rules say</span><span data-i="live.col3">Leyla's entry</span><em></em></div>
+        <div id="test-list"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="sec" id="agents">
+    <h2 class="h2-s" data-i="ag.h">Agents</h2>
+    <ul class="agents">
+      <li><div class="ag-t"><b data-i="ag.a1">Books</b><em class="st now" data-i="ag.launch">At launch</em></div><p data-i="ag.a1t">Reads invoices, receipts and bank statements, and prepares checked entries for 1C.</p></li>
+      <li><div class="ag-t"><b data-i="ag.a2">Cash</b><em class="st" data-i="ag.next">Next</em></div><p data-i="ag.a2t">Forecasts cash and drafts reminders for overdue invoices.</p></li>
+      <li><div class="ag-t"><b data-i="ag.a3">Tax</b><em class="st" data-i="ag.next">Next</em></div><p data-i="ag.a3t">Keeps the filing calendar, pre-checks declarations and flags rule changes.</p></li>
+      <li><div class="ag-t"><b data-i="ag.a4">People</b><em class="st" data-i="ag.next">Next</em></div><p data-i="ag.a4t">Prepares labour contracts and tracks payroll rule changes.</p></li>
+      <li><div class="ag-t"><b data-i="ag.a5">Comply</b><em class="st later" data-i="ag.later">Later</em></div><p data-i="ag.a5t">Tracks cash-register rules, licences and certificates.</p></li>
+    </ul>
+  </section>
+
+  <section class="sec" id="volume">
+    <div class="calc">
+      <div class="calc-in">
+        <h2 class="h2-s" data-i="calc.h">At your volume</h2>
+        <label class="calc-q" for="calc-n" data-i="calc.q">Clients your practice serves</label>
+        <div class="calc-row">
+          <input id="calc-n" type="range" min="10" max="100" step="1" value="30">
+          <output id="calc-v" for="calc-n">30</output>
+        </div>
+        <p class="calc-label" data-i="calc.label">Base case from our model. Untested with real practices.</p>
+        <p class="calc-basis" id="calc-basis"></p>
+      </div>
+      <dl class="calc-out">
+        <div><dt data-i="calc.o1">NowAI bill a month</dt><dd><span id="o-bill">435</span> AZN</dd></div>
+        <div><dt data-i="calc.o2">Accountant hours freed a month</dt><dd><span id="o-hours">103</span></dd></div>
+        <div><dt data-i="calc.o3">What those hours are worth a month</dt><dd><span id="o-worth">1,046</span> AZN</dd></div>
+        <div><dt data-i="calc.o4">More clients you could take</dt><dd><span id="o-more">5</span></dd><span class="calc-sub" id="o-fees"></span></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec" id="start">
+    <h2 class="h2-s" data-i="start.h">How we start</h2>
+    <ol class="steps">
+      <li><i>1</i><span data-i="start.s1">Interview 20 practices.</span></li>
+      <li><i>2</i><span data-i="start.s2">Pilot with 10 practices. Three must agree to pay.</span></li>
+      <li><i>3</i><span data-i="start.s3">Measure overdue invoices at 30 firms.</span></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-in"><p data-i="foot">Scripted prototype. Every company, person, number and document here is fictional. Not connected to any real system, bank or tax service. Payments would run through a licensed partner, and that route is not legally confirmed yet.</p></div>
+</footer>
+
+<script>
+/* ---------- Numbers to update ----------
+   Base case from AI_Company_Model.xlsx, sheet Practice ROI (checked 2026-11-06, 30-client practice).
+   Every calculator figure on the page reads from here. */
+const CONFIG = {
+  clients: { min: 10, max: 100, start: 30 },
+  billPerClient: 14.5,         // AZN a client a month (Practice ROI B66:D66)
+  hoursSavedPerClient: 3.4167, // accountant hours a client a month (102.5 hours / 30 clients, C67)
+  hourlyCost: 10.2,            // loaded AZN an accountant hour (B22)
+  feePerClient: 220,           // AZN a client a month the practice charges (6,600 / 30, C74)
+  hoursPerClient: 12.23,       // accountant hours a client a month today (367 / 30, C76)
+  resaleShare: 0.5             // share of freed hours resold to new clients, base case (E38:G38)
+};
+
+const I18N = {"nav.label":{"en":"Sections","az":"Bölmələr"},"nav.build":{"en":"Build","az":"Qur"},"nav.test":{"en":"Test","az":"Yoxla"},"nav.run":{"en":"Run","az":"İşlət"},"nav.improve":{"en":"Improve","az":"Təkmilləşdir"},"nav.cash":{"en":"Cash","az":"Pul"},"nav.live":{"en":"Try it live","az":"Canlı sınayın"},"tag":{"en":"Scripted prototype","az":"Ssenarili prototip"},"lang.label":{"en":"Language","az":"Dil"},"hero.h1a":{"en":"Clients send photos.","az":"Müştərilər şəkil göndərir."},"hero.h1b":{"en":"The books write themselves.","az":"Uçot özü aparılır."},"hero.h1c":{"en":"You approve.","az":"Siz təsdiqləyirsiniz."},"hero.sub":{"en":"The AI back office for Azerbaijani small firms, run by their accountant.","az":"Azərbaycanın kiçik şirkətləri üçün süni intellektli arxa ofis. Onu şirkətin öz mühasibi idarə edir."},"hero.alt":{"en":"Scripted film. A client sends a photo of an invoice, the accountant approves the entry, and NowAI reports 18,420 AZN of late customer payments in the team chat.","az":"Ssenarili film. Müştəri qaimənin şəklini göndərir, mühasib yazılışı təsdiqləyir, NowAI komanda çatında 18 420 AZN gecikmiş debitor borc barədə xəbər verir."},"hero.s1":{"en":"Client sends a photo","az":"Müştəri şəkil göndərir"},"hero.s2":{"en":"You approve","az":"Siz təsdiqləyirsiniz"},"hero.s3":{"en":"NowAI finds what nobody tagged","az":"NowAI heç kimin qeyd etmədiyini tapır"},"hero.g1":{"en":"Today's delivery note","az":""},"hero.g2":{"en":"Received","az":""},"hero.alert":{"en":"I read October for all 38 clients and found something nobody has tagged: Nümunə Market is owed **18,420 AZN** by 6 customers, all over 30 days late. @Leyla shall I draft reminders?","az":"Oktyabrı 38 müştərinin hamısı üzrə oxudum və heç kimin qeyd etmədiyi bir şey tapdım: Nümunə Market-in 6 alıcıdan **18 420 AZN** debitor borcu var, hamısı 30 gündən çox gecikib. @Leyla xatırlatmaları hazırlayım?"},"problem.a":{"en":"Accountants spend their month typing receipts and chasing rule changes.","az":"Mühasiblərin ayı qəbzləri əl ilə daxil etməklə və dəyişən qaydaları izləməklə keçir."},"problem.b":{"en":"Small firms cannot afford more staff.","az":"Kiçik şirkətlərin əlavə işçiyə pulu çatmır."},"film.caption":{"en":"Scripted film. Sample data.","az":"Ssenarili film. Nümunə məlumatlar."},"film.pause":{"en":"Pause film","az":"Filmi dayandır"},"film.play":{"en":"Play film","az":"Filmi oynat"},"film.replay":{"en":"Replay film","az":"Filmi yenidən oynat"},"film.expand":{"en":"Expand film","az":"Filmi böyüt"},"film.close":{"en":"Close expanded film","az":"Böyüdülmüş filmi bağla"},"rev.title":{"en":"Review queue","az":"Yoxlama növbəsi"},"rev.sent":{"en":"Sent to 1C","az":"1C-yə göndərildi"},"btn.approve":{"en":"Approve","az":"Təsdiqlə"},"btn.approved":{"en":"Approved","az":"Təsdiqləndi"},"f.supplier":{"en":"Supplier","az":"Təchizatçı"},"f.date":{"en":"Date","az":"Tarix"},"f.net":{"en":"Net","az":"ƏDV-siz"},"f.vat":{"en":"ƏDV 18%","az":"ƏDV 18%"},"f.total":{"en":"Total","az":"Yekun"},"je.title":{"en":"Proposed entry","az":"Mühasibat yazılışı"},"je.dr":{"en":"Debit","az":"Debet"},"je.cr":{"en":"Credit","az":"Kredit"},"ac.205":{"en":"Goods","az":"Mallar"},"ac.241":{"en":"ƏDV to offset","az":"Əvəzləşdirilən ƏDV"},"ac.531":{"en":"Payables to suppliers","az":"Malsatanlara kreditor borc"},"team.channel":{"en":"Team chat","az":"Komanda çatı"},"team.agent":{"en":"Agent","az":"Agent"},"build.h":{"en":"Build","az":"Qur"},"build.line":{"en":"Hand over last year's files. NowAI sets up the client.","az":"Keçən ilin fayllarını verin. NowAI müştərini sistemə qoşur."},"build.f1":{"en":"Learns from your files","az":"Fayllarınızdan öyrənir"},"build.f1t":{"en":"Reads the cash book, bank statements, 1C exports and your voice notes.","az":"Kassa kitabını, bank çıxarışlarını, 1C ixracını və səs qeydlərinizi oxuyur."},"build.f2":{"en":"Writes plain rules","az":"Sadə qaydalar yazır"},"build.f2t":{"en":"Each client gets rules you can read, change or reject.","az":"Hər müştəri üçün oxuya, dəyişə və ya rədd edə biləcəyiniz qaydalar."},"build.f3":{"en":"Checks before going live","az":"İşə düşməzdən əvvəl yoxlayır"},"build.f3t":{"en":"It replays a past month, so you see the result before real books change.","az":"Keçmiş ayı təkrar işləyir. Real uçot dəyişməzdən əvvəl nəticəni görürsünüz."},"build.alt":{"en":"Scripted film. NowAI Builder reads four files, learns 62 suppliers, writes 14 rules and starts replaying October.","az":"Ssenarili film. NowAI Builder dörd faylı oxuyur, 62 təchizatçını öyrənir, 14 qayda yazır və oktyabrı təkrar işləməyə başlayır."},"build.prompt":{"en":"Set up Nümunə Market from these files. Follow Leyla's voice note.","az":"Bu fayllardan Nümunə Market-i qur. Leylanın səs qeydinə əməl et."},"build.using":{"en":"Using","az":"İstifadə edir:"},"build.u1":{"en":"Chart of accounts","az":"Hesablar planı"},"build.u2":{"en":"Tax rules","az":"Vergi qaydaları"},"build.u3":{"en":"Supplier map","az":"Təchizatçı xəritəsi"},"build.say":{"en":"Client is set up. I'm replaying last October before anything goes live.","az":"Müştəri sistemə qoşuldu. Heç nə işə düşməzdən əvvəl keçən oktyabrı təkrar işləyirəm."},"build.c1":{"en":"Read 6,480 documents","az":"6 480 sənəd oxundu"},"build.c2":{"en":"Learned 62 suppliers","az":"62 təchizatçı öyrənildi"},"build.c3":{"en":"Wrote 14 rules","az":"14 qayda yazıldı"},"build.c4":{"en":"Replaying October","az":"Oktyabr təkrar işlənir"},"build.box":{"en":"What should I change?","az":"Nəyi dəyişim?"},"test.h":{"en":"Test","az":"Yoxla"},"test.line":{"en":"Replay a past month before anything goes live.","az":"Heç nə işə düşməzdən əvvəl keçmiş ayı təkrar işlədin."},"test.f1":{"en":"Scored on your own work","az":"Öz işinizlə ölçülür"},"test.f1t":{"en":"Every document is compared with the entry your accountant made.","az":"Hər sənəd mühasibin etdiyi yazılışla tutuşdurulur."},"test.f2":{"en":"Every difference explained","az":"Hər fərqin izahı var"},"test.f2t":{"en":"See why each one failed, with the documents behind it.","az":"Hər fərqin səbəbini və arxasındakı sənədləri görürsünüz."},"test.f3":{"en":"Fix it in plain words","az":"Sadə sözlə düzəldin"},"test.f3t":{"en":"Approve a rule, rerun the month and see the new score.","az":"Qaydanı təsdiqləyin, ayı yenidən işlədin, yeni nəticəni görün."},"test.alt":{"en":"Scripted film. A replay of October matches 96.4% of 412 documents. One approved rule lifts the match to 98.5%, with 6 left for the accountant.","az":"Ssenarili film. Oktyabrın təkrarı 412 sənədin 96,4%-ni uyğunlaşdırır. Təsdiqlənən bir qayda nəticəni 98,5%-ə qaldırır, 6 sənəd mühasibə qalır."},"test.title":{"en":"Replay: October","az":"Təkrar: oktyabr"},"test.docs":{"en":"documents","az":"sənəd"},"test.pct":{"en":"98.5%","az":"98,5%"},"test.of":{"en":"406 of 412 match Leyla's own entries","az":"406 / 412 Leylanın yazılışları ilə eynidir"},"test.left":{"en":"6 left for Leyla","az":"6 sənəd Leylaya qalır"},"test.diffs":{"en":"15 differences","az":"15 fərq"},"test.r1":{"en":"Fuel receipts with no VÖEN (9)","az":"VÖEN-siz yanacaq qəbzləri (9)"},"test.r2":{"en":"Sale booked to the wrong shop (3)","az":"Satış səhv mağazaya yazılıb (3)"},"test.r3":{"en":"Supplier name spelled two ways (2)","az":"Təchizatçı adı iki cür yazılıb (2)"},"test.r4":{"en":"Bank fee with no document (1)","az":"Sənədsiz bank komissiyası (1)"},"test.why":{"en":"Why it failed","az":"Niyə uyğun gəlmədi"},"test.whyt":{"en":"These 9 receipts have no tax number. Leyla held them and asked the driver. NowAI booked them.","az":"Bu 9 qəbzdə VÖEN yoxdur. Leyla onları saxlayıb sürücüdən soruşub, NowAI isə yazılış edib."},"test.rule":{"en":"Proposed rule","az":"Təklif olunan qayda"},"test.rulet":{"en":"If a fuel receipt has no VÖEN, ask the driver on WhatsApp and hold the entry.","az":"Yanacaq qəbzində VÖEN yoxdursa, sürücüdən WhatsApp-da soruş və yazılışı saxla."},"test.ok":{"en":"Approve rule","az":"Qaydanı təsdiqlə"},"test.oked":{"en":"Rule approved","az":"Qayda təsdiqləndi"},"run.h":{"en":"Run","az":"İşlət"},"run.line":{"en":"Every day, from photo to approved entry.","az":"Hər gün, şəkildən təsdiqlənmiş yazılışa qədər."},"run.f1":{"en":"Reads the document","az":"Sənədi oxuyur"},"run.f1t":{"en":"Each field carries a confidence dot, so you check only what needs checking.","az":"Hər sahənin yanında əminlik nöqtəsi var, yalnız lazım olanı yoxlayırsınız."},"run.f2":{"en":"Proposes the entry","az":"Yazılış təklif edir"},"run.f2t":{"en":"Debit and credit lines, with the suppliers it learned in Build.","az":"Qur mərhələsində öyrəndiyi təchizatçılarla debet və kredit sətirləri."},"run.f3":{"en":"Matches the bank","az":"Bankla uzlaşdırır"},"run.f3t":{"en":"Links the payment to the invoice and checks the e-qaimə. Accountants match the delivery note (qara qaimə) to the e-qaimə by hand today; NowAI would do it line by line.","az":"Ödənişi qaimə ilə əlaqələndirir və e-qaiməni yoxlayır. Mühasiblər qara qaiməni e-qaimə ilə bu gün əllə uyğunlaşdırır; NowAI bunu sətir-sətir edərdi."},"run.eqtag":{"en":"Delivery note matches e-qaimə","az":"Qara qaimə = e-qaimə: 240.72 AZN"},"run.eqsub":{"en":"2 of 2 lines match","az":"2 sətirdən 2-si uzlaşır"},"run.alt":{"en":"Scripted film. NowAI reads a supplier invoice of 240.72 AZN, proposes the entry, the accountant approves, and the bank line and e-qaimə both match.","az":"Ssenarili film. NowAI 240,72 AZN-lik təchizatçı qaiməsini oxuyur, yazılış təklif edir, mühasib təsdiqləyir, bank sətri və e-qaimə uzlaşır."},"run.queue":{"en":"Queue: 41 left today","az":"Növbə: bu gün 41 qalıb"},"run.l1":{"en":"Document","az":"Sənəd"},"run.l2":{"en":"Extracted fields","az":"Oxunan sahələr"},"run.sure":{"en":"High confidence","az":"Yüksək əminlik"},"run.check":{"en":"Worth a look","az":"Baxmağa dəyər"},"run.learned":{"en":"Örnək Süd MMC, learned in Build","az":"Örnək Süd MMC, Qur mərhələsində öyrənilib"},"run.acct":{"en":"Account","az":"Hesab"},"run.bal":{"en":"Total","az":"Cəmi"},"run.bank":{"en":"Bank","az":"Bank"},"run.inv":{"en":"Delivery note 0000-14","az":"Qara qaimə 0000-14"},"run.vat":{"en":"ƏDV 36.72","az":"ƏDV 36,72"},"run.match":{"en":"Matched","az":"Uzlaşdı"},"imp.h":{"en":"Improve","az":"Təkmilləşdir"},"imp.line":{"en":"It reads across all your clients and speaks up.","az":"Bütün müştəriləri oxuyur və gördüyünü deyir."},"imp.f1":{"en":"Finds what nobody tagged","az":"Heç kimin görmədiyini tapır"},"imp.f1t":{"en":"Looks across every client for patterns a busy team misses.","az":"Məşğul komandanın gözündən qaçanları bütün müştərilər üzrə axtarır."},"imp.f2":{"en":"Answers in money","az":"Məbləğlə cavab verir"},"imp.f2t":{"en":"Ask how big it is and get a figure in your team chat.","az":"Nə qədər böyük olduğunu soruşun, komanda çatında məbləği alın."},"imp.f3":{"en":"Prepares the work","az":"İşi hazırlayır"},"imp.f3t":{"en":"It drafts the reminders. You review them before anything is sent.","az":"Xatırlatmaları hazırlayır. Göndərilməzdən əvvəl siz yoxlayırsınız."},"improve.alt":{"en":"Scripted film. NowAI tells the team that Nümunə Market is owed 18,420 AZN by 6 customers, sizes it at 61% of the bills due, and prepares 6 reminders. Nine days later 12,870 AZN is collected.","az":"Ssenarili film. NowAI komandaya Nümunə Market-in 6 alıcıdan 18 420 AZN debitor borcu olduğunu deyir, bunun ödəniləcək hesabların 61%-i olduğunu göstərir və 6 xatırlatma hazırlayır. Doqquz gün sonra 12 870 AZN yığılır."},"imp.m1":{"en":"New finding. I read October for all 38 clients and found something nobody has tagged: Nümunə Market is owed **18,420 AZN** by 6 customers, all over 30 days late. @Leyla shall I draft reminders?","az":"Yeni tapıntı. Oktyabrı 38 müştərinin hamısı üzrə oxudum və heç kimin qeyd etmədiyi bir şey tapdım: Nümunə Market-in 6 alıcıdan **18 420 AZN** debitor borcu var, hamısı 30 gündən çox gecikib. @Leyla xatırlatmaları hazırlayım?"},"imp.m2":{"en":"How big is that against what he has to pay this month?","az":"Bu ay ödəməli olduğu ilə müqayisədə bu nə qədərdir?"},"imp.m3":{"en":"**61%** of the 30,100 AZN in bills due by the 20th. Without it, cash goes below zero on day 19.","az":"Ayın 20-nə qədər ödənməli 30 100 AZN hesabın **61%**-i. Bu pul olmasa, pul qalığı 19-⁠cu gün sıfırın altına düşür."},"imp.m4":{"en":"This matters. @NowAI draft them before my 2 o'clock with Elnur.","az":"Bu vacibdir. @NowAI saat 2-də Elnurla görüşümə qədər hazırla."},"imp.m5":{"en":"6 reminders ready for your review.","az":"6 xatırlatma yoxlamanıza hazırdır."},"imp.later":{"en":"9 days later: 4 of 6 paid, 12,870 AZN collected.","az":"9 gün sonra: 6 alıcıdan 4-ü ödədi, 12 870 AZN yığıldı."},"cash.h":{"en":"Cash","az":"Pul"},"cash.line":{"en":"The owner sees what is coming, in plain numbers.","az":"Sahibkar nə gəldiyini sadə rəqəmlərlə görür."},"cash.f1":{"en":"What is owed and what is due","az":"Alacaqlar və ödəniləcək hesablar"},"cash.f1t":{"en":"One card with the money coming in and the bills going out.","az":"Gələn pul və ödəniləcək hesablar bir kartda."},"cash.f2":{"en":"The day cash runs out","az":"Pulun bitdiyi gün"},"cash.f2t":{"en":"A daily balance line shows the first day below zero.","az":"Gündəlik qalıq xətti sıfırın altına düşən ilk günü göstərir."},"cash.f3":{"en":"One tap to act","az":"Bir toxunuşla"},"cash.f3t":{"en":"The owner sends the reminders the accountant reviewed.","az":"Sahibkar mühasibin yoxladığı xatırlatmaları göndərir."},"cash.alt":{"en":"Scripted film. The owner's phone shows 18,420 AZN owed and 30,100 AZN due, with cash below zero on day 19. After reminders the balance stays above zero.","az":"Ssenarili film. Sahibkarın telefonu 18 420 AZN debitor borcu və 30 100 AZN ödənişi, 19-cu gün sıfırın altına düşən qalığı göstərir. Xatırlatmalardan sonra qalıq sıfırdan yuxarı qalır."},"cash.week":{"en":"This week","az":"Bu həftə"},"cash.owed":{"en":"Owed to you","az":"Alacağınız"},"cash.owe":{"en":"You owe","az":"Sizin borcunuz"},"cash.late":{"en":"6 late","az":"6 gecikmiş"},"cash.by":{"en":"by the 20th","az":"ayın 20-nə qədər"},"cash.bal":{"en":"Daily cash balance, by day of the month","az":"Gündəlik pul qalığı, ayın günləri üzrə"},"cash.d19":{"en":"Day 19: below zero","az":"19-cu gün: sıfırın altında"},"cash.above":{"en":"Above zero","az":"Sıfırdan yuxarı"},"cash.cap":{"en":"With 4 of 6 paid: 12,870 AZN in 9 days","az":"6 alıcıdan 4-ü ödəsə: 9 gündə 12 870 AZN"},"cash.send":{"en":"Send reminders","az":"Xatırlatmaları göndər"},"cash.sent":{"en":"Reminders sent","az":"Xatırlatmalar göndərildi"},"cash.note":{"en":"Paying suppliers and payment links would run through a licensed partner. Planned, not built.","az":"Təchizatçılara ödəniş və ödəniş linkləri lisenziyalı tərəfdaş vasitəsilə işləyəcək. Planlaşdırılıb, hələ qurulmayıb."},"live.h":{"en":"Try it live","az":"Canlı sınayın"},"live.line":{"en":"This is real Claude reading a sample. It is a test, not the product.","az":"Bu, nümunəni oxuyan real Claude-dur. Bu sınaqdır, məhsulun özü deyil."},"live.cost":{"en":"It runs on your own Claude usage. The first call asks for your consent.","az":"Öz Claude limitinizdən istifadə olunur. İlk sorğu razılığınızı soruşur."},"live.off":{"en":"Live reading works when this page is opened in Claude.","az":"Canlı oxuma bu səhifə Claude-da açılanda işləyir."},"live.denied":{"en":"Live reading is off in this view.","az":"Canlı oxuma bu baxışda söndürülüb."},"live.t1":{"en":"Read a document","az":"Sənədi oxut"},"live.t1s":{"en":"Claude reads the document and proposes the entry. This page checks the arithmetic.","az":"Claude sənədi oxuyur və yazılış təklif edir. Bu səhifə hesablamanı yoxlayır."},"live.pick":{"en":"Sample documents","az":"Nümunə sənədlər"},"live.s1":{"en":"Invoice","az":"Qaimə"},"live.s2":{"en":"Fuel receipt","az":"Yanacaq qəbzi"},"live.s3":{"en":"Bank statement","az":"Bank çıxarışı"},"live.own":{"en":"Use your own photo","az":"Öz şəklinizi yükləyin"},"live.warn":{"en":"Use a sample or a document you are allowed to share. Nothing is saved.","az":"Nümunədən və ya paylaşmağa icazəniz olan sənəddən istifadə edin. Heç nə saxlanmır."},"live.textonly":{"en":"This view cannot send images, so Claude reads the text of the sample.","az":"Bu baxış şəkil göndərə bilmir, ona görə Claude nümunənin mətnini oxuyur."},"live.go":{"en":"Read this document","az":"Bu sənədi oxu"},"live.stop":{"en":"Stop","az":"Dayandır"},"live.retry":{"en":"Try again","az":"Yenidən cəhd et"},"live.reading":{"en":"Reading…","az":"Oxuyur…"},"live.writing":{"en":"Writing the answer…","az":"Cavabı yazır…"},"live.f.type":{"en":"Document type","az":"Sənəd növü"},"live.f.seller":{"en":"Seller","az":"Satıcı"},"live.f.voen":{"en":"VÖEN","az":"VÖEN"},"live.f.date":{"en":"Date","az":"Tarix"},"live.f.net":{"en":"Net","az":"ƏDV-siz"},"live.f.vat":{"en":"ƏDV","az":"ƏDV"},"live.f.total":{"en":"Total","az":"Yekun"},"live.f.cur":{"en":"Currency","az":"Valyuta"},"live.f.pay":{"en":"Payment method","az":"Ödəniş üsulu"},"live.f.lang":{"en":"Language","az":"Dil"},"live.unread":{"en":"Not readable","az":"Oxunmur"},"live.items":{"en":"Line items","az":"Mal sətirləri"},"live.chk1":{"en":"Net + ƏDV = total","az":"ƏDV-siz + ƏDV = yekun"},"live.chk2":{"en":"Debits = credits","az":"Debet = kredit"},"live.cant":{"en":"cannot check, a value is missing","az":"yoxlamaq olmur, dəyər çatmır"},"live.entry":{"en":"Proposed entry","az":"Təklif olunan yazılış"},"live.approve":{"en":"Approve","az":"Təsdiqlə"},"live.approved":{"en":"Approved on this page only","az":"Yalnız bu səhifədə təsdiqləndi"},"live.t2":{"en":"Set up a client","az":"Müştərini qur"},"live.t2s":{"en":"Describe how a client works. Claude writes rules, then tests them on 8 sample documents.","az":"Müştərinin necə işlədiyini yazın. Claude qaydalar yazır və onları 8 nümunə sənəddə sınayır."},"live.t2l":{"en":"How this client works","az":"Bu müştəri necə işləyir"},"live.seed":{"en":"Nümunə Market has three shops. Fuel goes to transport costs. Rent is paid on the 5th.","az":"Nümunə Market-in üç mağazası var. Yanacaq nəqliyyat xərclərinə yazılır. İcarə haqqı ayın 5-də ödənilir."},"live.go2":{"en":"Write rules and test them","az":"Qaydaları yaz və sına"},"live.writerules":{"en":"Writing rules…","az":"Qaydaları yazır…"},"live.testing":{"en":"Testing on 8 documents…","az":"8 sənəddə sınayır…"},"live.rules":{"en":"Rules","az":"Qaydalar"},"live.when":{"en":"When","az":"Əgər"},"live.then":{"en":"then","az":"onda"},"live.res":{"en":"Test on 8 sample documents:","az":"8 nümunə sənəddə sınaq:"},"live.sum":{"en":"{p} of 8 passed","az":"keçdi: {p} / 8"},"live.col1":{"en":"Document","az":"Sənəd"},"live.col2":{"en":"The rules say","az":"Qaydalara görə"},"live.col3":{"en":"Leyla's entry","az":"Leylanın yazılışı"},"live.passed":{"en":"Passed","az":"Keçdi"},"live.failed":{"en":"Failed","az":"Keçmədi"},"live.fix":{"en":"Proposed fix","az":"Təklif olunan düzəliş"},"live.nores":{"en":"No answer","az":"Cavab yoxdur"},"live.d1":{"en":"Fuel receipt, van, 33.00 AZN","az":"Yanacaq qəbzi, furqon, 33,00 AZN"},"live.d2":{"en":"Fuel receipt, no VÖEN, 28.00 AZN","az":"VÖEN-siz yanacaq qəbzi, 28,00 AZN"},"live.d3":{"en":"Rent, shop 1, paid on the 5th","az":"İcarə, 1-ci mağaza, ayın 5-də ödənilib"},"live.d4":{"en":"Rent, shop 3, paid on the 7th","az":"İcarə, 3-cü mağaza, ayın 7-də ödənilib"},"live.d5":{"en":"Örnək Süd MMC invoice, 240.72 AZN","az":"Örnək Süd MMC qaiməsi, 240,72 AZN"},"live.d6":{"en":"Electricity, shop 2, 96.40 AZN","az":"Elektrik, 2-ci mağaza, 96,40 AZN"},"live.d7":{"en":"Bank fee, 4.50 AZN","az":"Bank komissiyası, 4,50 AZN"},"live.d8":{"en":"Fuel for Elnur's own car, 40.00 AZN","az":"Elnurun şəxsi maşını üçün yanacaq, 40,00 AZN"},"cat.0":{"en":"Goods for resale","az":"Satış üçün mallar"},"cat.1":{"en":"Transport costs","az":"Nəqliyyat xərcləri"},"cat.2":{"en":"Rent","az":"İcarə"},"cat.3":{"en":"Utilities","az":"Kommunal xərclər"},"cat.4":{"en":"Bank charges","az":"Bank xərcləri"},"cat.5":{"en":"Hold and ask","az":"Saxla və soruş"},"cat.6":{"en":"Owner's private","az":"Sahibin şəxsi xərci"},"cat.none":{"en":"No rule","az":"Qayda yoxdur"},"risk.low":{"en":"Low risk","az":"Aşağı risk"},"risk.medium":{"en":"Medium risk","az":"Orta risk"},"risk.high":{"en":"High risk","az":"Yüksək risk"},"err.rate":{"en":"Too many requests right now. Wait a little, then press the button again.","az":"Hazırda sorğu çoxdur. Bir az gözləyin və düyməni yenidən basın."},"err.session":{"en":"Your Claude session ended. Sign in again, then try.","az":"Claude sessiyanız bitib. Yenidən daxil olun və cəhd edin."},"err.image":{"en":"This file did not work. Try a JPEG or PNG photo under 20 MB.","az":"Bu fayl alınmadı. 20 MB-dan kiçik JPEG və ya PNG şəkil sınayın."},"err.refused":{"en":"Claude declined this one. Try a different document or wording.","az":"Claude bunu rədd etdi. Başqa sənəd və ya ifadə sınayın."},"err.empty":{"en":"Claude returned nothing. Try a different document or wording.","az":"Claude heç nə qaytarmadı. Başqa sənəd və ya ifadə sınayın."},"err.long":{"en":"That text is too long. Shorten it and try again.","az":"Mətn çox uzundur. Qısaldın və yenidən cəhd edin."},"err.noimg":{"en":"This view cannot send images. Press the button to read the sample as text.","az":"Bu baxış şəkil göndərə bilmir. Nümunəni mətn kimi oxutmaq üçün düyməni basın."},"err.page":{"en":"This call did not work. Reload the page and try again.","az":"Bu sorğu alınmadı. Səhifəni yeniləyin və yenidən cəhd edin."},"err.json":{"en":"The answer could not be read.","az":"Cavabı oxumaq olmadı."},"err.service":{"en":"The connection to Claude failed.","az":"Claude ilə əlaqə kəsildi."},"ag.h":{"en":"Agents","az":"Agentlər"},"ag.a1":{"en":"Books","az":"Uçot"},"ag.a1t":{"en":"Reads invoices, receipts and bank statements, and prepares checked entries for 1C.","az":"Qaimə, qəbz və bank çıxarışlarını oxuyur, 1C üçün yoxlanmış yazılışlar hazırlayır."},"ag.a2":{"en":"Cash","az":"Pul"},"ag.a2t":{"en":"Forecasts cash and drafts reminders for overdue invoices.","az":"Pul axınını proqnozlaşdırır, gecikmiş hesablar üçün xatırlatma hazırlayır."},"ag.a3":{"en":"Tax","az":"Vergi"},"ag.a3t":{"en":"Keeps the filing calendar, pre-checks declarations and flags rule changes.","az":"Hesabat təqvimini aparır, bəyannamələri əvvəlcədən yoxlayır, qayda dəyişikliklərini bildirir."},"ag.a4":{"en":"People","az":"Kadrlar"},"ag.a4t":{"en":"Prepares labour contracts and tracks payroll rule changes.","az":"Əmək müqavilələrini hazırlayır, əmək haqqı qaydalarındakı dəyişiklikləri izləyir."},"ag.a5":{"en":"Comply","az":"Uyğunluq"},"ag.a5t":{"en":"Tracks cash-register rules, licences and certificates.","az":"Kassa aparatı qaydalarını, lisenziya və sertifikatları izləyir."},"ag.launch":{"en":"At launch","az":"Başlanğıcda"},"ag.next":{"en":"Next","az":"Növbəti"},"ag.later":{"en":"Later","az":"Sonra"},"calc.h":{"en":"At your volume","az":"Sizin həcmdə"},"calc.q":{"en":"Clients your practice serves","az":"Firmanızın müştəri sayı"},"calc.o1":{"en":"NowAI bill a month","az":"Aylıq NowAI hesabı"},"calc.o2":{"en":"Accountant hours freed a month","az":"Ayda boşalan mühasib saatı"},"calc.o3":{"en":"What those hours are worth a month","az":"Bu saatların aylıq dəyəri"},"calc.o4":{"en":"More clients you could take","az":"Götürə biləcəyiniz əlavə müştəri"},"calc.fees":{"en":"About {v} AZN a month in fees","az":"Ayda təxminən {v} AZN haqq"},"calc.label":{"en":"Base case from our model. Untested with real practices.","az":"Modelimizin əsas ssenarisi. Real mühasibat firmalarında sınanmayıb."},"calc.basis":{"en":"Uses {bill} AZN a client a month, {hours} hours saved a client, {cost} AZN an accountant hour, a {fee} AZN fee a client, and {today} hours a client today (assumption). More clients = hours freed × {share} resold to new clients ÷ hours a client with NowAI.","az":"Hesablama: müştəri başına ayda {bill} AZN, müştəri başına {hours} saat qənaət, mühasib saatı {cost} AZN, müştəri başına {fee} AZN haqq və bu gün müştəri başına {today} saat (fərziyyə). Əlavə müştəri = boşalan saatların {share}-i yeni müştərilərə ayrılır ÷ NowAI ilə müştəri başına saat."},"start.h":{"en":"How we start","az":"Necə başlayırıq"},"start.s1":{"en":"Interview 20 practices.","az":"20 mühasibat firması ilə müsahibə edirik."},"start.s2":{"en":"Pilot with 10 practices. Three must agree to pay.","az":"10 firma ilə pilot keçiririk. Üçü ödəməyə razı olmalıdır."},"start.s3":{"en":"Measure overdue invoices at 30 firms.","az":"30 şirkətdə gecikmiş hesabları ölçürük."},"foot":{"en":"Scripted prototype. Every company, person, number and document here is fictional. Not connected to any real system, bank or tax service. Payments would run through a licensed partner, and that route is not legally confirmed yet.","az":"Ssenarili prototip. Burada hər şirkət, şəxs, rəqəm və sənəd uydurmadır. Heç bir real sistemə, banka və ya vergi xidmətinə qoşulmayıb. Ödənişlər lisenziyalı tərəfdaş vasitəsilə işləyəcək və bu yol hələ hüquqi cəhətdən təsdiqlənməyib."},"rev.wait":{"en":"Waiting for the next document","az":"Növbəti sənəd gözlənilir"},"run.g1":{"en":"Delivery note (qara qaimə), in Azerbaijani","az":""}};
+/* ---------- Language ---------- */
+let LANG = "en";
+
+function tr(key) {
+  const e = I18N[key];
+  if (!e) return key;
+  const s = e[LANG] ?? e.en;
+  return LANG === "az" ? s.replace(/(\d) (?=\d{3}(?!\d))/g, "$1 ") : s;
+}
+
+function rich(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+    .replace(/@([\wəüöğışçƏÜÖĞİŞÇ]+)/g, '<span class="at">@$1</span>');
+}
+
+/* EN 18,420.50 / AZ 18 420,50 */
+function fmtNum(v, dec = 0) {
+  const [i, d] = Math.abs(v).toFixed(dec).split(".");
+  const sep = LANG === "az" ? " " : ",", point = LANG === "az" ? "," : ".";
+  const body = i.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+  return (v < 0 ? "−" : "") + body + (d ? point + d : "");
+}
+
+function applyLang() {
+  const root = document.documentElement;
+  root.lang = LANG;
+  document.querySelectorAll("[data-i]").forEach(el => { el.textContent = tr(el.dataset.i); });
+  document.querySelectorAll("[data-ih]").forEach(el => { el.innerHTML = rich(tr(el.dataset.ih)); });
+  document.querySelectorAll("[data-ia]").forEach(el => { el.setAttribute("aria-label", tr(el.dataset.ia)); });
+  document.querySelectorAll("[data-n]").forEach(el => {
+    const raw = el.dataset.n, dec = raw.includes(".") ? raw.split(".")[1].length : 0;
+    el.textContent = fmtNum(parseFloat(raw), dec);
+  });
+}
+
+/* ---------- Film engine ----------
+   A film is a pure function of time. seek(ms) can land on any frame, which is what
+   makes the loop, the pause button and the QA hook exact. Every element stays in the
+   layout for the whole film, only its opacity and transform change, so cursor targets
+   measured once from the layout stay right at every width. */
+const HOLD = 3000, FADE = 260;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const EASE = {
+  out: p => 1 - Math.pow(1 - p, 3),
+  inOut: p => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2),
+  back: p => { const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); },
+  line: p => p
+};
+const REST = { o: 1, x: 0, y: 0, s: 1 };
+const FILM_DEFS = {};
+const FILMS = {};
+
+function makeTimeline(stage, mode) {
+  const props = new Map(), fx = [];
+  const one = sel => (typeof sel === "string" ? stage.querySelector(sel) : sel);
+  const all = sel => (typeof sel === "string" ? [...stage.querySelectorAll(sel)] : [].concat(sel));
+  const track = el => {
+    let p = props.get(el);
+    if (!p) { p = { from: { ...REST }, segs: [], last: "" }; props.set(el, p); }
+    return p;
+  };
+  /* Logical stage coordinates of a point inside an element. offset* ignores transforms. */
+  const box = sel => {
+    const el = one(sel);
+    let x = 0, y = 0, n = el;
+    while (n && n !== stage) {
+      x += n.offsetLeft; y += n.offsetTop;
+      n = n.offsetParent;
+      if (n && n !== stage) { x += n.clientLeft; y += n.clientTop; }
+    }
+    return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+  };
+  const pos = (sel, ax = .5, ay = .5) => { const b = box(sel); return [b.x + b.w * ax, b.y + b.h * ay]; };
+
+  const cur = stage.querySelector(".cur"), ring = stage.querySelector(".ring");
+  const keys = [], vis = [], clicks = [];
+
+  const T = {
+    mode, one, all, box, pos,
+    /* hidden until t, then eases to rest */
+    show(sel, t, o = {}) {
+      for (const el of all(sel)) {
+        const p = track(el);
+        p.from = { o: 0, x: o.x || 0, y: o.y ?? 10, s: o.s ?? 1 };
+        p.segs.push({ t, d: o.d || 340, e: o.e || "out", to: { ...REST } });
+      }
+      return T;
+    },
+    hide(sel, t, o = {}) {
+      for (const el of all(sel))
+        track(el).segs.push({ t, d: o.d || 240, e: o.e || "out", to: { o: 0, x: o.x || 0, y: o.y || 0, s: o.s ?? 1 } });
+      return T;
+    },
+    /* eases to a state relative to rest */
+    move(sel, t, to, o = {}) {
+      for (const el of all(sel))
+        track(el).segs.push({ t, d: o.d || 520, e: o.e || "inOut", to: { ...REST, ...to } });
+      return T;
+    },
+    place(sel, state) { for (const el of all(sel)) track(el).from = { ...REST, ...state }; return T; },
+    /* centres a card above the caption strip on the wide layout */
+    center(sel) {
+      const el = one(sel);
+      if (mode === "wide") el.style.top = Math.max(12, Math.round((stage.offsetHeight - 50 - el.offsetHeight) / 2)) + "px";
+      else el.style.top = "";
+      return T;
+    },
+    stagger(sel, t, gap, o) { all(sel).forEach((el, i) => T.show(el, t + i * gap, o)); return T; },
+    cls(sel, t, name, until = Infinity) {
+      for (const el of all(sel)) fx.push(ms => el.classList.toggle(name, ms >= t && ms < until));
+      return T;
+    },
+    fx(fn) { fx.push(fn); return T; },
+    /* types over a ghost of the full text, so lines never rewrap while typing */
+    type(sel, t, d) {
+      const el = one(sel), text = el.textContent;
+      el.textContent = "";
+      const a = document.createElement("span"), c = document.createElement("span"), b = document.createElement("span");
+      c.className = "caret"; b.className = "ghost";
+      b.textContent = text;
+      el.append(a, c, b);
+      let last = -1;
+      fx.push(ms => {
+        const n = Math.round(clamp((ms - t) / d, 0, 1) * text.length);
+        if (n !== last) { a.textContent = text.slice(0, n); b.textContent = text.slice(n); last = n; }
+        c.style.display = ms >= t - 260 && ms < t + d + 420 ? "" : "none";
+      });
+      return T;
+    },
+    spin(sel, t0, t1) {
+      const el = one(sel);
+      fx.push(ms => { if (ms >= t0 && ms < t1) el.style.transform = "rotate(" + Math.round((ms - t0) * .42) % 360 + "deg)"; });
+      return T;
+    },
+    cursor: {
+      enter(t, x, y) { keys.push({ t, d: 0, x, y }); vis.push([t, 1]); return T.cursor; },
+      to(t, sel, o = {}) {
+        const p = pos(sel, o.ax ?? .5, o.ay ?? .55);
+        keys.push({ t, d: o.d || 760, x: p[0], y: p[1] });
+        return T.cursor;
+      },
+      click(t, sel) { clicks.push(t); if (sel) T.cls(sel, t, "press", t + 170); return T.cursor; },
+      leave(t) { vis.push([t, 0]); return T.cursor; }
+    }
+  };
+
+  /* cursor and click ring */
+  fx.push(ms => {
+    if (!cur) return;
+    let x = 0, y = 0;
+    for (const k of keys) {
+      if (ms < k.t) break;
+      const p = k.d ? EASE.inOut(clamp((ms - k.t) / k.d, 0, 1)) : 1;
+      const arc = Math.sin(Math.PI * p) * Math.min(26, Math.hypot(k.x - x, k.y - y) * .06);
+      const nx = x + (k.x - x) * p, ny = y + (k.y - y) * p;
+      x = nx + arc * .6; y = ny - arc;
+      if (p >= 1) { x = k.x; y = k.y; }
+    }
+    let o = 0;
+    for (const [t, on] of vis) {
+      if (ms < t) break;
+      const p = clamp((ms - t) / 200, 0, 1);
+      o = on ? p : 1 - p;
+    }
+    let press = 1, ro = 0, rs = .3;
+    for (const t of clicks) {
+      const q = ms - t;
+      if (q >= 0 && q < 170) press = .84;
+      if (q >= 0 && q < 460) { const p = q / 460; ro = .55 * (1 - p); rs = .3 + p * 1.1; }
+    }
+    cur.style.opacity = o.toFixed(2);
+    cur.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) scale(" + press + ")";
+    ring.style.opacity = ro.toFixed(2);
+    ring.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) scale(" + rs.toFixed(2) + ")";
+  });
+
+  return { T, props, fx };
+}
+
+function stateAt(p, ms) {
+  let cur = p.from;
+  for (const s of p.segs) {
+    if (ms <= s.t) break;
+    const k = s.d ? clamp((ms - s.t) / s.d, 0, 1) : 1;
+    if (k >= 1) { cur = s.to; continue; }
+    const e = EASE[s.e](k);
+    return {
+      o: cur.o + (s.to.o - cur.o) * clamp(e, 0, 1),
+      x: cur.x + (s.to.x - cur.x) * e,
+      y: cur.y + (s.to.y - cur.y) * e,
+      s: cur.s + (s.to.s - cur.s) * e
+    };
+  }
+  return cur;
+}
+
+function seek(f, ms) {
+  f.t = ms;
+  for (const [el, p] of f.tl.props) {
+    const st = stateAt(p, ms);
+    const key = st.o.toFixed(3) + "|" + st.x.toFixed(1) + "|" + st.y.toFixed(1) + "|" + st.s.toFixed(3);
+    if (key === p.last) continue;
+    p.last = key;
+    el.style.opacity = st.o.toFixed(3);
+    el.style.visibility = st.o <= 0 ? "hidden" : "visible";
+    el.style.transform = st.x || st.y || st.s !== 1
+      ? "translate(" + st.x.toFixed(1) + "px," + st.y.toFixed(1) + "px) scale(" + st.s.toFixed(3) + ")" : "none";
+  }
+  for (const fn of f.tl.fx) fn(ms);
+  let o = 1;
+  if (f.looping && !f.frozen) {
+    if (ms < FADE) o = ms / FADE;
+    else if (ms > f.total - FADE) o = (f.total - ms) / FADE;
+  }
+  f.stage.style.opacity = o.toFixed(3);
+}
+
+function build(f) {
+  if (f.tl) {
+    for (const [el] of f.tl.props) { el.style.opacity = ""; el.style.visibility = ""; el.style.transform = ""; }
+    f.stage.querySelectorAll(".press").forEach(n => n.classList.remove("press"));
+  }
+  f.tl = makeTimeline(f.stage, f.mode);
+  f.def.script(f.tl.T);
+  seek(f, f.t);
+}
+
+function fit(f) {
+  const cw = f.el.clientWidth;
+  if (!cw) return;
+  const expanded = f.el.classList.contains("expanded");
+  const mode = cw < f.def.narrowBelow ? "narrow" : "wide";
+  let [w, h] = f.def[mode];
+  const changed = mode !== f.mode;
+  if (changed) {
+    f.mode = mode;
+    f.stage.style.width = w + "px";
+    f.stage.dataset.mode = mode;
+  }
+  /* On a phone the panel takes the height of its card, in either language. */
+  if (mode === "narrow" && f.def.fitTo) {
+    const c = f.stage.querySelector(f.def.fitTo);
+    h = c.offsetTop + c.offsetHeight + 58;
+  }
+  f.stage.style.height = h + "px";
+  const ch = expanded ? f.el.clientHeight : 0;
+  let s = Math.min(cw / w, mode === "narrow" ? 1.3 : f.def.maxScale || 1.3);
+  if (expanded) s = Math.min(cw / w, ch / h);
+  if (changed && f.ready) build(f);
+  f.screen.style.height = expanded ? "100%" : Math.round(h * s) + "px";
+  const left = Math.max(0, (cw - w * s) / 2), top = expanded ? Math.max(0, (ch - h * s) / 2) : 0;
+  f.stage.style.transform = "translate(" + left.toFixed(1) + "px," + top.toFixed(1) + "px) scale(" + s.toFixed(4) + ")";
+}
+
+function iconSvg(name) {
+  const paths = {
+    pause: '<path d="M9 6v12M15 6v12"/>',
+    play: '<path d="M8 5.5v13l11-6.5z"/>',
+    replay: '<path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5"/><path d="M4.5 4.5v4h4"/>',
+    expand: '<path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/>',
+    close: '<path d="M6 6l12 12M18 6L6 18"/>'
+  };
+  return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths[name] + "</svg>";
+}
+
+function refreshButtons(f) {
+  const paused = f.userPaused;
+  f.btnPause.innerHTML = iconSvg(paused ? "play" : "pause");
+  f.btnPause.setAttribute("aria-label", tr(paused ? "film.play" : "film.pause"));
+  f.btnPause.title = tr(paused ? "film.play" : "film.pause");
+  f.btnPause.setAttribute("aria-pressed", paused ? "true" : "false");
+  f.btnReplay.setAttribute("aria-label", tr("film.replay"));
+  f.btnReplay.title = tr("film.replay");
+  const on = f.el.classList.contains("expanded");
+  f.btnExpand.innerHTML = iconSvg(on ? "close" : "expand");
+  f.btnExpand.setAttribute("aria-label", tr(on ? "film.close" : "film.expand"));
+  f.btnExpand.title = tr(on ? "film.close" : "film.expand");
+}
+
+function setExpanded(f, on) {
+  f.el.classList.toggle("expanded", on);
+  document.documentElement.classList.toggle("film-open", on);
+  f.screen.style.height = "";
+  f.mode = null;
+  fit(f);
+  refreshButtons(f);
+  f.btnExpand.focus();
+}
+
+function controls(f) {
+  const bar = f.el.querySelector(".ctl");
+  const mk = cls => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "rb " + cls;
+    bar.append(b);
+    return b;
+  };
+  f.btnPause = mk("rb-pause");
+  f.btnReplay = mk("rb-replay");
+  f.btnReplay.innerHTML = iconSvg("replay");
+  f.btnExpand = mk("rb-expand");
+  f.btnPause.onclick = () => {
+    f.userPaused = !f.userPaused;
+    if (!f.userPaused && !f.looping) { f.looping = true; f.frozen = false; f.t = 0; }
+    refreshButtons(f); kick();
+  };
+  f.btnReplay.onclick = () => {
+    f.frozen = false; f.looping = true; f.userPaused = false;
+    seek(f, 0); refreshButtons(f); kick();
+  };
+  f.btnExpand.onclick = () => setExpanded(f, !f.el.classList.contains("expanded"));
+  refreshButtons(f);
+}
+
+/* ---------- Clock ---------- */
+const REDUCED = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+let rafOn = false, lastNow = 0;
+function live(f) { return f.looping && f.inView && !f.userPaused && !f.frozen && !document.hidden; }
+function frame(now) {
+  const dt = Math.min(80, now - lastNow);
+  lastNow = now;
+  let any = false;
+  for (const id in FILMS) {
+    const f = FILMS[id];
+    if (!live(f)) continue;
+    any = true;
+    let t = f.t + dt;
+    if (t >= f.total) t = 0;
+    seek(f, t);
+  }
+  if (any) requestAnimationFrame(frame); else rafOn = false;
+}
+function kick() {
+  if (rafOn) return;
+  rafOn = true;
+  lastNow = performance.now();
+  requestAnimationFrame(frame);
+}
+
+function initFilms() {
+  const io = new IntersectionObserver(es => {
+    for (const e of es) {
+      const f = e.target.__film;
+      f.inView = e.isIntersecting && e.intersectionRatio >= .25;
+      if (f.inView && !f.seen && !f.frozen && !REDUCED) {
+        f.seen = true;
+        f.looping = true;
+        /* The first view starts from the fade out of the resting frame. */
+        if (!f.def.opener) f.t = f.total - FADE;
+      }
+    }
+    kick();
+  }, { threshold: [0, .25, .5] });
+
+  document.querySelectorAll(".cinema").forEach(el => {
+    const id = el.dataset.film, def = FILM_DEFS[id];
+    const f = {
+      id, def, el, screen: el.querySelector(".screen"), stage: el.querySelector(".stage"),
+      mode: null, t: def.dur, total: def.dur + HOLD, tl: null,
+      inView: false, seen: false, looping: false, frozen: false, userPaused: REDUCED, ready: false
+    };
+    if (def.opener && !REDUCED) { f.t = 0; f.looping = true; f.seen = true; }
+    el.__film = f;
+    FILMS[id] = f;
+    const cur = document.createElement("div");
+    cur.className = "cur";
+    cur.innerHTML = '<svg viewBox="0 0 26 30" width="26" height="30" aria-hidden="true"><path class="cur-a" d="M3 2.5v21.2l5.7-5.2 3.8 8.9 4.6-2-3.9-8.8 7.9-.6z"/></svg>';
+    const ring = document.createElement("div");
+    ring.className = "ring";
+    f.stage.append(ring, cur);
+    controls(f);
+    fit(f);
+    build(f);
+    f.ready = true;
+    new ResizeObserver(() => fit(f)).observe(el);
+    io.observe(el);
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    for (const id in FILMS) if (FILMS[id].el.classList.contains("expanded")) setExpanded(FILMS[id], false);
+  });
+  document.addEventListener("visibilitychange", kick);
+  kick();
+}
+
+/* Test hook: window.__film(id, ms) freezes a film on one frame. Pass null to release it. */
+window.__film = (id, ms) => {
+  const f = FILMS[id];
+  if (!f) return false;
+  if (ms === null || ms === undefined) { f.frozen = false; f.looping = true; kick(); return true; }
+  f.frozen = true;
+  f.seen = true;
+  seek(f, ms);
+  return true;
+};
+
+/* ---------- Film scripts ---------- */
+const NUM_RE = /\d[\d,  ]*\d|\d/;
+const withNum = (text, n) => text.replace(NUM_RE, fmtNum(n));
+/* Counts the first number in a string up from zero, then restores the full string. */
+function countIn(T, sel, t, d, to, key) {
+  const el = T.one(sel);
+  let last = null;
+  T.fx(ms => {
+    const s = ms >= t + d ? tr(key) : withNum(tr(key), Math.round(to * clamp((ms - t) / d, 0, 1)));
+    if (s !== last) { el.textContent = s; last = s; }
+  });
+}
+
+FILM_DEFS.hero = {
+  wide: [1120, 610], narrow: [420, 690], narrowBelow: 760, dur: 17700, opener: true,
+  script(T) {
+    const wide = T.mode === "wide";
+    const b2 = 3300, b3 = 8700;
+
+    T.cls('.hs-i[data-s="1"]', 0, "on", b2);
+    T.cls('.hs-i[data-s="2"]', b2, "on", b3);
+    T.cls('.hs-i[data-s="3"]', b3, "on");
+
+    /* Beat 1: the client sends a photo, NowAI answers at once */
+    T.show(".h-photo", 450, { y: 28, s: .97, d: 460 });
+    T.show(".h-reply", 1350, { y: 12, d: 300 });
+
+    /* Beat 2: the card moves to the accountant's screen */
+    if (wide) {
+      const a = T.box(".h-photo .doc"), b = T.box(".rv-doc .doc"), fly = T.one(".h-fly");
+      fly.style.left = b.x + "px";
+      fly.style.top = b.y + "px";
+      fly.style.width = b.w + "px";
+      T.place(".h-review", { o: .62 });
+      T.move(".h-review", b2 - 100, {}, { d: 420 });
+      T.place(".rv-wait", { o: 1 });
+      T.hide(".rv-wait", b2 + 60, { d: 200 });
+      T.place(fly, { o: 0, x: a.x - b.x, y: a.y - b.y, s: a.w / b.w });
+      T.move(fly, b2 + 100, { o: 1, x: a.x - b.x, y: a.y - b.y, s: a.w / b.w }, { d: 60, e: "line" });
+      T.move(fly, b2 + 170, { o: 1 }, { d: 780 });
+      T.hide(fly, b2 + 960, { d: 1 });
+      T.show(".rv-doc", b2 + 950, { y: 0, d: 1 });
+    } else {
+      T.move(".h-phone", b2, { x: -360, o: 0 }, { d: 520 });
+      T.show(".h-review", b2 + 140, { x: 300, y: 0, d: 560 });
+    }
+    T.stagger(".h-review .fl", b2 + 720, 85, { y: 6, d: 240 });
+    T.stagger(".h-review .je", b2 + 1300, 110, { y: 6, d: 240 });
+    T.show(".h-review .go", b2 + 1820, { y: 6, d: 260 });
+
+    const [cx, cy] = T.pos(".h-review .go", .5, .55);
+    T.cursor.enter(b2 + 2000, cx + (wide ? 170 : 60), cy + 150);
+    T.cursor.to(b2 + 2100, ".h-review .go", { d: 900 });
+    T.cursor.click(b2 + 3150, ".h-review .go");
+    T.cls(".h-review .go", b2 + 3240, "done");
+    T.show(".h-review .sent", b2 + 3700, { x: 14, y: 0, d: 360 });
+    T.cursor.leave(b2 + 4500);
+
+    /* Beat 3: the alert in the team chat */
+    T.move(".h-review", b3, { s: .95, y: wide ? -14 : -46, o: wide ? .5 : .35 }, { d: 640 });
+    T.show(".h-team", b3 + 120, { y: 70, d: 640 });
+    T.show(".h-team .t-msg", b3 + 620, { y: 10, d: 360 });
+    T.show(".h-team .rx", b3 + 4800, { s: .3, y: 0, d: 460, e: "back" });
+  }
+};
+
+FILM_DEFS.build = {
+  wide: [720, 640], narrow: [420, 700], fitTo: ".b-card", narrowBelow: 540, maxScale: 1.12, dur: 15800,
+  script(T) {
+    T.type(".b-text", 350, 2200);
+    T.stagger(".chip", 2700, 230, { x: -14, y: 0, d: 300 });
+
+    const [sx, sy] = T.pos(".b-send");
+    T.cursor.enter(3800, sx + 70, sy + 190);
+    T.cursor.to(3900, ".b-send", { d: 820 });
+    T.cursor.click(4900, ".b-send");
+    T.cls(".b-send", 5000, "gone");
+    T.cursor.leave(5500);
+
+    T.show(".b-using > span:first-child", 5300, { y: 6, d: 240 });
+    T.stagger(".b-using .u", 5450, 240, { y: 6, d: 240 });
+    T.show(".b-say", 6500, { y: 8 });
+
+    const steps = [[7500, 8900, 6480, "build.c1"], [8900, 9900, 62, "build.c2"], [9900, 10800, 14, "build.c3"], [10800, 12600, 0, "build.c4"]];
+    T.all(".ck").forEach((row, i) => {
+      const [a, b, n, key] = steps[i];
+      T.show(row, a, { y: 6, d: 220 });
+      T.cls(row, a, "run", b);
+      T.cls(row, b, "ok");
+      T.spin(row.querySelector(".sp"), a, b);
+      if (n) countIn(T, row.querySelector(".ck-t"), a, b - a - 120, n, key);
+    });
+    T.show(".b-box", 13100, { y: 10, d: 340 });
+    T.cls(".b-approve", 13300, "ready");
+  }
+};
+
+FILM_DEFS.test = {
+  wide: [720, 640], narrow: [420, 760], fitTo: ".x-card", narrowBelow: 540, maxScale: 1.12, dur: 16500,
+  script(T) {
+    T.center(".x-card");
+    const a0 = 300, a1 = 4300, r0 = 11300, r1 = 13300;
+    const bar = T.one(".x-bar i"), pct = T.one(".x-pct"), docs = T.one(".x-docs"), of = T.one(".x-of");
+    T.fx(ms => {
+      const k1 = clamp((ms - a0) / (a1 - a0), 0, 1), k2 = clamp((ms - r0) / (r1 - r0), 0, 1), again = ms >= r0;
+      const k = again ? k2 : k1;
+      bar.style.transform = "scaleX(" + k.toFixed(3) + ")";
+      docs.textContent = fmtNum(Math.round(412 * k));
+      const p = again ? 96.4 + 2.1 * EASE.out(k2) : 96.4 * EASE.out(k1);
+      pct.textContent = fmtNum(p, 1) + "%";
+      const m = Math.round(again ? 397 + 9 * EASE.out(k2) : 397 * k1);
+      of.textContent = withNum(tr("test.of"), m);
+    });
+
+    T.show(".x-lh", 4500, { y: 6 });
+    T.stagger(".x-row", 4650, 130, { y: 8, d: 260 });
+
+    const [fx0, fy0] = T.pos(".x-fuel", .88, .55);
+    T.cursor.enter(5700, fx0 + 40, fy0 + 200);
+    T.cursor.to(5800, ".x-fuel", { ax: .88, ay: .55, d: 820 });
+    T.cursor.click(6780, ".x-fuel");
+    T.cls(".x-fuel", 6840, "sel");
+    T.show(".x-side", 7000, { x: T.mode === "wide" ? 16 : 0, y: T.mode === "wide" ? 0 : 12, d: 360 });
+    T.show(".x-why", 7000, { y: 0, d: 200 });
+    T.show(".x-rule", 7800, { y: 8 });
+    T.show(".x-ok", 8700, { y: 6 });
+    T.cursor.to(9500, ".x-ok", { d: 800 });
+    T.cursor.click(10450, ".x-ok");
+    T.cls(".x-ok", 10530, "done");
+    T.cursor.leave(11000);
+    T.cls(".x-fuel", r1, "fixed");
+    T.show(".x-left", r1 + 200, { s: .7, y: 0, d: 400, e: "back" });
+  }
+};
+
+FILM_DEFS.run = {
+  wide: [1120, 624], narrow: [420, 800], fitTo: ".r-card", narrowBelow: 760, dur: 17600,
+  script(T) {
+    const wide = T.mode === "wide";
+    T.center(".r-card");
+    T.show(".r-paper", 200, { x: -18, y: 0, d: 420 });
+
+    /* step 1: scan the page */
+    const scan = T.one(".r-scan"), h = T.box(".r-paper .doc").h;
+    T.show(scan, 650, { y: 0, d: 160 });
+    T.fx(ms => { scan.style.top = (clamp((ms - 650) / 3000, 0, 1) * (h - 56)).toFixed(1) + "px"; });
+    T.hide(scan, 3650, { d: 260 });
+
+    /* step 2: fields appear one by one, each lit on the page */
+    /* the delivery note has no VÖEN line, and ƏDV-siz and ƏDV come from its total */
+    const keys = ["seller", null, "date", "l1", "l2", "total", "total", "total"];
+    T.all(".r-c2 .fl").forEach((f, i) => {
+      const t = 900 + i * 360;
+      T.show(f, t, { x: -8, y: 0, d: 240 });
+      if (keys[i]) T.cls('.r-paper [data-f="' + keys[i] + '"]', t - 140, "hit", t + 520);
+    });
+    T.show(".r-legend", 4000, { y: 4 });
+
+    /* step 3: the entry */
+    T.show(".r-learn", 4400, { y: 6, s: .96 });
+    T.stagger(".r-c3 .je", 4750, 170, { y: 6, d: 240 });
+    T.show(".r-c3 .go", 5750, { y: 6, d: 260 });
+    const [cx, cy] = T.pos(".r-c3 .go");
+    T.cursor.enter(5950, cx - 120, cy + (wide ? 150 : 160));
+    T.cursor.to(6050, ".r-c3 .go", { d: 860 });
+    T.cursor.click(7050, ".r-c3 .go");
+    T.cls(".r-c3 .go", 7130, "done");
+    T.cursor.leave(7650);
+
+    /* the delivery note and the e-qaimə sit side by side and link up */
+    T.show(".r-match", 7850, { y: 0, d: 260 });
+    T.show(".rm-note", 8000, { x: -14, y: 0, d: 340 });
+    T.show(".rm-eq", 8200, { x: 14, y: 0, d: 340 });
+    const mlink = T.one(".rm-link i");
+    T.fx(ms => {
+      const k = EASE.inOut(clamp((ms - 8650) / 650, 0, 1)).toFixed(3);
+      mlink.style.transform = wide ? "scaleX(" + k + ")" : "scaleY(" + k + ")";
+    });
+    ["l1", "l2", "total"].forEach((k, i) => T.cls('.r-match [data-f="' + k + '"]', 9000 + i * 280, "hit", 10250));
+    T.show(".rm-tag", 9500, { y: 6, d: 320 });
+    T.hide(".r-match", 10250, { d: 260 });
+
+    /* the bank line and the e-qaimə row */
+    T.show(".r-bank", 10500, { x: 36, y: 0, d: 420 });
+    const links = T.all(".r-link i");
+    T.fx(ms => {
+      links[0].style.transform = "scaleX(" + EASE.inOut(clamp((ms - 11000) / 700, 0, 1)).toFixed(3) + ")";
+      links[1].style.transform = "scaleX(" + EASE.inOut(clamp((ms - 12900) / 500, 0, 1)).toFixed(3) + ")";
+    });
+    T.show(".r-bank .mt", 11750, { s: .6, y: 0, d: 380, e: "back" });
+    T.show(".r-eq", 12500, { x: 36, y: 0, d: 420 });
+    T.show(".r-eq .mt", 13450, { s: .6, y: 0, d: 380, e: "back" });
+
+    const q = T.one(".r-q");
+    let last = null;
+    T.fx(ms => {
+      const s = ms >= 14100 ? tr("run.queue") : withNum(tr("run.queue"), 42);
+      if (s !== last) { q.textContent = s; last = s; }
+    });
+    T.cls(".r-tally", 14100, "bump", 15100);
+  }
+};
+
+FILM_DEFS.improve = {
+  wide: [720, 640], narrow: [420, 760], fitTo: ".i-card", narrowBelow: 540, maxScale: 1.12, dur: 17000,
+  script(T) {
+    T.center(".i-card");
+    T.show(".i-1", 300, { y: 14, d: 380 });
+    const [ax, ay] = T.pos(".rx-add");
+    T.cursor.enter(3700, ax + 150, ay + 170);
+    T.cursor.to(3800, ".rx-add", { d: 820 });
+    T.cursor.click(4760, ".rx-add");
+    T.show(".i-1 .rx", 4800, { s: .3, y: 0, d: 460, e: "back" });
+    T.cursor.leave(5350);
+    T.show(".i-2", 5900, { y: 14, d: 340 });
+    T.show(".i-3", 7700, { y: 14, d: 340 });
+    T.show(".i-4", 10100, { y: 14, d: 340 });
+    T.show(".i-5", 12400, { y: 14, d: 340 });
+    T.show(".i-later", 14200, { y: 8, d: 420 });
+  }
+};
+
+FILM_DEFS.cash = {
+  wide: [720, 640], narrow: [420, 690], narrowBelow: 540, maxScale: 1.12, dur: 14500,
+  script(T) {
+    const before = T.one(".k-cbr"), after = T.one(".k-car");
+    T.show(".k-week", 250, { y: 10 });
+    T.stagger(".k-two > div", 620, 420, { y: 8, d: 280 });
+    T.show(".k-lab", 1500, { y: 4, d: 240 });
+    T.fx(ms => {
+      before.setAttribute("width", (264 * EASE.inOut(clamp((ms - 1700) / 1900, 0, 1))).toFixed(1));
+      after.setAttribute("width", (264 * EASE.inOut(clamp((ms - 7400) / 1700, 0, 1))).toFixed(1));
+    });
+    T.show(".k-mark", 3650, { y: 0, d: 300 });
+    T.show(".k-send", 4300, { y: 8, d: 300 });
+
+    const [cx, cy] = T.pos(".k-send");
+    T.cursor.enter(5300, cx + 96, cy + 96);
+    T.cursor.to(5400, ".k-send", { d: 820 });
+    T.cursor.click(6420, ".k-send");
+    T.cls(".k-send", 6500, "done");
+    T.cursor.leave(7000);
+
+    T.hide(".k-mark", 7100, { d: 260 });
+    T.cls(".k-chart", 7150, "after");
+    T.show(".k-ok", 9250, { y: 0, d: 300 });
+    T.show(".k-cap", 9450, { y: 4, d: 300 });
+    T.show(".k-note", 10500, { y: 4, d: 360 });
+  }
+};
+
+/* ---------- Try it live ----------
+   Real Claude through the sample capability, on the viewer's own account.
+   Every call starts from a click. Nothing here retries by itself. */
+const CHART = "205 Mallar; 201 Material ehtiyatları; 241 Əvəzləşdirilən əlavə dəyər vergisi; 531 Malsatan və podratçılara qısamüddətli kreditor borcları; 221 Kassa; 223 Bank hesablaşma hesabları; 211 Alıcılar və sifarişçilərin qısamüddətli debitor borcları; 601 Satış; 711 Kommersiya xərcləri; 721 İnzibati xərclər; 731 Sair əməliyyat xərcləri; 751 Maliyyə xərcləri; 244 Təhtəlhesab məbləğlər; 521 Vergi öhdəlikləri";
+
+const CATS = ["Goods for resale", "Transport costs", "Rent", "Utilities", "Bank charges", "Hold and ask", "Owner's private"];
+
+/* Eight fixed sample documents. "leyla" is how the accountant treated each one. */
+const TEST_DOCS = [
+  { id: 1, text: "Fuel receipt from Nümunə Yanacaq, VÖEN 0000000000, 33.00 AZN, for the delivery van.", leyla: "Transport costs" },
+  { id: 2, text: "Fuel receipt with no VÖEN, 28.00 AZN, for the delivery van.", leyla: "Hold and ask" },
+  { id: 3, text: "Rent invoice for shop 1 from Örnək Əmlak MMC, 850.00 AZN, paid on the 5th.", leyla: "Rent" },
+  { id: 4, text: "Rent invoice for shop 3 from Örnək Əmlak MMC, 640.00 AZN, paid on the 7th.", leyla: "Rent" },
+  { id: 5, text: "Supplier invoice from Örnək Süd MMC for milk and kefir, 240.72 AZN.", leyla: "Goods for resale" },
+  { id: 6, text: "Electricity bill for shop 2 from Nümunə Enerji, 96.40 AZN.", leyla: "Utilities" },
+  { id: 7, text: "Bank fee from Nümunə Bank, 4.50 AZN.", leyla: "Bank charges" },
+  { id: 8, text: "Fuel receipt, 40.00 AZN, with Elnur's note: for my own car at the weekend.", leyla: "Owner's private" }
+];
+
+/* Sample documents, drawn on canvas at load. Each one carries the NÜMUNƏ stamp. */
+const SAMPLES = {
+  /* The e-qaimə layout, landscape and simplified to 8 columns. */
+  invoice: {
+    eq: true,
+    title: "Malların, işlərin və xidmətlərin təqdim edilməsi barədə elektron qaimə-faktura",
+    series: "Seriya: NÜMUNƏ     Nömrə: 0000000     Tarix: 14.10.2026",
+    kind: "Növü: Cari",
+    sender: ["Göndərən:", "Örnək Süd MMC"],
+    receiver: ["Qəbul edən:", "Nümunə Market"],
+    basis: "Əsas: Satış Sənədi № 0000-14, 14.10.2026",
+    cols: ["Sıra №", "Malın adı", "Ölçü vahidi", "Miqdarı", "Vahidinin qiyməti", "ƏDV-siz dəyəri", "ƏDV məbləği", "Yekun məbləğ"],
+    rows: [["1", "Süd 1L", "ədəd", "120", "1.10", "132.00", "23.76", "155.76"], ["2", "Kefir 1L", "ədəd", "60", "1.20", "72.00", "12.96", "84.96"]],
+    total: ["", "Cəmi", "", "", "", "204.00", "36.72", "240.72"],
+    words: "Yekun məbləğ: 240 manat 72 qəpik",
+    sign: ["M.Y.", "Təhvil verdim", "Təhvil aldım"]
+  },
+  fuel: {
+    title: "YANACAQ QƏBZİ", no: "12.10.2026 09:41",
+    head: ["Nümunə Yanacaq", "Doldurma məntəqəsi 7"],
+    cols: ["Mal", "Litr", "Qiymət", "Məbləğ"],
+    rows: [["Aİ-92", "30.00", "1.10", "33.00"]],
+    sum: [["ƏDV-siz", "27.97"], ["ƏDV 18%", "5.03"], ["Yekun", "33.00 AZN"]],
+    foot: "Ödəniş: nağd. Nümunə sənəd."
+  },
+  bank: {
+    title: "BANK ÇIXARIŞI", no: "Nümunə Bank",
+    head: ["Hesab sahibi: Nümunə Market", "VÖEN 0000000000", "Hesab: AZ00 NÜMUNƏ 0000 0000", "Dövr: 13.10.2026 - 15.10.2026"],
+    cols: ["Tarix", "Təyinat", "Məxaric", "Mədaxil"],
+    rows: [["13.10", "Kart satışları", "", "1,250.00"], ["14.10", "Bank komissiyası", "4.50", ""], ["15.10", "Örnək Süd MMC, sənəd 0000-14", "240.72", ""]],
+    sum: [["Son qalıq", "9,420.18 AZN"]],
+    foot: "Nümunə sənəd. Real hesab deyil."
+  }
+};
+
+function docText(key) {
+  const d = SAMPLES[key];
+  if (d.eq) return [d.title, d.series, d.kind, d.sender.join(" VÖEN 0000000000 "), d.receiver.join(" VÖEN 0000000000 "), d.basis, d.cols.join(" | "), ...d.rows.map(r => r.join(" | ")), d.total.join(" | "), d.words].join("\n");
+  return [d.title, d.no, ...d.head, d.cols.join(" | "), ...d.rows.map(r => r.join(" | ")), ...d.sum.map(r => r.join(": ")), d.foot].join("\n");
+}
+
+/* The e-qaimə sample: landscape, ten VÖEN boxes of zeros, a big NÜMUNƏ stamp, no logo, no QR, no real series. */
+function drawEq(canvas, d) {
+  const W = 1400, H = 990, ctx = canvas.getContext("2d");
+  canvas.width = W; canvas.height = H;
+  const F = '"Onest","Segoe UI",Arial,sans-serif';
+  const css = getComputedStyle(document.documentElement), tok = n => css.getPropertyValue(n).trim();
+  const ink = tok("--paper-ink"), stampCol = tok("--stamp");
+  const L = 60, R = W - 60;
+  ctx.fillStyle = tok("--white"); ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = ink; ctx.strokeStyle = ink; ctx.textBaseline = "alphabetic";
+  let fs = 30;
+  ctx.font = "700 " + fs + "px " + F;
+  while (ctx.measureText(d.title).width > R - L && fs > 20) { fs -= 1; ctx.font = "700 " + fs + "px " + F; }
+  ctx.textAlign = "center"; ctx.fillText(d.title, W / 2, 72);
+  ctx.font = "400 24px " + F; ctx.fillText(d.series, W / 2, 124);
+  ctx.fillText(d.kind, W / 2, 160);
+  ctx.textAlign = "left";
+  const party = (y, p) => {
+    ctx.font = "700 24px " + F; ctx.fillText(p[0], L, y);
+    ctx.font = "400 24px " + F; ctx.fillText("VÖEN", 250, y);
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 10; i++) {
+      const x = 330 + i * 40;
+      ctx.strokeRect(x, y - 28, 34, 40);
+      ctx.textAlign = "center"; ctx.fillText("0", x + 17, y); ctx.textAlign = "left";
+    }
+    ctx.font = "400 26px " + F; ctx.fillText(p[1], 760, y);
+    ctx.beginPath(); ctx.moveTo(750, y + 12); ctx.lineTo(1180, y + 12); ctx.stroke();
+  };
+  party(228, d.sender); party(298, d.receiver);
+  ctx.font = "700 24px " + F; ctx.fillText("Əsas:", L, 366);
+  ctx.font = "400 24px " + F; ctx.fillText(d.basis.replace("Əsas: ", ""), 150, 366);
+  ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(140, 378); ctx.lineTo(760, 378); ctx.stroke();
+
+  const cw = [70, 390, 140, 130, 170, 150, 120, 110], x0 = L, y0 = 410, hh = 74, rh = 54;
+  const xs = [x0]; cw.forEach(w => xs.push(xs[xs.length - 1] + w));
+  const nRows = d.rows.length + 1, yb = y0 + hh + rh * nRows;
+  ctx.lineWidth = 2.5;
+  ctx.strokeRect(x0, y0, xs[8] - x0, yb - y0);
+  ctx.lineWidth = 2;
+  xs.slice(1, 8).forEach(x => { ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, yb); ctx.stroke(); });
+  for (let i = 0; i <= nRows; i++) { const y = y0 + hh + rh * i; ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(xs[8], y); ctx.stroke(); }
+  ctx.font = "600 21px " + F; ctx.textAlign = "center";
+  d.cols.forEach((t, i) => {
+    const words = t.split(" "), cx = (xs[i] + xs[i + 1]) / 2;
+    const lines = words.length > 1 && ctx.measureText(t).width > cw[i] - 16 ? [words.slice(0, -1).join(" "), words[words.length - 1]] : [t];
+    lines.forEach((ln, j) => ctx.fillText(ln, cx, y0 + hh / 2 + 7 + (j - (lines.length - 1) / 2) * 26));
+  });
+  const row = (r, y, bold) => {
+    ctx.font = (bold ? "700 " : "400 ") + "25px " + F;
+    r.forEach((t, i) => {
+      if (i === 1 || i === 2) { ctx.textAlign = i === 1 ? "left" : "center"; ctx.fillText(t, i === 1 ? xs[i] + 12 : (xs[i] + xs[i + 1]) / 2, y); }
+      else if (i === 0) { ctx.textAlign = "center"; ctx.fillText(t, (xs[0] + xs[1]) / 2, y); }
+      else { ctx.textAlign = "right"; ctx.fillText(t, xs[i + 1] - 12, y); }
+    });
+  };
+  d.rows.forEach((r, k) => row(r, y0 + hh + rh * k + 36, false));
+  row(d.total, y0 + hh + rh * d.rows.length + 36, true);
+
+  ctx.textAlign = "left"; ctx.font = "700 28px " + F;
+  ctx.fillText(d.words, L, yb + 64);
+  const by = 800;
+  ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(L + 70, by + 80, 64, 0, Math.PI * 2); ctx.stroke();
+  ctx.font = "600 26px " + F; ctx.textAlign = "center"; ctx.fillText(d.sign[0], L + 70, by + 90);
+  [[240, d.sign[1]], [700, d.sign[2]]].forEach(([x, t]) => {
+    ctx.lineWidth = 2.5; ctx.strokeRect(x, by + 10, 400, 130);
+    ctx.textAlign = "left"; ctx.font = "400 22px " + F; ctx.fillText(t, x + 16, by + 42);
+  });
+  ctx.save();
+  ctx.translate(1050, 726); ctx.rotate(-9 * Math.PI / 180);
+  ctx.globalAlpha = .55; ctx.strokeStyle = stampCol; ctx.fillStyle = stampCol; ctx.lineWidth = 11;
+  ctx.font = "700 110px " + F; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  const tw = ctx.measureText("NÜMUNƏ").width + 90;
+  ctx.strokeRect(-tw / 2, -88, tw, 176);
+  ctx.fillText("NÜMUNƏ", 0, 8);
+  ctx.restore();
+}
+
+function drawDoc(canvas, key) {
+  if (SAMPLES[key].eq) return drawEq(canvas, SAMPLES[key]);
+  const W = 900, H = 1120, d = SAMPLES[key], ctx = canvas.getContext("2d");
+  canvas.width = W; canvas.height = H;
+  const F = '"Onest","Segoe UI",Arial,sans-serif';
+  const css = getComputedStyle(document.documentElement), tok = n => css.getPropertyValue(n).trim();
+  const col = { ink: tok("--paper-ink"), dim: tok("--mute"), line: tok("--paper-line"), stamp: tok("--stamp") };
+  ctx.fillStyle = tok("--white"); ctx.fillRect(0, 0, W, H);
+  const L = 70, R = W - 70;
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = col.ink;
+  ctx.font = "700 46px " + F; ctx.textAlign = "left"; ctx.fillText(d.title, L, 110);
+  ctx.font = "400 28px " + F; ctx.fillStyle = col.dim; ctx.textAlign = "right"; ctx.fillText(d.no, R, 108);
+  ctx.textAlign = "left"; ctx.fillStyle = col.ink;
+  let y = 190;
+  d.head.forEach((t, i) => {
+    ctx.font = (i ? "400 30px " : "600 36px ") + F;
+    ctx.fillStyle = i ? col.dim : col.ink;
+    ctx.fillText(t, L, y); y += i ? 44 : 52;
+  });
+  y += 30;
+  const xs = key === "bank" ? [L, L + 110, R - 150, R] : [L, R - 370, R - 180, R];
+  const align = key === "bank" ? ["left", "left", "right", "right"] : ["left", "right", "right", "right"];
+  ctx.strokeStyle = col.ink; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke();
+  y += 42;
+  ctx.font = "400 26px " + F; ctx.fillStyle = col.dim;
+  d.cols.forEach((t, i) => { ctx.textAlign = align[i]; ctx.fillText(t, xs[i], y); });
+  y += 18;
+  ctx.strokeStyle = col.line; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke();
+  ctx.font = "400 30px " + F; ctx.fillStyle = col.ink;
+  d.rows.forEach(r => {
+    y += 52;
+    r.forEach((t, i) => { ctx.textAlign = align[i]; ctx.fillText(t, xs[i], y); });
+    y += 16;
+    ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke();
+  });
+  y += 60;
+  d.sum.forEach((r, i) => {
+    const last = i === d.sum.length - 1;
+    ctx.font = (last ? "700 " : "400 ") + "32px " + F;
+    ctx.fillStyle = last ? col.ink : col.dim;
+    ctx.textAlign = "left"; ctx.fillText(r[0], R - 400, y);
+    ctx.textAlign = "right"; ctx.fillStyle = col.ink; ctx.fillText(r[1], R, y);
+    y += 50;
+  });
+  ctx.textAlign = "left"; ctx.font = "400 25px " + F; ctx.fillStyle = col.dim;
+  ctx.fillText(d.foot, L, H - 70);
+  ctx.save();
+  ctx.translate(W / 2 - 40, 900); ctx.rotate(-8 * Math.PI / 180);
+  ctx.globalAlpha = .55; ctx.strokeStyle = col.stamp; ctx.fillStyle = col.stamp; ctx.lineWidth = 11;
+  ctx.font = "700 92px " + F; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  const tw = ctx.measureText("NÜMUNƏ").width + 90;
+  ctx.strokeRect(-tw / 2, -74, tw, 148);
+  ctx.fillText("NÜMUNƏ", 0, 8);
+  ctx.restore();
+}
+
+const $ = id => document.getElementById(id);
+const str = s => String(s ?? "");
+const num = v => (typeof v === "number" && isFinite(v) ? v : (typeof v === "string" && v.trim() !== "" && isFinite(+v) ? +v : null));
+const near = (a, b) => Math.abs(a - b) < .015;
+
+/* Viewer copy for each failure code. Anything unknown is treated as a service error. */
+function failure(code) {
+  const off = ["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"];
+  if (off.includes(code)) return { off: true };
+  const keys = {
+    rate_limited: "err.rate", session_expired: "err.session", image_rejected: "err.image", refused: "err.refused",
+    empty_completion: "err.empty", prompt_too_large: "err.long", images_unavailable: "err.noimg",
+    invalid_request: "err.page", transform_error: "err.page", queue_overflow: "err.page", tools_unavailable: "err.page"
+  };
+  if (keys[code]) return { msg: keys[code] };
+  return { msg: code === "invalid_json" ? "err.json" : "err.service", retry: true };
+}
+
+let SAMPLE = null, CAN_IMAGES = false, liveState = "off";
+let picked = "invoice", ownFile = null, ownUrl = null;
+let readCtl = null, rulesCtl = null;
+let lastRead = null, lastRules = null, lastTest = null;
+const running = { read: false, rules: false };
+
+function setLive(state, why) {
+  liveState = state;
+  $("live").dataset.live = state;
+  $("live").dataset.why = why || "live.off";
+  document.querySelectorAll(".smp").forEach(b => { b.disabled = state === "off"; });
+  if (state === "off") {
+    $("live-off-text").textContent = tr($("live").dataset.why);
+    if (readCtl) readCtl.abort();
+    if (rulesCtl) rulesCtl.abort();
+  }
+}
+
+function setBusy(which, on, key) {
+  running[which] = on;
+  const go = $(which === "read" ? "read-go" : "rules-go"), stop = $(which === "read" ? "read-stop" : "rules-stop");
+  const st = $(which === "read" ? "read-status" : "rules-status"), retry = $(which === "read" ? "read-retry" : "rules-retry");
+  go.disabled = on;
+  stop.hidden = !on;
+  retry.hidden = true;
+  st.textContent = key ? tr(key) : "";
+  st.classList.remove("bad");
+}
+
+function showError(which, e) {
+  const f = failure(e && e.code);
+  if (f.off) { setLive("off", "live.denied"); return; }
+  if (e.code === "images_unavailable") { CAN_IMAGES = false; $("own-wrap").hidden = true; $("read-mode").hidden = false; pick(picked); }
+  const st = $(which === "read" ? "read-status" : "rules-status");
+  st.textContent = tr(f.msg);
+  st.classList.add("bad");
+  $(which === "read" ? "read-retry" : "rules-retry").hidden = !f.retry;
+}
+
+/* ---------- Tool 1: read a document ---------- */
+const FIELDS = [
+  ["document_type", "live.f.type"], ["seller", "live.f.seller"], ["voen", "live.f.voen"], ["date", "live.f.date"],
+  ["net", "live.f.net"], ["vat", "live.f.vat"], ["total", "live.f.total"], ["currency", "live.f.cur"],
+  ["payment_method", "live.f.pay"], ["language", "live.f.lang"]
+];
+
+function readPrompt(usingText) {
+  const lang = LANG === "az" ? "Azerbaijani" : "English";
+  const src = usingText ? "The document text is at the end of this message." : "The document is in the attached image.";
+  return "You read one business document. " + src + " It may be in Azerbaijani, Russian or English.\n"
+    + "Reply with only one JSON object in exactly this shape and no other text:\n"
+    + '{"document_type":"","seller":"","voen":"","date":"","line_items":[{"name":"","qty":0,"unit_price":0,"amount":0}],"net":0,"vat":0,"total":0,"currency":"","payment_method":"","language":"",'
+    + '"confidence":{"document_type":0,"seller":0,"voen":0,"date":0,"line_items":0,"net":0,"vat":0,"total":0,"currency":0,"payment_method":0,"language":0},'
+    + '"journal":[{"code":"","account":"","debit":0,"credit":0}],"reasoning":""}\n'
+    + "Rules:\n"
+    + "- Write null for anything you cannot read. Never guess a tax number (VÖEN). Copy it digit by digit or write null.\n"
+    + "- Numbers are JSON numbers with a dot for decimals. Confidence values run from 0 to 1.\n"
+    + "- journal is a proposed double-entry entry for the firm that received this document, and debits must equal credits.\n"
+    + "- Use these codes from Azerbaijan's chart of accounts where they fit: " + CHART + ". If none fits, set code to null and name the account in words.\n"
+    + "- Write account names, document_type and reasoning in " + lang + ". reasoning is one sentence.";
+}
+
+function renderFields(data) {
+  const box = $("read-fields");
+  box.textContent = "";
+  for (const [k, label] of FIELDS) {
+    const row = document.createElement("div");
+    row.className = "lf";
+    const a = document.createElement("span"), b = document.createElement("b"), c = document.createElement("i");
+    a.textContent = tr(label);
+    const conf = data ? num(data.confidence && data.confidence[k]) : null;
+    let v = data ? data[k] : undefined;
+    if (data && (v === null || v === undefined || v === "")) { b.textContent = tr("live.unread"); b.className = "unread"; }
+    else if (data && ["net", "vat", "total"].includes(k) && num(v) !== null) b.textContent = fmtNum(num(v), 2);
+    else b.textContent = data ? str(v) : "";
+    if (!data) b.className = "blank";
+    if (conf !== null) {
+      c.className = "cf " + (conf >= .9 ? "hi" : conf >= .6 ? "mid" : "lo");
+      c.textContent = Math.round(conf * 100) + "%";
+    }
+    row.append(a, b, c);
+    box.append(row);
+  }
+  const items = $("read-items");
+  items.textContent = "";
+  const list = data && Array.isArray(data.line_items) ? data.line_items : [];
+  $("read-items-wrap").hidden = !list.length;
+  for (const it of list.slice(0, 12)) {
+    const row = document.createElement("div");
+    row.className = "li";
+    const n = document.createElement("span"), q = document.createElement("span"), m = document.createElement("span");
+    n.textContent = str(it && it.name);
+    const qty = num(it && it.qty), up = num(it && it.unit_price), am = num(it && it.amount);
+    q.textContent = qty !== null && up !== null ? fmtNum(qty, qty % 1 ? 2 : 0) + " × " + fmtNum(up, 2) : "";
+    m.textContent = am !== null ? fmtNum(am, 2) : "";
+    row.append(n, q, m);
+    items.append(row);
+  }
+}
+
+function tag(ok, text) {
+  const t = document.createElement("span");
+  t.className = "chk " + (ok ? "good" : "warn");
+  t.textContent = text;
+  return t;
+}
+
+function renderChecks(data) {
+  const box = $("read-checks");
+  box.textContent = "";
+  if (!data) return;
+  const net = num(data.net), vat = num(data.vat), total = num(data.total);
+  if (net === null || vat === null || total === null) box.append(tag(false, tr("live.chk1") + ": " + tr("live.cant")));
+  else {
+    const ok = near(net + vat, total);
+    box.append(tag(ok, tr("live.chk1") + ": " + fmtNum(net, 2) + " + " + fmtNum(vat, 2) + (ok ? " = " : " ≠ ") + fmtNum(total, 2)));
+  }
+  const j = Array.isArray(data.journal) ? data.journal : [];
+  if (!j.length) box.append(tag(false, tr("live.chk2") + ": " + tr("live.cant")));
+  else {
+    const dr = j.reduce((s, l) => s + (num(l && l.debit) || 0), 0), cr = j.reduce((s, l) => s + (num(l && l.credit) || 0), 0);
+    const ok = near(dr, cr);
+    box.append(tag(ok, tr("live.chk2") + ": " + fmtNum(dr, 2) + (ok ? " = " : " ≠ ") + fmtNum(cr, 2)));
+  }
+}
+
+function renderEntry(data) {
+  const wrap = $("read-entry"), body = $("read-journal");
+  body.textContent = "";
+  const j = data && Array.isArray(data.journal) ? data.journal : [];
+  wrap.hidden = !j.length;
+  $("read-why").textContent = data ? str(data.reasoning) : "";
+  for (const l of j.slice(0, 10)) {
+    const row = document.createElement("div");
+    row.className = "lj";
+    const a = document.createElement("span"), d = document.createElement("span"), c = document.createElement("span");
+    const code = document.createElement("em");
+    code.textContent = l && l.code ? str(l.code) : "";
+    a.append(code, document.createTextNode(str(l && l.account)));
+    const dr = num(l && l.debit), cr = num(l && l.credit);
+    d.textContent = dr ? fmtNum(dr, 2) : "";
+    c.textContent = cr ? fmtNum(cr, 2) : "";
+    row.append(a, d, c);
+    body.append(row);
+  }
+  const ok = $("read-ok");
+  ok.classList.remove("done");
+  ok.disabled = false;
+  ok.textContent = tr("live.approve");
+}
+
+async function currentBlob() {
+  if (ownFile) return ownFile;
+  return new Promise(res => $("doc-view").toBlob(b => res(b), "image/png"));
+}
+
+async function readDoc() {
+  if (!SAMPLE || running.read) return;
+  const usingText = !CAN_IMAGES;
+  if (usingText && ownFile) return;
+  readCtl = new AbortController();
+  const ctl = readCtl;
+  setBusy("read", true, "live.reading");
+  renderFields(null); renderChecks(null); renderEntry(null);
+  lastRead = null;
+  try {
+    const opts = {
+      modelTier: "default", signal: ctl.signal,
+      onText: () => { $("read-status").textContent = tr("live.writing"); }
+    };
+    let prompt = readPrompt(usingText);
+    if (usingText) prompt += "\n\nDocument text:\n" + docText(picked);
+    else opts.images = await currentBlob();
+    if (ctl.signal.aborted) { setBusy("read", false); return; }
+    const data = await SAMPLE.json(prompt, opts);
+    if (!data || typeof data !== "object") throw { code: "invalid_json" };
+    lastRead = data;
+    setBusy("read", false);
+    renderFields(data); renderChecks(data); renderEntry(data);
+  } catch (e) {
+    setBusy("read", false);
+    if (e && e.code === "cancelled") return;
+    showError("read", e || {});
+  }
+}
+
+function pick(key) {
+  picked = key;
+  ownFile = null;
+  if (ownUrl) { URL.revokeObjectURL(ownUrl); ownUrl = null; }
+  $("own-view").hidden = true;
+  $("doc-view").hidden = false;
+  drawDoc($("doc-view"), key);
+  document.querySelectorAll(".smp[data-doc]").forEach(b => b.setAttribute("aria-pressed", b.dataset.doc === key ? "true" : "false"));
+  $("own-wrap").classList.remove("on");
+}
+
+/* ---------- Tool 2: set up a client ---------- */
+function rulesPrompt(text) {
+  const lang = LANG === "az" ? "Azerbaijani" : "English";
+  return "You set up bookkeeping rules for a small Azerbaijani firm from its accountant's plain description.\n"
+    + 'Description:\n"""\n' + text.slice(0, 2000) + '\n"""\n'
+    + "Reply with only one JSON object and no other text:\n"
+    + '{"rules":[{"when":"","then":"","why":"","risk":"low"}]}\n'
+    + "Rules:\n"
+    + "- Write 3 to 6 rules. Use only what the description says. Do not invent suppliers or amounts.\n"
+    + "- when, then and why are one short plain sentence each, in " + lang + ".\n"
+    + '- risk is one of "low", "medium", "high".\n'
+    + "- In then, name one of these treatments where it fits: " + CATS.join(", ") + ".";
+}
+
+function testPrompt(rules) {
+  const lang = LANG === "az" ? "Azerbaijani" : "English";
+  return "Apply these bookkeeping rules to 8 sample documents, using only the rules.\n"
+    + "Rules (JSON): " + JSON.stringify(rules) + "\n"
+    + "Documents (JSON): " + JSON.stringify(TEST_DOCS) + "\n"
+    + 'Each document has "leyla", the treatment the accountant chose. Do not let it change what the rules would do.\n'
+    + "Reply with only one JSON object and no other text:\n"
+    + '{"results":[{"id":1,"rule":1,"result":"","note":"","fix":null}]}\n'
+    + "- rule is the number of the rule used, counting from 1, or null.\n"
+    + "- result is exactly one of: " + CATS.join(", ") + ", No rule.\n"
+    + "- note is one short sentence in " + lang + ".\n"
+    + "- fix is null if result equals leyla. Otherwise it is one plain sentence in " + lang + " with the rule change that would make it match.";
+}
+
+function catLabel(c) {
+  const i = CATS.findIndex(x => x.toLowerCase() === c.toLowerCase());
+  return i >= 0 ? tr("cat." + i) : (c.toLowerCase() === "no rule" ? tr("cat.none") : c);
+}
+
+function renderRules(rules) {
+  const box = $("rules-list");
+  box.textContent = "";
+  $("rules-wrap").hidden = !rules.length;
+  rules.forEach((r, i) => {
+    const row = document.createElement("div");
+    row.className = "rule";
+    const n = document.createElement("i"), body = document.createElement("div");
+    n.textContent = i + 1;
+    const w = document.createElement("p");
+    const wl = document.createElement("span"), wt = document.createElement("b"), tl = document.createElement("span"), tt = document.createElement("b");
+    wl.textContent = tr("live.when") + " "; wt.textContent = str(r.when);
+    tl.textContent = " " + tr("live.then") + " "; tt.textContent = str(r.then);
+    w.append(wl, wt, tl, tt);
+    const y = document.createElement("p");
+    y.className = "rule-why";
+    y.textContent = str(r.why);
+    body.append(w, y);
+    const risk = document.createElement("em");
+    const lv = ["low", "medium", "high"].includes(r.risk) ? r.risk : "medium";
+    risk.className = "risk " + lv;
+    risk.textContent = tr("risk." + lv);
+    row.append(n, body, risk);
+    box.append(row);
+  });
+}
+
+function renderTest(res) {
+  const box = $("test-list");
+  box.textContent = "";
+  const byId = {};
+  for (const r of res) if (r && r.id !== undefined) byId[+r.id] = r;
+  let passed = 0;
+  TEST_DOCS.forEach(d => {
+    const r = byId[d.id] || {};
+    const got = str(r.result).trim();
+    const ok = got.toLowerCase() === d.leyla.toLowerCase();
+    if (ok) passed++;
+    const row = document.createElement("div");
+    row.className = "tr-row " + (ok ? "pass" : "fail");
+    const a = document.createElement("span"), b = document.createElement("span"), c = document.createElement("span"), t = document.createElement("em");
+    a.className = "tr-doc"; a.textContent = tr("live.d" + d.id);
+    b.textContent = got ? catLabel(got) : tr("live.nores");
+    c.textContent = catLabel(d.leyla);
+    t.textContent = tr(ok ? "live.passed" : "live.failed");
+    row.append(a, b, c, t);
+    box.append(row);
+    if (!ok && r.fix) {
+      const f = document.createElement("div");
+      f.className = "tr-fix";
+      f.textContent = tr("live.fix") + ": " + str(r.fix);
+      box.append(f);
+    }
+  });
+  $("test-sum").textContent = tr("live.sum").replace("{p}", passed);
+  $("test-wrap").hidden = false;
+}
+
+async function runRules() {
+  if (!SAMPLE || running.rules) return;
+  const text = $("rules-text").value.trim();
+  if (!text) return;
+  rulesCtl = new AbortController();
+  const ctl1 = rulesCtl;
+  setBusy("rules", true, "live.writerules");
+  lastRules = null; lastTest = null;
+  renderRules([]); $("test-wrap").hidden = true;
+  try {
+    const data = await SAMPLE.json(rulesPrompt(text), {
+      modelTier: "default", signal: ctl1.signal,
+      onText: () => { $("rules-status").textContent = tr("live.writing"); }
+    });
+    const rules = data && Array.isArray(data.rules) ? data.rules.filter(r => r && typeof r === "object").slice(0, 8) : [];
+    if (!rules.length) throw { code: "invalid_json" };
+    lastRules = rules;
+    renderRules(rules);
+
+    rulesCtl = new AbortController();
+    const ctl2 = rulesCtl;
+    $("rules-status").textContent = tr("live.testing");
+    const out = await SAMPLE.json(testPrompt(rules), {
+      modelTier: "default", signal: ctl2.signal,
+      onText: () => { $("rules-status").textContent = tr("live.testing"); }
+    });
+    const res = out && Array.isArray(out.results) ? out.results : null;
+    if (!res) throw { code: "invalid_json" };
+    lastTest = res;
+    setBusy("rules", false);
+    renderTest(res);
+  } catch (e) {
+    setBusy("rules", false);
+    if (e && e.code === "cancelled") return;
+    showError("rules", e || {});
+  }
+}
+
+window.onLangChange = () => {
+  if (liveState === "off") $("live-off-text").textContent = tr($("live").dataset.why || "live.off");
+  renderFields(lastRead); renderChecks(lastRead);
+  if (lastRead) renderEntry(lastRead);
+  if (lastRules) renderRules(lastRules);
+  if (lastTest) renderTest(lastTest);
+  const box = $("rules-text");
+  if (box && box.value === box.dataset.seed) { box.value = tr("live.seed"); box.dataset.seed = box.value; }
+};
+
+async function initLive() {
+  /* The three sample documents exist with or without Claude. */
+  const draw = () => {
+    document.querySelectorAll(".smp canvas").forEach(c => drawDoc(c, c.dataset.doc));
+    if (!ownFile) drawDoc($("doc-view"), picked);
+  };
+  draw();
+  if (document.fonts && document.fonts.load) {
+    Promise.all([document.fonts.load('400 30px "Onest"', "ƏəÜüİı"), document.fonts.load('700 46px "Onest"', "ƏəÜüİı"), document.fonts.load('600 36px "Onest"', "ƏəÜüİı")]).then(draw, () => {});
+  }
+  renderFields(null);
+  const box = $("rules-text");
+  box.value = tr("live.seed");
+  box.dataset.seed = box.value;
+
+  document.querySelectorAll(".smp[data-doc]").forEach(b => { b.onclick = () => pick(b.dataset.doc); });
+  $("read-go").onclick = readDoc;
+  $("read-retry").onclick = readDoc;
+  $("read-stop").onclick = () => { if (readCtl) readCtl.abort(); };
+  $("rules-go").onclick = runRules;
+  $("rules-retry").onclick = runRules;
+  $("rules-stop").onclick = () => { if (rulesCtl) rulesCtl.abort(); };
+  $("read-ok").onclick = () => {
+    const ok = $("read-ok");
+    ok.classList.add("done");
+    ok.disabled = true;
+    ok.textContent = tr("live.approved");
+  };
+  $("own-file").onchange = e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    ownFile = f;
+    if (ownUrl) URL.revokeObjectURL(ownUrl);
+    ownUrl = URL.createObjectURL(f);
+    $("own-view").src = ownUrl;
+    $("own-view").hidden = false;
+    $("doc-view").hidden = true;
+    document.querySelectorAll(".smp[data-doc]").forEach(b => b.setAttribute("aria-pressed", "false"));
+    $("own-wrap").classList.add("on");
+  };
+
+  let sample = null;
+  if (window.claude) $("live").dataset.live = "wait";
+  try { sample = window.claude && await window.claude.use("sample"); } catch (e) { sample = null; }
+  if (!sample) { setLive("off"); return; }
+  SAMPLE = sample;
+  const caps = await sample.limits().catch(() => null);
+  CAN_IMAGES = !!(caps && caps.images);
+  $("own-wrap").hidden = !CAN_IMAGES;
+  if (CAN_IMAGES && caps.images.mediaTypes) $("own-file").accept = caps.images.mediaTypes.join(",");
+  $("read-mode").hidden = CAN_IMAGES;
+  setLive("on");
+}
+
+/* ---------- Calculator ---------- */
+function calc() {
+  const n = +document.getElementById("calc-n").value;
+  const bill = n * CONFIG.billPerClient;
+  const hours = n * CONFIG.hoursSavedPerClient;
+  const worth = hours * CONFIG.hourlyCost;
+  const withNow = CONFIG.hoursPerClient - CONFIG.hoursSavedPerClient;
+  const more = Math.floor(hours * CONFIG.resaleShare / withNow);
+  const set = (id, v) => { document.getElementById(id).textContent = v; };
+  set("calc-v", fmtNum(n));
+  set("o-bill", fmtNum(bill));
+  set("o-hours", fmtNum(hours));
+  set("o-worth", fmtNum(worth));
+  set("o-more", fmtNum(more));
+  set("o-fees", tr("calc.fees").replace("{v}", fmtNum(more * CONFIG.feePerClient)));
+  set("calc-basis", tr("calc.basis")
+    .replace("{bill}", fmtNum(CONFIG.billPerClient, 1))
+    .replace("{hours}", fmtNum(CONFIG.hoursSavedPerClient, 2))
+    .replace("{cost}", fmtNum(CONFIG.hourlyCost, 1))
+    .replace("{fee}", fmtNum(CONFIG.feePerClient))
+    .replace("{today}", fmtNum(CONFIG.hoursPerClient, 2))
+    .replace("{share}", fmtNum(CONFIG.resaleShare * 100) + "%"));
+}
+
+/* ---------- Page ---------- */
+function setLang(l, remember = true) {
+  LANG = l;
+  applyLang();
+  document.getElementById("lang-en").setAttribute("aria-pressed", l === "en" ? "true" : "false");
+  document.getElementById("lang-az").setAttribute("aria-pressed", l === "az" ? "true" : "false");
+  if (remember) { try { localStorage.setItem("nowai-lang", l); } catch (e) { /* storage may be blocked */ } }
+  for (const id in FILMS) { const f = FILMS[id]; if (f.tl) { build(f); fit(f); refreshButtons(f); } }
+  calc();
+  if (window.onLangChange) window.onLangChange();
+}
+
+function start() {
+  const qa = /^#qa-([a-z]+)-(\d+)(?:-(az|en))?$/.exec(location.hash);
+  let lang = "en";
+  try { lang = localStorage.getItem("nowai-lang") || "en"; } catch (e) { /* storage may be blocked */ }
+  if (qa && qa[3]) lang = qa[3];
+  document.documentElement.lang = lang;
+  if (lang !== "en") { LANG = lang; applyLang(); }
+  document.getElementById("lang-en").onclick = () => setLang("en");
+  document.getElementById("lang-az").onclick = () => setLang("az");
+  document.getElementById("lang-en").setAttribute("aria-pressed", LANG === "en" ? "true" : "false");
+  document.getElementById("lang-az").setAttribute("aria-pressed", LANG === "az" ? "true" : "false");
+
+  const slider = document.getElementById("calc-n");
+  slider.min = CONFIG.clients.min;
+  slider.max = CONFIG.clients.max;
+  slider.value = CONFIG.clients.start;
+  slider.oninput = calc;
+  calc();
+
+  initFilms();
+  initLive();
+
+  const freeze = () => {
+    if (!qa || !FILMS[qa[1]]) return;
+    window.__film(qa[1], +qa[2]);
+    FILMS[qa[1]].el.scrollIntoView({ block: "center", behavior: "instant" });
+  };
+  freeze();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      for (const id in FILMS) { build(FILMS[id]); fit(FILMS[id]); }
+      freeze();
+    });
+  }
+}
+
+start();
+
+
+</script>
+</body>
+</html>

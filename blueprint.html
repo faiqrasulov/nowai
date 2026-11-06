@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NowAI Blueprint</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300..700&display=swap">
+<style>
+/* NowAI Blueprint: a working drawing of the company. One light look, on purpose. */
+:root {
+  --bg: #FFFFFF; --ink: #0F1C18; --ink-2: #33423D; --mute: #5E6D68; --mute-2: #8B9893;
+  --line: #E2E8E5; --line-2: #CBD5D0; --soft: #F3F6F4; --soft-2: #F7F9F8;
+  --green: #0E5A3C; --act: #12A06A; --act-soft: #E2F4EB; --amber: #A9650C; --amber-soft: #FBF0DC;
+  --font: "Onest", "Segoe UI", "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+h1, h2, h3, p, figure, dl, dd, ol, ul { margin: 0; padding: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+ol, ul { list-style: none; }
+.wrap { max-width: 1408px; margin-inline: auto; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 2.5px solid var(--green); outline-offset: 2px; }
+
+/* top bar and tabs */
+.top { position: sticky; top: 0; z-index: 30; background: var(--bg); border-bottom: 1px solid var(--line); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+.bar { display: flex; align-items: center; gap: 8px 24px; flex-wrap: wrap; min-height: 56px; max-width: 1408px; margin-inline: auto; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; font-size: 18px; }
+.brand b { color: var(--green); font-weight: 700; }
+.brand span { font-weight: 400; color: var(--mute); }
+.tabs { display: flex; gap: 4px; margin-left: auto; }
+.tab { background: none; border: 0; border-bottom: 3px solid transparent; padding: 15px 12px 12px; font-weight: 600; color: var(--mute); font-size: 15px; white-space: nowrap; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--green); border-bottom-color: var(--green); }
+
+/* view head */
+.view { padding-top: 20px; padding-bottom: 8px; scroll-margin-top: 70px; }
+.head { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 6px 28px; align-items: baseline; margin-bottom: 14px; }
+h1 { font-size: 26px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; }
+.means { font-size: 19px; line-height: 1.4; color: var(--ink); max-width: 72ch; }
+.means small { display: block; font-size: 12px; font-weight: 700; color: var(--green); letter-spacing: .02em; margin-bottom: 2px; }
+.sub { color: var(--ink-2); max-width: 72ch; }
+h2 { font-size: 21px; line-height: 1.25; font-weight: 700; letter-spacing: -.015em; }
+h3 { font-size: 15px; line-height: 1.3; font-weight: 700; }
+
+/* switches */
+.controls { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; margin-bottom: 12px; }
+.sw { border: 0; padding: 0; margin: 0; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.sw legend { float: left; padding: 0; margin-right: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); line-height: 34px; }
+.seg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 7px; overflow: hidden; background: var(--bg); }
+.seg label { position: relative; display: block; }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span { display: block; padding: 6px 13px; font-size: 14px; font-weight: 600; color: var(--ink-2); line-height: 20px; white-space: nowrap; }
+.seg label + label span { border-left: 1px solid var(--line-2); }
+.seg input:checked + span { background: var(--green); color: #FFFFFF; }
+.seg input:focus-visible + span { outline: 2.5px solid var(--green); outline-offset: -4px; box-shadow: inset 0 0 0 2px #FFFFFF; }
+.note { font-size: 14px; color: var(--ink-2); flex: 1 1 280px; min-width: 0; }
+
+/* drawing layout */
+.mapgrid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+figure { min-width: 0; }
+.scroll { overflow-x: auto; border: 1px solid var(--line-2); border-radius: 8px; background: var(--bg); -webkit-overflow-scrolling: touch; }
+.stage { position: relative; min-width: 980px; }
+.stage svg { display: block; width: 100%; height: auto; }
+figcaption { font-size: 14px; color: var(--mute); padding-top: 8px; max-width: 90ch; }
+.hint { display: none; font-size: 13px; color: var(--mute); padding-bottom: 6px; }
+.hit, .shit { position: absolute; padding: 0; background: transparent; border: 0; color: transparent; font-size: 1px; overflow: hidden; white-space: nowrap; border-radius: 4px; }
+.hit:hover, .shit:hover { background: rgba(14, 90, 60, .08); }
+.hit:focus-visible, .shit:focus-visible { outline-offset: 1px; }
+
+/* side panel */
+.side { border: 1px solid var(--line-2); border-radius: 8px; padding: 14px 16px 16px; background: var(--bg); font-size: 14.5px; line-height: 1.45; min-width: 0; }
+.side .kicker { font-size: 12px; font-weight: 700; color: var(--green); }
+.side h2 { font-size: 19px; margin-bottom: 8px; }
+.side dl { display: grid; gap: 10px; }
+.side dt { font-size: 12px; font-weight: 700; color: var(--mute); }
+.side dd { color: var(--ink); }
+.side .plain { font-size: 15px; margin-bottom: 10px; }
+.side details { margin-top: 10px; font-size: 13.5px; color: var(--ink-2); }
+.side summary { cursor: pointer; font-weight: 600; color: var(--ink-2); }
+.side .warn { margin-top: 10px; padding: 8px 10px; border-left: 3px solid var(--amber); background: var(--amber-soft); font-size: 13.5px; }
+.tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 4px; background: var(--soft); color: var(--ink-2); }
+.tag.build { background: #DCE9E2; color: #0E5A3C; }
+.tag.buy { background: #DDE8F6; color: #2C5F9E; }
+.back { display: none; margin-top: 12px; background: none; border: 1px solid var(--line-2); border-radius: 6px; padding: 6px 10px; font-size: 14px; font-weight: 600; }
+
+/* colour key under the map */
+.ckey { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; color: var(--ink-2); padding-top: 8px; min-height: 0; }
+.ckey span { display: inline-flex; align-items: center; gap: 6px; }
+.ckey i { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid; display: inline-block; }
+
+/* map drawing */
+.pnl { fill: var(--soft-2); stroke: var(--line-2); stroke-width: 1; }
+.pnl-dash { fill: #FFFFFF; stroke: var(--mute-2); stroke-dasharray: 5 4; }
+.lt { font: 600 12.5px var(--font); fill: var(--ink-2); paint-order: stroke; stroke: #FFFFFF; stroke-width: 6px; stroke-linejoin: round; }
+.ln { font-weight: 700; fill: var(--green); }
+.ground { fill: #EEF2F0; }
+.gline { stroke: var(--ink); stroke-width: 2.5; }
+.pt rect { fill: #FFFFFF; stroke: var(--ink-2); stroke-width: 1; }
+.tn { font: 600 13px var(--font); fill: var(--ink); }
+.ts { font: 400 12px var(--font); fill: var(--mute); }
+.ed path { fill: none; stroke: var(--mute); stroke-width: 1.4; }
+.ed.k-a path { stroke: var(--green); stroke-width: 2.2; }
+.ed.k-f path { stroke-dasharray: 5 4; }
+.el { font: 500 12px var(--font); fill: var(--ink-2); paint-order: stroke; stroke: #FFFFFF; stroke-width: 4px; stroke-linejoin: round; }
+.ed.k-a .el { fill: var(--green); font-weight: 600; }
+.bus { fill: none; stroke: var(--mute); stroke-width: 2.2; }
+.bus-t { stroke: var(--mute); stroke-width: 1.4; }
+.actor rect { fill: #FFFFFF; stroke: var(--ink-2); stroke-width: 1.2; }
+.actor line { stroke: var(--ink-2); stroke-width: 1.2; }
+.chk path { fill: #FFFFFF; stroke: var(--ink-2); stroke-width: 1.2; }
+.flag path { fill: #FFFFFF; stroke: var(--amber); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.zn { font: 700 12px var(--font); fill: var(--mute); letter-spacing: .02em; }
+.nh { font: 700 13px var(--font); fill: var(--ink); }
+.nt { font: 400 12.5px var(--font); fill: var(--ink-2); }
+.tb rect { fill: #FFFFFF; stroke: var(--ink-2); stroke-width: 1; }
+.tb line { stroke: var(--line-2); stroke-width: 1; }
+.tbh { font: 700 13px var(--font); fill: var(--green); }
+.tbt { font: 400 12px var(--font); fill: var(--ink-2); }
+.kl { stroke: var(--mute); stroke-width: 1.4; }
+.kl.ka { stroke: var(--green); stroke-width: 2.2; }
+.kl.kf { stroke-dasharray: 5 4; }
+.kb { fill: none; stroke: var(--mute-2); stroke-dasharray: 4 3; }
+.kd { fill: #FFFFFF; stroke: var(--ink-2); stroke-width: 1.2; }
+.pt-gate .wall { fill: var(--green); stroke: none; }
+.pt-gate .wall-cap { fill: var(--ink); stroke: none; }
+.gh { font: 700 16px var(--font); fill: #FFFFFF; }
+.gs { font: 500 12.5px var(--font); fill: #E2F4EB; }
+.gn { font: 700 14px var(--font); fill: #A9D9C3; }
+.gc { fill: none; stroke: #FFFFFF; stroke-width: 2; }
+.gk { fill: none; stroke: #FFFFFF; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.gt { stroke: #FFFFFF; stroke-width: 2; }
+
+/* stage switch: parts that do not exist yet fade to an outline */
+svg:not([data-stage="d1"]) .o-d1 { display: none; }
+svg[data-stage="d1"] .f-m12 { display: none; }
+svg:not([data-stage="m12"]) .o-m12 { display: none; }
+svg:not([data-stage="y3"]) .o-y3 { display: none; }
+svg[data-colour="owner"] .pt:not(.pt-gate)[data-owner="lead"] rect { fill: #DDF1E7; stroke: #1A8A5C; stroke-width: 1.6; }
+svg[data-colour="owner"] .pt:not(.pt-gate)[data-owner="backend"] rect { fill: #DFEAF7; stroke: #2F6FBF; stroke-width: 1.6; }
+svg[data-colour="owner"] .pt:not(.pt-gate)[data-owner="evals"] rect { fill: #FBEBD2; stroke: #D08A1E; stroke-width: 1.6; }
+svg[data-colour="owner"] .pt:not(.pt-gate)[data-owner="integ"] rect { fill: #EAE3F7; stroke: #7B55C7; stroke-width: 1.6; }
+svg[data-colour="owner"] .pt:not(.pt-gate)[data-owner="front"] rect { fill: #F8E0EA; stroke: #C4487A; stroke-width: 1.6; }
+svg[data-colour="owner"] .pt:not(.pt-gate)[data-owner="infra"] rect { fill: #D9F1F5; stroke: #16A0B5; stroke-width: 1.6; }
+svg[data-colour="owner"] .pt:not(.pt-gate)[data-owner="acct"] rect { fill: #EFEBCF; stroke: #7A6C10; stroke-width: 1.6; }
+svg[data-colour="bb"] .pt:not(.pt-gate)[data-bb="Build"] rect { fill: #DDF1E7; stroke: #1A8A5C; stroke-width: 1.6; }
+svg[data-colour="bb"] .pt:not(.pt-gate)[data-bb="Buy"] rect { fill: #DFEAF7; stroke: #2F6FBF; stroke-width: 1.6; }
+svg[data-stage="d1"] .pt.s-m12 rect, svg[data-stage="d1"] .pt.s-y3 rect, svg[data-stage="m12"] .pt.s-y3 rect { fill: transparent; stroke: var(--mute-2); stroke-dasharray: 4 3; }
+svg[data-stage="d1"] .pt.s-m12 text, svg[data-stage="d1"] .pt.s-y3 text, svg[data-stage="m12"] .pt.s-y3 text { fill: var(--mute-2); }
+svg[data-stage="d1"] .ed.s-m12, svg[data-stage="d1"] .ed.s-y3, svg[data-stage="m12"] .ed.s-y3,
+svg[data-stage="d1"] .bus-t.s-m12, svg[data-stage="d1"] .bus-t.s-y3, svg[data-stage="m12"] .bus-t.s-y3 { opacity: .28; }
+.pt.sel rect { stroke: var(--green); stroke-width: 2.6; stroke-dasharray: none; }
+.pt-gate.sel .wall { stroke: var(--act); stroke-width: 3.5; }
+
+/* receipt view */
+.rc .ed, .rc .bus, .rc .bus-t { opacity: .5; }
+.trail { fill: none; stroke: var(--green); stroke-width: 3.2; stroke-linejoin: round; stroke-linecap: round; display: none; }
+.trail.on { display: inline; }
+.trail.amb { stroke: var(--amber); }
+.dot { fill: var(--act); stroke: #FFFFFF; stroke-width: 2.5; }
+.dot.amb { fill: var(--amber); }
+.rc .pt.lit rect { fill: var(--act-soft); stroke: var(--green); stroke-width: 2.2; stroke-dasharray: none; }
+.rc .pt.lit text { fill: var(--ink); }
+.rc .pt-gate.lit .wall { fill: var(--green); stroke: var(--act); stroke-width: 3.5; }
+.rail { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; }
+.num { width: 34px; height: 34px; border: 1px solid var(--line-2); border-radius: 6px; background: var(--bg); font-weight: 700; font-size: 14px; color: var(--ink-2); }
+.num.done { background: var(--act-soft); border-color: var(--act-soft); color: var(--green); }
+.num[aria-current="step"] { background: var(--green); border-color: var(--green); color: #FFFFFF; }
+.btn { border: 1px solid var(--line-2); background: var(--bg); border-radius: 6px; padding: 6px 12px; font-size: 14px; font-weight: 600; height: 34px; line-height: 20px; }
+.btn.go { background: var(--green); border-color: var(--green); color: #FFFFFF; min-width: 76px; }
+.btn[disabled] { color: var(--mute-2); cursor: default; }
+.gapx { flex: 1 1 8px; }
+.meter { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; border-top: 1px solid var(--line); margin-top: 12px; padding-top: 10px; }
+.meter div { min-width: 0; }
+.meter b { display: block; font-size: 19px; line-height: 1.2; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.meter span { font-size: 12px; color: var(--mute); font-weight: 600; }
+.pathcall { margin-top: 10px; font-size: 13.5px; color: var(--ink-2); }
+.costp { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px 28px; margin-top: 18px; border: 1px solid var(--line-2); border-radius: 8px; padding: 16px; }
+.sum { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; font-size: 15px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.sum b { font-weight: 700; }
+.sum .tot { border-top: 1.5px solid var(--ink); padding-top: 5px; font-weight: 700; }
+.bar2 { display: flex; height: 22px; border-radius: 3px; overflow: hidden; background: var(--soft); margin-top: 12px; border: 1px solid var(--line-2); }
+.bar2 i { display: block; background: var(--green); }
+.barcap { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--ink-2); padding-top: 4px; }
+.costp li { font-size: 14px; color: var(--ink-2); padding: 3px 0 3px 12px; border-left: 2px solid var(--line-2); margin-bottom: 4px; }
+.costp .warn { margin-top: 10px; padding: 8px 10px; border-left: 3px solid var(--amber); background: var(--amber-soft); font-size: 14px; }
+
+/* route view */
+.stage2 { position: relative; min-width: 860px; }
+.stage2 svg { display: block; width: 100%; height: auto; }
+.sg { stroke: var(--line); stroke-width: 1; }
+.sa { font: 400 12px var(--font); fill: var(--mute); }
+.sal { font: 700 12.5px var(--font); fill: var(--ink-2); }
+.sx { stroke: var(--mute-2); }
+.st .sb { fill: #DCE9E2; }
+.st-i .sb { fill: #FFFFFF; }
+.stread { stroke: var(--green); stroke-width: 2.5; }
+.st-i .stread { stroke-dasharray: 6 4; }
+.sn { font: 700 13px var(--font); fill: var(--green); }
+.st1 { font: 600 12.5px var(--font); fill: var(--ink); }
+.sf { font: 700 13px var(--font); fill: var(--ink); }
+.st.sel .sb { fill: var(--green); }
+.st.sel .sh { display: none; }
+.st.sel .sn, .st.sel .st1 { fill: #FFFFFF; }
+.st.sel .stread { stroke-dasharray: none; }
+.sref { stroke: var(--mute-2); stroke-dasharray: 3 3; }
+.srt { font: 400 12px var(--font); fill: var(--ink-2); paint-order: stroke; stroke: #FFFFFF; stroke-width: 4px; }
+.scall { stroke: var(--mute-2); }
+.sdot { fill: var(--green); }
+.lg { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13px; color: var(--ink-2); padding-top: 8px; }
+.lg span { display: inline-flex; align-items: center; gap: 6px; }
+.lg i { width: 18px; height: 14px; display: inline-block; border-radius: 2px; }
+.lg i.solid { background: #DCE9E2; border-top: 2.5px solid var(--green); }
+.lg i.hat { background: repeating-linear-gradient(135deg, #FFFFFF 0 3px, #B6CDBF 3px 4px); border-top: 2.5px dashed var(--green); }
+.stepchips { display: none; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.chip { border: 1px solid var(--line-2); background: var(--bg); border-radius: 6px; padding: 5px 9px; font-size: 13.5px; font-weight: 600; }
+.chip[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: #FFFFFF; }
+.kv { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 14px; margin-top: 8px; }
+.kv dd { font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums; }
+.proof { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.proof dt { font-size: 12px; font-weight: 700; color: var(--mute); }
+.alert { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--amber); background: var(--amber-soft); font-size: 15px; color: var(--ink); }
+.block { margin-top: 28px; }
+.block > p { color: var(--ink-2); max-width: 80ch; margin-top: 4px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-top: 28px; }
+.sums { display: grid; gap: 10px; margin-top: 10px; }
+.sumc { border: 1px solid var(--line-2); border-radius: 8px; padding: 12px 14px; }
+.sumc p { font-size: 15px; }
+.sumc b { font-variant-numeric: tabular-nums; }
+.ans { background: var(--green); color: #FFFFFF; border-radius: 8px; padding: 12px 14px; font-size: 17px; font-weight: 700; }
+.rev { display: block; width: 100%; min-width: 520px; height: auto; }
+.rn, .rv { font: 600 12.5px var(--font); fill: var(--ink); }
+.rv { font-variant-numeric: tabular-nums; }
+.r-yes { fill: #1A8A5C; } .r-part { fill: #D08A1E; } .r-no { fill: #7F8C87; }
+.rhit { fill: transparent; }
+.rb:hover .rhit { fill: var(--soft); }
+.lg i.c { border-radius: 3px; }
+.rails { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+.railc { border: 1px solid var(--line-2); border-radius: 8px; padding: 12px; font-size: 14px; min-width: 0; }
+.railc.diff { border-style: dashed; }
+.railc h3 { font-size: 16px; }
+.railc .big { font-size: 20px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.railc .sml { font-size: 12.5px; color: var(--mute); margin-bottom: 8px; }
+.railc dt { font-size: 12px; font-weight: 700; color: var(--mute); margin-top: 6px; }
+.routes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+.routec { border: 1px solid var(--line-2); border-radius: 8px; padding: 12px 14px; font-size: 14.5px; min-width: 0; }
+.routec .odds { display: inline-block; font-size: 12px; font-weight: 700; background: var(--soft); border-radius: 4px; padding: 1px 7px; margin: 4px 0 6px; }
+.routec.best { border-color: var(--green); border-width: 2px; }
+
+/* facts and glossary */
+.facts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+.facts li { border-top: 2px solid var(--ink); padding-top: 8px; font-size: 14px; color: var(--ink-2); min-width: 0; }
+.facts b { display: block; color: var(--ink); font-size: 14.5px; }
+.gloss { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 24px; margin-top: 10px; font-size: 14px; }
+.gloss div { min-width: 0; }
+.gloss dt { font-weight: 700; display: inline; }
+.gloss dd { display: inline; color: var(--ink-2); }
+.foot { margin-top: 36px; border-top: 1px solid var(--line); padding: 14px 0 28px; font-size: 13.5px; color: var(--mute); }
+
+/* phone: layers stacked, drawing scrolls in its own box */
+.stack { display: none; }
+.lay { border: 1px solid var(--line-2); border-radius: 8px; padding: 10px 12px; background: var(--soft-2); }
+.lay h3 { font-size: 14px; color: var(--ink-2); }
+.lay h3 b { color: var(--green); }
+.lay p { font-size: 13.5px; color: var(--ink-2); margin: 2px 0 8px; }
+.lay ul { display: flex; flex-wrap: wrap; gap: 6px; }
+.pbtn { border: 1px solid var(--ink-2); background: var(--bg); border-radius: 4px; padding: 7px 10px; font-size: 14px; font-weight: 600; min-height: 38px; }
+.pbtn.later { border: 1px dashed var(--mute-2); color: var(--mute); background: transparent; font-weight: 500; }
+.pbtn[aria-pressed="true"] { border: 2px solid var(--green); padding: 6px 9px; }
+.lay.gate { background: var(--green); border-color: var(--green); color: #FFFFFF; }
+.lay.gate h3, .lay.gate p { color: #FFFFFF; }
+.lay.gate .pbtn { background: #FFFFFF; color: var(--green); border-color: #FFFFFF; }
+.down { text-align: center; font-size: 13px; color: var(--mute); padding: 3px 0; }
+.down::before { content: "\2193\00a0"; }
+.lay.ground2 { border-top: 3px solid var(--ink); background: #EEF2F0; }
+
+@media (max-width: 1240px) {
+  .mapgrid { grid-template-columns: minmax(0, 1fr); }
+  .rails { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .two, .costp { grid-template-columns: minmax(0, 1fr); }
+  .routes { grid-template-columns: minmax(0, 1fr); }
+  .gloss { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .head { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .tabs { margin-left: -6px; width: 100%; }
+  .tab { padding: 8px 8px 9px; font-size: 14px; }
+  .bar { padding-top: 8px; gap: 2px 12px; }
+  .stack { display: block; margin-bottom: 16px; }
+  .hint { display: block; }
+  .rails, .facts, .gloss { grid-template-columns: minmax(0, 1fr); }
+  .stepchips { display: flex; }
+  .means { font-size: 17px; }
+  .back { display: inline-block; }
+  .sw { flex-wrap: wrap; gap: 2px 8px; }
+  .sw legend { float: none; line-height: 22px; width: 100%; }
+  .scroll.hard-scroll { max-width: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <div class="brand"><b>NowAI</b> Blueprint <span>design proposal</span></div>
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button class="tab" role="tab" id="t-backend" aria-controls="backend" aria-selected="true" type="button">Backend map</button>
+      <button class="tab" role="tab" id="t-receipt" aria-controls="receipt" aria-selected="false" tabindex="-1" type="button">Follow one receipt</button>
+      <button class="tab" role="tab" id="t-route" aria-controls="route" aria-selected="false" tabindex="-1" type="button">Route to $1B</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="view" id="backend" role="tabpanel" aria-labelledby="t-backend">
+  <div class="head">
+    <h1>The backend map</h1>
+    <p class="means"><small>What this means</small>Clients send photos in. Agents read them and propose entries. An accountant approves. Only then do they enter the books.</p>
+  </div>
+  <div class="controls">
+    <fieldset class="sw"><legend>Show the company at</legend><div class="seg">
+      <label><input type="radio" name="stage" value="d1" checked><span>Day 1</span></label>
+      <label><input type="radio" name="stage" value="m12"><span>Month 12</span></label>
+      <label><input type="radio" name="stage" value="y3"><span>Year 3</span></label>
+    </div></fieldset>
+    <fieldset class="sw"><legend>Colour parts by</legend><div class="seg">
+      <label><input type="radio" name="colour" value="plain" checked><span>Plain</span></label>
+      <label><input type="radio" name="colour" value="owner"><span>Who owns it</span></label>
+      <label><input type="radio" name="colour" value="bb"><span>Build or buy</span></label>
+    </div></fieldset>
+    <p class="note" id="stageNote" aria-live="polite">Day 1: 21 of 29 parts exist. One agent, Books. Banks and the state are files the accountant carries.</p>
+  </div>
+  <div class="stack" aria-label="Layers of the backend, from outside to inside"><div class="lay"><h3><b>1</b> Front doors</h3><p>Where people touch NowAI: clients on WhatsApp, the accountant in a web app, 1C through a small add-on later.</p><ul><li><button class="pbtn" type="button" data-id="wa_number" data-stage="d1" aria-pressed="false">WhatsApp number</button></li><li><button class="pbtn" type="button" data-id="webapp" data-stage="d1" aria-pressed="false">Accountant web app</button></li><li><button class="pbtn later" type="button" data-id="c1" data-stage="m12" aria-pressed="false">1C connector</button></li></ul></div><div class="down">photo</div><div class="lay"><h3><b>2</b> Intake</h3><p>Turns whatever arrives (photo, bank file, e-qaimə file) into clean, labelled data before any AI judgement.</p><ul><li><button class="pbtn" type="button" data-id="gateway" data-stage="d1" aria-pressed="false">Gateway and queue</button></li><li><button class="pbtn" type="button" data-id="reader" data-stage="d1" aria-pressed="false">Document reader</button></li><li><button class="pbtn" type="button" data-id="importers" data-stage="d1" aria-pressed="false">Bank and e-qaimə importers</button></li></ul></div><div class="down">fields + confidence</div><div class="lay"><h3><b>3</b> Agent brain</h3><p>The reasoning layer. Each agent is one narrow job with its own tools, rules and tests, run by one shared engine.</p><ul><li><button class="pbtn" type="button" data-id="books" data-stage="d1" aria-pressed="false">Books</button></li><li><button class="pbtn later" type="button" data-id="cash" data-stage="m12" aria-pressed="false">Cash</button></li><li><button class="pbtn later" type="button" data-id="tax" data-stage="m12" aria-pressed="false">Tax</button></li><li><button class="pbtn later" type="button" data-id="people" data-stage="y3" aria-pressed="false">People</button></li><li><button class="pbtn later" type="button" data-id="comply" data-stage="y3" aria-pressed="false">Comply</button></li><li><button class="pbtn later" type="button" data-id="builder" data-stage="m12" aria-pressed="false">Builder (internal)</button></li><li><button class="pbtn" type="button" data-id="router" data-stage="d1" aria-pressed="false">Model router</button></li><li><button class="pbtn later" type="button" data-id="workflow" data-stage="m12" aria-pressed="false">Workflow engine</button></li></ul></div><div class="down">asks for rules and history</div><div class="lay"><h3><b>4</b> Knowledge</h3><p>What the agents know about each client and about Azerbaijani accounting, kept apart from the model so it can be checked and corrected.</p><ul><li><button class="pbtn" type="button" data-id="memory" data-stage="d1" aria-pressed="false">Client memory</button></li><li><button class="pbtn" type="button" data-id="rules" data-stage="d1" aria-pressed="false">Rules library</button></li><li><button class="pbtn" type="button" data-id="suppliers" data-stage="d1" aria-pressed="false">Supplier map</button></li></ul></div><div class="down">proposed entry, reminder draft</div><div class="lay gate"><h3><b>6</b> Human approval queue</h3><p>The safety gate. At launch nothing is posted or sent without an accountant's click.</p><ul><li><button class="pbtn" type="button" data-id="gate" data-stage="d1" aria-pressed="false">Human approval queue</button></li></ul></div><div class="down">approved entry</div><div class="lay"><h3><b>5</b> Records</h3><p>The permanent books. Everything an auditor or tax inspector would ask for.</p><ul><li><button class="pbtn" type="button" data-id="ledger" data-stage="d1" aria-pressed="false">Ledger</button></li><li><button class="pbtn" type="button" data-id="docstore" data-stage="d1" aria-pressed="false">Document store</button></li><li><button class="pbtn" type="button" data-id="audit" data-stage="d1" aria-pressed="false">Audit trail</button></li></ul></div><div class="down">export file, approved message</div><div class="lay"><h3><b>7</b> Outside systems</h3><p>Everything NowAI talks to but does not own. Most are files at launch because no public APIs were found.</p><ul><li><button class="pbtn" type="button" data-id="etaxes" data-stage="d1" aria-pressed="false">E-taxes and e-qaimə</button></li><li><button class="pbtn" type="button" data-id="banks" data-stage="d1" aria-pressed="false">Banks</button></li><li><button class="pbtn later" type="button" data-id="partner" data-stage="m12" aria-pressed="false">Licensed payment partner</button></li><li><button class="pbtn" type="button" data-id="wa_provider" data-stage="d1" aria-pressed="false">WhatsApp provider</button></li></ul></div><div class="lay ground2"><h3><b>8</b> Foundation</h3><p>Hosting, security, monitoring and the tests that stop the agents from quietly getting worse.</p><ul><li><button class="pbtn" type="button" data-id="hosting" data-stage="d1" aria-pressed="false">Hosting</button></li><li><button class="pbtn" type="button" data-id="secrets" data-stage="d1" aria-pressed="false">Secrets and key proxy</button></li><li><button class="pbtn" type="button" data-id="harness" data-stage="d1" aria-pressed="false">Test and simulation harness</button></li><li><button class="pbtn" type="button" data-id="monitoring" data-stage="d1" aria-pressed="false">Monitoring and backups</button></li></ul></div></div>
+  <div class="mapgrid">
+    <figure>
+      <p class="hint">Slide sideways to see the whole drawing.</p>
+      <div class="scroll" tabindex="0" role="region" aria-label="Backend drawing, scrolls sideways"><div class="stage" id="mapStage"><svg class="draw" viewBox="0 0 1104 764" role="img" aria-label="Backend map of NowAI. Photos enter from outside systems through the WhatsApp number, pass intake and the document reader and reach the agents. Every agent proposal stops at the human approval queue, drawn as a green gate. Only approved work continues to the ledger, the 1C connector and outside systems. The foundation runs under everything." data-stage="d1" data-colour="plain"><defs><marker id="m-ad" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><polygon points="0,0 8,3.5 0,7" fill="#5E6D68"/></marker><marker id="m-ads" markerWidth="8" markerHeight="7" refX="1" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><polygon points="8,0 0,3.5 8,7" fill="#5E6D68"/></marker><marker id="m-aa" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><polygon points="0,0 8,3.5 0,7" fill="#0E5A3C"/></marker><marker id="m-aas" markerWidth="8" markerHeight="7" refX="1" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><polygon points="8,0 0,3.5 8,7" fill="#0E5A3C"/></marker><pattern id="m-grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#DDE4E0"/></pattern><pattern id="m-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#33423D" stroke-width="1.2"/></pattern></defs><rect x="0" y="0" width="1104" height="764" fill="url(#m-grid)"/><rect x="12" y="672" width="1080" height="84" class="ground"/><rect x="12" y="672" width="1080" height="9" fill="url(#m-hatch)" opacity=".55"/><line x1="12" y1="672" x2="1092" y2="672" class="gline"/><text class="lt" x="24" y="694"><tspan class="ln">8</tspan> Foundation: the ground everything stands on</text><rect class="pnl pnl-dash" x="12" y="14" width="1080" height="78" rx="4"/><rect class="pnl" x="28" y="108" width="1064" height="58" rx="4"/><rect class="pnl" x="28" y="182" width="620" height="58" rx="4"/><rect class="pnl" x="28" y="272" width="176" height="66" rx="4"/><rect class="pnl" x="216" y="258" width="432" height="308" rx="4"/><rect class="pnl" x="216" y="590" width="432" height="66" rx="4"/><rect class="pnl" x="940" y="246" width="152" height="164" rx="4"/><text class="lt" x="24" y="18"><tspan class="ln">7</tspan> Outside systems: we use them, we do not own them</text><text class="lt" x="40" y="112"><tspan class="ln">1</tspan> Front doors</text><text class="lt" x="40" y="186"><tspan class="ln">2</tspan> Intake</text><text class="lt" x="40" y="276"><tspan class="ln">5</tspan> Records: originals</text><text class="lt" x="228" y="262"><tspan class="ln">3</tspan> Agent brain</text><text class="lt" x="228" y="594"><tspan class="ln">4</tspan> Knowledge</text><text class="lt" x="952" y="250"><tspan class="ln">5</tspan> Records: the books</text><g class="ed k-d s-d1" data-id="e_client"><path d="M74,58 L116,58" marker-end="url(#m-ad)"/><text class="el" x="95" y="53" text-anchor="middle">photo</text></g><g class="ed k-a s-d1" data-id="e_reply"><path d="M116,74 L74,74" marker-end="url(#m-aa)"/><text class="el" x="95" y="87" text-anchor="middle">reply</text></g><g class="ed k-d s-d1" data-id="e_photo1"><path d="M160,86 L160,116" marker-end="url(#m-ad)"/><text class="el" x="166" y="105" text-anchor="start">photo</text></g><g class="ed k-d s-d1" data-id="e_photo2"><path d="M116,158 L116,190" marker-end="url(#m-ad)"/><text class="el" x="122" y="178" text-anchor="start">photo + phone number</text></g><g class="ed k-d s-d1" data-id="e_orig"><path d="M180,232 L180,284" marker-end="url(#m-ad)"/><text class="el" x="174" y="258" text-anchor="end">original photo</text></g><g class="ed k-d s-d1" data-id="e_g2r"><path d="M192,211 L232,211" marker-end="url(#m-ad)"/><text class="el" x="212" y="205" text-anchor="middle">photo</text></g><g class="ed k-d s-d1" data-id="e_r2rt"><path d="M370,232 L370,290" marker-end="url(#m-ad)"/><text class="el" x="376" y="274" text-anchor="start">photo</text></g><g class="ed k-d s-d1" data-id="e_rt2c"><path d="M340,334 L340,372" marker-end="url(#m-ad)"/><text class="el" x="334" y="357" text-anchor="end">photo + prompt</text></g><g class="ed k-d s-d1" data-id="e_c2rt"><path d="M400,372 L400,334" marker-end="url(#m-ad)"/><text class="el" x="406" y="357" text-anchor="start">answer</text></g><g class="ed k-d s-d1" data-id="e_fields"><path d="M244,232 L244,430 L456,430" marker-end="url(#m-ad)" marker-start="url(#m-ads)"/><text class="el" x="252" y="424" text-anchor="start">fields + confidence</text><text class="el" x="252" y="446" text-anchor="start">failed? read again</text></g><g class="ed k-d s-d1" data-id="e_pass"><path d="M484,430 L512,430" marker-end="url(#m-ad)"/><text class="el" x="498" y="424" text-anchor="middle">pass</text></g><g class="ed k-d s-d1" data-id="e_know"><path d="M470,590 L470,444" marker-end="url(#m-ad)"/><text class="el" x="478" y="582" text-anchor="start">rules, suppliers, history</text></g><g class="ed k-d s-d1" data-id="e_models"><path d="M440,312 L512,312" marker-end="url(#m-ad)"/><text class="el" x="476" y="306" text-anchor="middle">model calls</text></g><g class="ed k-d s-d1" data-id="e_bank"><path d="M578,232 L578,270" marker-end="url(#m-ad)"/><text class="el" x="586" y="253" text-anchor="start">bank + invoice lines</text></g><g class="ed k-f s-d1" data-id="e_files"><path d="M702,137 L570,137 L570,190" marker-end="url(#m-ad)"/><text class="el" x="636" y="131" text-anchor="middle">bank + e-qaimə files</text></g><g class="ed k-d s-d1" data-id="e_p_books"><path d="M632,287 L752,287" marker-end="url(#m-ad)"/><text class="el" x="692" y="282" text-anchor="middle">proposed entry</text></g><g class="ed k-d s-m12" data-id="e_p_cash"><path d="M632,329 L752,329" marker-end="url(#m-ad)"/><text class="el" x="692" y="324" text-anchor="middle">reminder draft</text></g><g class="ed k-d s-m12" data-id="e_p_tax"><path d="M632,371 L752,371" marker-end="url(#m-ad)"/><text class="el" x="692" y="366" text-anchor="middle">tax figures</text></g><g class="ed k-d s-y3" data-id="e_p_people"><path d="M632,413 L752,413" marker-end="url(#m-ad)"/><text class="el" x="692" y="408" text-anchor="middle">payroll draft</text></g><g class="ed k-d s-y3" data-id="e_p_comply"><path d="M632,455 L752,455" marker-end="url(#m-ad)"/><text class="el" x="692" y="450" text-anchor="middle">deadline list</text></g><g class="ed k-d s-m12" data-id="e_p_builder"><path d="M632,497 L752,497" marker-end="url(#m-ad)"/><text class="el" x="692" y="492" text-anchor="middle">rule pack draft</text></g><g class="ed k-d s-d1" data-id="e_corr"><path d="M752,624 L636,624" marker-end="url(#m-ad)"/><text class="el" x="694" y="618" text-anchor="middle">corrections</text></g><g class="ed k-a s-d1" data-id="e_appr"><path d="M776,158 L776,196" marker-end="url(#m-aa)"/><text class="el" x="770" y="181" text-anchor="end">approve, edit, reject</text></g><g class="ed k-d s-d1" data-id="e_evid"><path d="M828,196 L828,158" marker-end="url(#m-ad)"/><text class="el" x="834" y="181" text-anchor="start">evidence</text></g><g class="ed k-f s-d1" data-id="e_stmt"><path d="M740,86 L740,116" marker-end="url(#m-ad)"/><text class="el" x="734" y="105" text-anchor="end">statement file</text></g><g class="ed k-f s-d1" data-id="e_etax"><path d="M856,86 L856,116" marker-end="url(#m-ad)" marker-start="url(#m-ads)"/><text class="el" x="850" y="105" text-anchor="end">files, by hand</text></g><g class="ed k-a s-d1" data-id="e_approved"><path d="M852,287 L952,287" marker-end="url(#m-aa)"/><text class="el" x="902" y="281" text-anchor="middle">approved entry</text></g><g class="ed k-a s-d1" data-id="e_export"><path d="M1016,262 L1016,158" marker-end="url(#m-aa)"/><text class="el" x="1010" y="205" text-anchor="end">export file</text></g><g class="ed k-a s-d1" data-id="e_auditev"><path d="M1016,312 L1016,356" marker-end="url(#m-aa)"/><text class="el" x="1022" y="338" text-anchor="start">audit event</text></g><g class="ed k-a s-d1" data-id="e_trunk"><path d="M852,224 L936,224 L936,32"/><text class="el" x="894" y="218" text-anchor="middle">approved only</text></g><g class="ed k-a s-d1" data-id="e_rail_w"><path d="M936,32 L190,32 L190,44" marker-end="url(#m-aa)"/><text class="el o-d1" x="560" y="27" text-anchor="middle">confirmation</text><text class="el f-m12" x="560" y="27" text-anchor="middle">approved reminder, confirmation</text></g><g class="ed k-a s-m12" data-id="e_rail_p"><path d="M936,32 L1016,32 L1016,44" marker-end="url(#m-aa)"/><text class="el" x="974" y="27" text-anchor="middle">approved payment</text></g><path class="bus" d="M512,287 L512,497"/><line class="bus-t s-d1" x1="512" y1="287" x2="524" y2="287"/><line class="bus-t s-m12" x1="512" y1="329" x2="524" y2="329"/><line class="bus-t s-m12" x1="512" y1="371" x2="524" y2="371"/><line class="bus-t s-y3" x1="512" y1="413" x2="524" y2="413"/><line class="bus-t s-y3" x1="512" y1="455" x2="524" y2="455"/><line class="bus-t s-m12" x1="512" y1="497" x2="524" y2="497"/><g class="actor"><rect x="40" y="44" width="18" height="26" rx="3"/><line x1="46" y1="65" x2="52" y2="65"/><text class="ts" x="49" y="85" text-anchor="middle">Client</text></g><g class="chk"><path d="M470,416 L484,430 L470,444 L456,430 Z"/><text class="el" x="470" y="410" text-anchor="middle">checks</text></g><g class="flag"><path d="M300,372 L426,372 L440,391 L426,410 L300,410 Z"/><text class="tn" x="364" y="387" text-anchor="middle">Claude API</text><text class="ts" x="364" y="402" text-anchor="middle">abroad</text></g><text class="zn" x="712" y="268" text-anchor="middle">Draft side</text><text class="zn" x="860" y="268">Official side</text><g class="never"><text class="nh" x="880" y="452">NowAI never</text><text class="nt" x="880" y="472">signs or files for a client</text><text class="nt" x="880" y="490">holds a client's ASAN İmza</text><text class="nt" x="880" y="508">holds client money</text></g><g class="tb"><rect x="868" y="540" width="224" height="116"/><line x1="868" y1="564" x2="1092" y2="564"/><line x1="868" y1="588" x2="1092" y2="588"/><line x1="868" y1="612" x2="1092" y2="612"/><line x1="868" y1="634" x2="1092" y2="634"/><text class="tbh" x="880" y="557">NowAI Blueprint</text><text class="tbt" x="880" y="581">Sheet 1: Backend map</text><text class="tbt o-d1" x="880" y="605">Stage: Day 1</text><text class="tbt o-d1" x="880" y="628">Parts that exist: 21 of 29</text><text class="tbt o-m12" x="880" y="605">Stage: Month 12</text><text class="tbt o-m12" x="880" y="628">Parts that exist: 27 of 29</text><text class="tbt o-y3" x="880" y="605">Stage: Year 3</text><text class="tbt o-y3" x="880" y="628">Parts that exist: 29 of 29</text><text class="tbt" x="880" y="650">Status: design proposal</text></g><g class="key"><text class="nh" x="28" y="358">Key</text><line class="kl" x1="28" y1="378" x2="64" y2="378" marker-end="url(#m-ad)"/><text class="ts" x="74" y="382">data or a draft</text><line class="kl ka" x1="28" y1="402" x2="64" y2="402" marker-end="url(#m-aa)"/><text class="ts" x="74" y="406">approved</text><line class="kl kf" x1="28" y1="426" x2="64" y2="426" marker-end="url(#m-ad)"/><text class="ts" x="74" y="430">file, moved by hand</text><rect class="kb" x="28" y="442" width="36" height="18" rx="3"/><text class="ts" x="74" y="456">does not exist yet</text><path class="kd" d="M46,468 L56,478 L46,488 L36,478 Z"/><text class="ts" x="74" y="482">automatic check</text></g><g class="pt s-d1" data-id="wa_provider" data-owner="integ" data-bb="Buy"><rect x="116" y="44" width="140" height="42" rx="3"/><text class="tn" x="186.0" y="69.5" text-anchor="middle">WhatsApp provider</text></g><g class="pt s-d1" data-id="banks" data-owner="integ" data-bb="Build"><rect x="650" y="44" width="130" height="42" rx="3"/><text class="tn" x="715.0" y="62.0" text-anchor="middle">Banks</text><text class="ts o-d1" x="715.0" y="77.0" text-anchor="middle">files</text><text class="ts f-m12" x="715.0" y="77.0" text-anchor="middle">files, later API</text></g><g class="pt s-d1" data-id="etaxes" data-owner="integ" data-bb="Build"><rect x="796" y="44" width="120" height="42" rx="3"/><text class="tn" x="856.0" y="62.0" text-anchor="middle">E-taxes, e-qaimə</text><text class="ts" x="856.0" y="77.0" text-anchor="middle">files only</text></g><g class="pt s-m12" data-id="partner" data-owner="integ" data-bb="Buy"><rect x="952" y="44" width="128" height="42" rx="3"/><text class="tn" x="1016.0" y="62.0" text-anchor="middle">Licensed payment</text><text class="ts" x="1016.0" y="77.0" text-anchor="middle">partner, planned</text></g><g class="pt s-d1" data-id="wa_number" data-owner="integ" data-bb="Buy"><rect x="40" y="116" width="152" height="42" rx="3"/><text class="tn" x="116.0" y="134.0" text-anchor="middle">WhatsApp number</text><text class="ts" x="116.0" y="149.0" text-anchor="middle">clients</text></g><g class="pt s-d1" data-id="webapp" data-owner="front" data-bb="Build"><rect x="702" y="116" width="200" height="42" rx="3"/><text class="tn" x="802.0" y="134.0" text-anchor="middle">Accountant web app</text><text class="ts" x="802.0" y="149.0" text-anchor="middle">the accountant works here</text></g><g class="pt s-m12" data-id="c1" data-owner="integ" data-bb="Build"><rect x="952" y="116" width="128" height="42" rx="3"/><text class="tn" x="1016.0" y="134.0" text-anchor="middle">1C connector</text><text class="ts o-d1" x="1016.0" y="149.0" text-anchor="middle">Day 1: file by hand</text><text class="ts f-m12" x="1016.0" y="149.0" text-anchor="middle">to accountant's 1C</text></g><g class="pt s-d1" data-id="gateway" data-owner="backend" data-bb="Build"><rect x="40" y="190" width="152" height="42" rx="3"/><text class="tn" x="116.0" y="208.0" text-anchor="middle">Gateway and queue</text><text class="ts" x="116.0" y="223.0" text-anchor="middle">saves, sorts, queues</text></g><g class="pt s-d1" data-id="reader" data-owner="backend" data-bb="Buy"><rect x="232" y="190" width="208" height="42" rx="3"/><text class="tn" x="336.0" y="208.0" text-anchor="middle">Document reader</text><text class="ts" x="336.0" y="223.0" text-anchor="middle">photo into fields</text></g><g class="pt s-d1" data-id="importers" data-owner="integ" data-bb="Build"><rect x="500" y="190" width="140" height="42" rx="3"/><text class="tn" x="570.0" y="208.0" text-anchor="middle">Bank and e-qaimə</text><text class="ts" x="570.0" y="223.0" text-anchor="middle">file importers</text></g><g class="pt s-d1" data-id="docstore" data-owner="lead" data-bb="Buy"><rect x="40" y="284" width="152" height="44" rx="3"/><text class="tn" x="116.0" y="303.0" text-anchor="middle">Document store</text><text class="ts" x="116.0" y="318.0" text-anchor="middle">original photos</text></g><g class="pt s-d1" data-id="router" data-owner="backend" data-bb="Build"><rect x="300" y="290" width="140" height="44" rx="3"/><text class="tn" x="370.0" y="309.0" text-anchor="middle">Model router</text><text class="ts" x="370.0" y="324.0" text-anchor="middle">Haiku or Sonnet</text></g><g class="pt s-d1" data-id="books" data-owner="backend" data-bb="Build"><rect x="524" y="270" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="291.5" text-anchor="middle">Books</text></g><g class="pt s-m12" data-id="cash" data-owner="backend" data-bb="Build"><rect x="524" y="312" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="333.5" text-anchor="middle">Cash</text></g><g class="pt s-m12" data-id="tax" data-owner="backend" data-bb="Build"><rect x="524" y="354" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="375.5" text-anchor="middle">Tax</text></g><g class="pt s-y3" data-id="people" data-owner="backend" data-bb="Build"><rect x="524" y="396" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="417.5" text-anchor="middle">People</text></g><g class="pt s-y3" data-id="comply" data-owner="backend" data-bb="Build"><rect x="524" y="438" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="459.5" text-anchor="middle">Comply</text></g><g class="pt s-m12" data-id="builder" data-owner="backend" data-bb="Build"><rect x="524" y="480" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="501.5" text-anchor="middle">Builder (internal)</text></g><g class="pt s-m12" data-id="workflow" data-owner="backend" data-bb="Buy"><rect x="506" y="522" width="126" height="34" rx="3"/><text class="tn" x="569.0" y="543.5" text-anchor="middle">Workflow engine</text></g><g class="pt s-d1" data-id="suppliers" data-owner="acct" data-bb="Build"><rect x="228" y="602" width="124" height="44" rx="3"/><text class="tn" x="290.0" y="621.0" text-anchor="middle">Supplier map</text><text class="ts" x="290.0" y="636.0" text-anchor="middle">tax ID to supplier</text></g><g class="pt s-d1" data-id="rules" data-owner="acct" data-bb="Build"><rect x="364" y="602" width="124" height="44" rx="3"/><text class="tn" x="426.0" y="621.0" text-anchor="middle">Rules library</text><text class="ts" x="426.0" y="636.0" text-anchor="middle">versioned rules</text></g><g class="pt s-d1" data-id="memory" data-owner="acct" data-bb="Build"><rect x="500" y="602" width="136" height="44" rx="3"/><text class="tn" x="568.0" y="621.0" text-anchor="middle">Client memory</text><text class="ts" x="568.0" y="636.0" text-anchor="middle">per client</text></g><g class="pt s-d1" data-id="ledger" data-owner="lead" data-bb="Build"><rect x="952" y="262" width="128" height="50" rx="3"/><text class="tn" x="1016.0" y="284.0" text-anchor="middle">Ledger</text><text class="ts" x="1016.0" y="299.0" text-anchor="middle">the books</text></g><g class="pt s-d1" data-id="audit" data-owner="lead" data-bb="Build"><rect x="952" y="356" width="128" height="42" rx="3"/><text class="tn" x="1016.0" y="374.0" text-anchor="middle">Audit trail</text><text class="ts" x="1016.0" y="389.0" text-anchor="middle">who did what</text></g><g class="pt s-d1" data-id="hosting" data-owner="lead" data-bb="Buy"><rect x="40" y="702" width="244" height="44" rx="3"/><text class="tn" x="162.0" y="721.0" text-anchor="middle">Hosting</text><text class="ts" x="162.0" y="736.0" text-anchor="middle">undecided</text></g><g class="pt s-d1" data-id="secrets" data-owner="infra" data-bb="Build"><rect x="300" y="702" width="244" height="44" rx="3"/><text class="tn" x="422.0" y="721.0" text-anchor="middle">Secrets and key proxy</text><text class="ts" x="422.0" y="736.0" text-anchor="middle">agents hold no keys</text></g><g class="pt s-d1" data-id="harness" data-owner="evals" data-bb="Build"><rect x="560" y="702" width="244" height="44" rx="3"/><text class="tn" x="682.0" y="721.0" text-anchor="middle">Test and simulation harness</text><text class="ts" x="682.0" y="736.0" text-anchor="middle">replays past documents</text></g><g class="pt s-d1" data-id="monitoring" data-owner="infra" data-bb="Buy"><rect x="820" y="702" width="244" height="44" rx="3"/><text class="tn" x="942.0" y="721.0" text-anchor="middle">Monitoring and backups</text><text class="ts" x="942.0" y="736.0" text-anchor="middle">alerts, nightly copies</text></g><g class="pt pt-gate" data-id="gate" data-owner="backend" data-bb="Build"><rect class="wall" x="752" y="196" width="100" height="476"/><rect class="wall-cap" x="744" y="196" width="116" height="6"/><line class="gt" x1="752" y1="287" x2="762" y2="287"/><line class="gt" x1="752" y1="329" x2="762" y2="329"/><line class="gt" x1="752" y1="371" x2="762" y2="371"/><line class="gt" x1="752" y1="413" x2="762" y2="413"/><line class="gt" x1="752" y1="455" x2="762" y2="455"/><line class="gt" x1="752" y1="497" x2="762" y2="497"/><line class="gt" x1="752" y1="624" x2="762" y2="624"/><line class="gt" x1="842" y1="224" x2="852" y2="224"/><line class="gt" x1="842" y1="287" x2="852" y2="287"/><text class="gn" x="802.0" y="226" text-anchor="middle">6</text><text class="gh" x="802.0" y="314" text-anchor="middle">Human</text><text class="gh" x="802.0" y="333" text-anchor="middle">approval</text><text class="gh" x="802.0" y="352" text-anchor="middle">queue</text><circle class="gc" cx="802.0" cy="390" r="14"/><path class="gk" d="M796.0,390 l4.5,5 l8,-10"/><text class="gs" x="802.0" y="430" text-anchor="middle">Nothing</text><text class="gs" x="802.0" y="446" text-anchor="middle">passes</text><text class="gs" x="802.0" y="462" text-anchor="middle">without an</text><text class="gs" x="802.0" y="478" text-anchor="middle">accountant's</text><text class="gs" x="802.0" y="494" text-anchor="middle">click</text></g></svg><button class="hit" type="button" data-id="wa_provider" style="left:10.507%;top:5.759%;width:12.681%;height:5.497%" aria-pressed="false">WhatsApp provider</button><button class="hit" type="button" data-id="banks" style="left:58.877%;top:5.759%;width:11.775%;height:5.497%" aria-pressed="false">Banks</button><button class="hit" type="button" data-id="etaxes" style="left:72.101%;top:5.759%;width:10.870%;height:5.497%" aria-pressed="false">E-taxes and e-qaimə</button><button class="hit" type="button" data-id="partner" style="left:86.232%;top:5.759%;width:11.594%;height:5.497%" aria-pressed="false">Licensed payment partner</button><button class="hit" type="button" data-id="wa_number" style="left:3.623%;top:15.183%;width:13.768%;height:5.497%" aria-pressed="false">WhatsApp number</button><button class="hit" type="button" data-id="webapp" style="left:63.587%;top:15.183%;width:18.116%;height:5.497%" aria-pressed="false">Accountant web app</button><button class="hit" type="button" data-id="c1" style="left:86.232%;top:15.183%;width:11.594%;height:5.497%" aria-pressed="false">1C connector</button><button class="hit" type="button" data-id="gateway" style="left:3.623%;top:24.869%;width:13.768%;height:5.497%" aria-pressed="false">Gateway and queue</button><button class="hit" type="button" data-id="reader" style="left:21.014%;top:24.869%;width:18.841%;height:5.497%" aria-pressed="false">Document reader</button><button class="hit" type="button" data-id="importers" style="left:45.290%;top:24.869%;width:12.681%;height:5.497%" aria-pressed="false">Bank and e-qaimə importers</button><button class="hit" type="button" data-id="docstore" style="left:3.623%;top:37.173%;width:13.768%;height:5.759%" aria-pressed="false">Document store</button><button class="hit" type="button" data-id="router" style="left:27.174%;top:37.958%;width:12.681%;height:5.759%" aria-pressed="false">Model router</button><button class="hit" type="button" data-id="books" style="left:47.464%;top:35.340%;width:9.783%;height:4.450%" aria-pressed="false">Books</button><button class="hit" type="button" data-id="cash" style="left:47.464%;top:40.838%;width:9.783%;height:4.450%" aria-pressed="false">Cash</button><button class="hit" type="button" data-id="tax" style="left:47.464%;top:46.335%;width:9.783%;height:4.450%" aria-pressed="false">Tax</button><button class="hit" type="button" data-id="people" style="left:47.464%;top:51.832%;width:9.783%;height:4.450%" aria-pressed="false">People</button><button class="hit" type="button" data-id="comply" style="left:47.464%;top:57.330%;width:9.783%;height:4.450%" aria-pressed="false">Comply</button><button class="hit" type="button" data-id="builder" style="left:47.464%;top:62.827%;width:9.783%;height:4.450%" aria-pressed="false">Builder (internal)</button><button class="hit" type="button" data-id="workflow" style="left:45.833%;top:68.325%;width:11.413%;height:4.450%" aria-pressed="false">Workflow engine</button><button class="hit" type="button" data-id="suppliers" style="left:20.652%;top:78.796%;width:11.232%;height:5.759%" aria-pressed="false">Supplier map</button><button class="hit" type="button" data-id="rules" style="left:32.971%;top:78.796%;width:11.232%;height:5.759%" aria-pressed="false">Rules library</button><button class="hit" type="button" data-id="memory" style="left:45.290%;top:78.796%;width:12.319%;height:5.759%" aria-pressed="false">Client memory</button><button class="hit" type="button" data-id="ledger" style="left:86.232%;top:34.293%;width:11.594%;height:6.545%" aria-pressed="false">Ledger</button><button class="hit" type="button" data-id="audit" style="left:86.232%;top:46.597%;width:11.594%;height:5.497%" aria-pressed="false">Audit trail</button><button class="hit" type="button" data-id="hosting" style="left:3.623%;top:91.885%;width:22.101%;height:5.759%" aria-pressed="false">Hosting</button><button class="hit" type="button" data-id="secrets" style="left:27.174%;top:91.885%;width:22.101%;height:5.759%" aria-pressed="false">Secrets and key proxy</button><button class="hit" type="button" data-id="harness" style="left:50.725%;top:91.885%;width:22.101%;height:5.759%" aria-pressed="false">Test and simulation harness</button><button class="hit" type="button" data-id="monitoring" style="left:74.275%;top:91.885%;width:22.101%;height:5.759%" aria-pressed="false">Monitoring and backups</button><button class="hit" type="button" data-id="gate" style="left:68.116%;top:25.654%;width:9.058%;height:62.304%" aria-pressed="false">Human approval queue</button></div></div>
+      <div class="ckey" id="ckey" hidden></div>
+      <figcaption>Read it from the top left. A photo comes in through the outside band and moves down to the agents. Agents can only propose, so every grey arrow stops at the green gate. Green lines start at the gate, so anything green was approved by an accountant. The one call that leaves before approval is to Claude API, which reads the document and changes nothing.</figcaption>
+    </figure>
+    <aside class="side" id="partPanel" aria-live="polite" aria-label="Selected part"><p class="kicker">Layer 6: Human approval queue</p><h2>Human approval queue</h2><p class="plain">The safety gate. Every proposed entry, reminder or payment waits here and shows its evidence, its confidence and what changed. The accountant approves, edits or rejects. Rejections feed client memory. Nothing reaches the ledger or leaves to an outside system without going through it.</p><dl><div><dt>What we would use</dt><dd>A queue table plus accountant app screens. Later, auto-approve only for rules the accountant switches on per client.</dd></div><div><dt>Build or buy</dt><dd><span class="tag build">Build</span></dd></div><div><dt>When it is needed</dt><dd>Day 1</dd></div><div><dt>Who owns it</dt><dd>Two backend engineers</dd></div><div><dt>Cost note</dt><dd>Free to run. Accountant time is the product.</dd></div></dl><p class="warn">One thing does leave before approval: model calls. Photos go to Claude abroad to be read. Nothing is posted or sent by that call, and it needs client consent.</p><details><summary>Other options</summary><p>None. Do not skip.</p></details></aside>
+  </div>
+  <div class="block">
+    <h2>Five facts that shaped this drawing</h2>
+    <ul class="facts">
+      <li><b>An accountant approves every entry.</b> Azerbaijani law requires a certified chief accountant for firms that need one, and software cannot sign or file. NowAI never holds a client's ASAN İmza.</li>
+      <li><b>NowAI never holds client money.</b> The payment partner route is planned and legally unconfirmed. Epoint and Payriff are the candidates.</li>
+      <li><b>State systems are files at launch.</b> No public e-taxes, e-qaimə or EMAS API was found, so the accountant handles these files.</li>
+      <li><b>Hosting is undecided.</b> No rule requiring servers in Azerbaijan was found, but a lawyer must confirm, because Claude API calls send client documents abroad.</li>
+      <li><b>Accuracy is untested.</b> Accuracy on real Azerbaijani receipts is unmeasured. No benchmark exists, so a pilot on 200+ real receipts comes first.</li>
+    </ul>
+  </div>
+  <div class="block">
+    <h2>Words used on this page</h2>
+    <dl class="gloss">
+      <div><dt>Agent:</dt> <dd>a program that uses an AI model to do one narrow job.</dd></div>
+      <div><dt>API:</dt> <dd>a doorway that lets one program talk to another.</dd></div>
+      <div><dt>Queue:</dt> <dd>a waiting list for jobs.</dd></div>
+      <div><dt>Ledger:</dt> <dd>the book of accounts. Double-entry means each entry balances.</dd></div>
+      <div><dt>Model:</dt> <dd>the AI that reads and writes. Haiku, Sonnet and Opus are Claude models, cheapest first.</dd></div>
+      <div><dt>Token:</dt> <dd>a small piece of text or image. Models charge by the token.</dd></div>
+      <div><dt>Prompt:</dt> <dd>the written instruction sent to a model.</dd></div>
+      <div><dt>Confidence:</dt> <dd>how sure the reader is of what it read.</dd></div>
+      <div><dt>Escalate:</dt> <dd>send a hard job to a stronger, more expensive model.</dd></div>
+      <div><dt>Test harness:</dt> <dd>a set of past documents that every change must pass.</dd></div>
+      <div><dt>Postgres:</dt> <dd>a free, widely used database.</dd></div>
+      <div><dt>E-qaimə:</dt> <dd>the state electronic invoice.</dd></div>
+      <div><dt>ASAN İmza, SIMA:</dt> <dd>digital signatures used to sign with the state.</dd></div>
+      <div><dt>1C:</dt> <dd>the accounting software the accountant already uses.</dd></div>
+      <div><dt>Practice:</dt> <dd>an accounting firm that serves many small clients.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="view" id="receipt" role="tabpanel" aria-labelledby="t-receipt">
+  <div class="head">
+    <h1>Follow one receipt</h1>
+    <p class="sub">One photographed receipt travels through the map in nine steps. The map shows Day 1, so parts that come later stay as outlines.</p>
+  </div>
+  <div class="controls">
+    <fieldset class="sw"><legend>Which receipt</legend><div class="seg">
+      <label><input type="radio" name="path" value="clean" checked><span>Clean receipt</span></label>
+      <label><input type="radio" name="path" value="hard"><span>Hard receipt</span></label>
+    </div></fieldset>
+    <p class="note" id="pathNote" aria-live="polite">Haiku reads it. About $0.002.</p>
+  </div>
+  <div class="rail">
+    <button class="btn" type="button" id="rBack" disabled>Back</button>
+    <button class="btn go" type="button" id="rPlay">Play</button>
+    <button class="btn" type="button" id="rNext">Next</button>
+    <span class="gapx"></span>
+    <button class="num" type="button" data-step="1" aria-label="Step 1: Client sends a photo">1</button><button class="num" type="button" data-step="2" aria-label="Step 2: Intake">2</button><button class="num" type="button" data-step="3" aria-label="Step 3: Read the receipt">3</button><button class="num" type="button" data-step="4" aria-label="Step 4: Checks">4</button><button class="num" type="button" data-step="5" aria-label="Step 5: Propose the entry">5</button><button class="num" type="button" data-step="6" aria-label="Step 6: Independent check">6</button><button class="num" type="button" data-step="7" aria-label="Step 7: Approval queue">7</button><button class="num" type="button" data-step="8" aria-label="Step 8: Post to the ledger">8</button><button class="num" type="button" data-step="9" aria-label="Step 9: Export and confirm">9</button>
+  </div>
+  <div class="mapgrid">
+    <figure>
+      <p class="hint">The drawing slides by itself to follow the dot.</p>
+      <div class="scroll" id="rcScroll" tabindex="0" role="region" aria-label="Receipt path drawing, scrolls sideways"><div class="stage rc" id="rcStage"><svg class="draw" viewBox="0 0 1104 764" role="img" aria-label="The same backend map at Day 1, with a dot that follows one receipt along its real path, from the client's phone to the gate, the ledger and back to the client." data-stage="d1" data-colour="plain"><defs><marker id="r-ad" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><polygon points="0,0 8,3.5 0,7" fill="#5E6D68"/></marker><marker id="r-ads" markerWidth="8" markerHeight="7" refX="1" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><polygon points="8,0 0,3.5 8,7" fill="#5E6D68"/></marker><marker id="r-aa" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><polygon points="0,0 8,3.5 0,7" fill="#0E5A3C"/></marker><marker id="r-aas" markerWidth="8" markerHeight="7" refX="1" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><polygon points="8,0 0,3.5 8,7" fill="#0E5A3C"/></marker><pattern id="r-grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#DDE4E0"/></pattern><pattern id="r-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#33423D" stroke-width="1.2"/></pattern></defs><rect x="0" y="0" width="1104" height="764" fill="url(#r-grid)"/><rect x="12" y="672" width="1080" height="84" class="ground"/><rect x="12" y="672" width="1080" height="9" fill="url(#r-hatch)" opacity=".55"/><line x1="12" y1="672" x2="1092" y2="672" class="gline"/><text class="lt" x="24" y="694"><tspan class="ln">8</tspan> Foundation: the ground everything stands on</text><rect class="pnl pnl-dash" x="12" y="14" width="1080" height="78" rx="4"/><rect class="pnl" x="28" y="108" width="1064" height="58" rx="4"/><rect class="pnl" x="28" y="182" width="620" height="58" rx="4"/><rect class="pnl" x="28" y="272" width="176" height="66" rx="4"/><rect class="pnl" x="216" y="258" width="432" height="308" rx="4"/><rect class="pnl" x="216" y="590" width="432" height="66" rx="4"/><rect class="pnl" x="940" y="246" width="152" height="164" rx="4"/><text class="lt" x="24" y="18"><tspan class="ln">7</tspan> Outside systems: we use them, we do not own them</text><text class="lt" x="40" y="112"><tspan class="ln">1</tspan> Front doors</text><text class="lt" x="40" y="186"><tspan class="ln">2</tspan> Intake</text><text class="lt" x="40" y="276"><tspan class="ln">5</tspan> Records: originals</text><text class="lt" x="228" y="262"><tspan class="ln">3</tspan> Agent brain</text><text class="lt" x="228" y="594"><tspan class="ln">4</tspan> Knowledge</text><text class="lt" x="952" y="250"><tspan class="ln">5</tspan> Records: the books</text><g class="ed k-d s-d1" data-id="e_client"><path d="M74,58 L116,58" marker-end="url(#r-ad)"/><text class="el" x="95" y="53" text-anchor="middle">photo</text></g><g class="ed k-a s-d1" data-id="e_reply"><path d="M116,74 L74,74" marker-end="url(#r-aa)"/><text class="el" x="95" y="87" text-anchor="middle">reply</text></g><g class="ed k-d s-d1" data-id="e_photo1"><path d="M160,86 L160,116" marker-end="url(#r-ad)"/><text class="el" x="166" y="105" text-anchor="start">photo</text></g><g class="ed k-d s-d1" data-id="e_photo2"><path d="M116,158 L116,190" marker-end="url(#r-ad)"/><text class="el" x="122" y="178" text-anchor="start">photo + phone number</text></g><g class="ed k-d s-d1" data-id="e_orig"><path d="M180,232 L180,284" marker-end="url(#r-ad)"/><text class="el" x="174" y="258" text-anchor="end">original photo</text></g><g class="ed k-d s-d1" data-id="e_g2r"><path d="M192,211 L232,211" marker-end="url(#r-ad)"/><text class="el" x="212" y="205" text-anchor="middle">photo</text></g><g class="ed k-d s-d1" data-id="e_r2rt"><path d="M370,232 L370,290" marker-end="url(#r-ad)"/><text class="el" x="376" y="274" text-anchor="start">photo</text></g><g class="ed k-d s-d1" data-id="e_rt2c"><path d="M340,334 L340,372" marker-end="url(#r-ad)"/><text class="el" x="334" y="357" text-anchor="end">photo + prompt</text></g><g class="ed k-d s-d1" data-id="e_c2rt"><path d="M400,372 L400,334" marker-end="url(#r-ad)"/><text class="el" x="406" y="357" text-anchor="start">answer</text></g><g class="ed k-d s-d1" data-id="e_fields"><path d="M244,232 L244,430 L456,430" marker-end="url(#r-ad)" marker-start="url(#r-ads)"/><text class="el" x="252" y="424" text-anchor="start">fields + confidence</text><text class="el" x="252" y="446" text-anchor="start">failed? read again</text></g><g class="ed k-d s-d1" data-id="e_pass"><path d="M484,430 L512,430" marker-end="url(#r-ad)"/><text class="el" x="498" y="424" text-anchor="middle">pass</text></g><g class="ed k-d s-d1" data-id="e_know"><path d="M470,590 L470,444" marker-end="url(#r-ad)"/><text class="el" x="478" y="582" text-anchor="start">rules, suppliers, history</text></g><g class="ed k-d s-d1" data-id="e_models"><path d="M440,312 L512,312" marker-end="url(#r-ad)"/><text class="el" x="476" y="306" text-anchor="middle">model calls</text></g><g class="ed k-d s-d1" data-id="e_bank"><path d="M578,232 L578,270" marker-end="url(#r-ad)"/><text class="el" x="586" y="253" text-anchor="start">bank + invoice lines</text></g><g class="ed k-f s-d1" data-id="e_files"><path d="M702,137 L570,137 L570,190" marker-end="url(#r-ad)"/><text class="el" x="636" y="131" text-anchor="middle">bank + e-qaimə files</text></g><g class="ed k-d s-d1" data-id="e_p_books"><path d="M632,287 L752,287" marker-end="url(#r-ad)"/><text class="el" x="692" y="282" text-anchor="middle">proposed entry</text></g><g class="ed k-d s-m12" data-id="e_p_cash"><path d="M632,329 L752,329" marker-end="url(#r-ad)"/><text class="el" x="692" y="324" text-anchor="middle">reminder draft</text></g><g class="ed k-d s-m12" data-id="e_p_tax"><path d="M632,371 L752,371" marker-end="url(#r-ad)"/><text class="el" x="692" y="366" text-anchor="middle">tax figures</text></g><g class="ed k-d s-y3" data-id="e_p_people"><path d="M632,413 L752,413" marker-end="url(#r-ad)"/><text class="el" x="692" y="408" text-anchor="middle">payroll draft</text></g><g class="ed k-d s-y3" data-id="e_p_comply"><path d="M632,455 L752,455" marker-end="url(#r-ad)"/><text class="el" x="692" y="450" text-anchor="middle">deadline list</text></g><g class="ed k-d s-m12" data-id="e_p_builder"><path d="M632,497 L752,497" marker-end="url(#r-ad)"/><text class="el" x="692" y="492" text-anchor="middle">rule pack draft</text></g><g class="ed k-d s-d1" data-id="e_corr"><path d="M752,624 L636,624" marker-end="url(#r-ad)"/><text class="el" x="694" y="618" text-anchor="middle">corrections</text></g><g class="ed k-a s-d1" data-id="e_appr"><path d="M776,158 L776,196" marker-end="url(#r-aa)"/><text class="el" x="770" y="181" text-anchor="end">approve, edit, reject</text></g><g class="ed k-d s-d1" data-id="e_evid"><path d="M828,196 L828,158" marker-end="url(#r-ad)"/><text class="el" x="834" y="181" text-anchor="start">evidence</text></g><g class="ed k-f s-d1" data-id="e_stmt"><path d="M740,86 L740,116" marker-end="url(#r-ad)"/><text class="el" x="734" y="105" text-anchor="end">statement file</text></g><g class="ed k-f s-d1" data-id="e_etax"><path d="M856,86 L856,116" marker-end="url(#r-ad)" marker-start="url(#r-ads)"/><text class="el" x="850" y="105" text-anchor="end">files, by hand</text></g><g class="ed k-a s-d1" data-id="e_approved"><path d="M852,287 L952,287" marker-end="url(#r-aa)"/><text class="el" x="902" y="281" text-anchor="middle">approved entry</text></g><g class="ed k-a s-d1" data-id="e_export"><path d="M1016,262 L1016,158" marker-end="url(#r-aa)"/><text class="el" x="1010" y="205" text-anchor="end">export file</text></g><g class="ed k-a s-d1" data-id="e_auditev"><path d="M1016,312 L1016,356" marker-end="url(#r-aa)"/><text class="el" x="1022" y="338" text-anchor="start">audit event</text></g><g class="ed k-a s-d1" data-id="e_trunk"><path d="M852,224 L936,224 L936,32"/><text class="el" x="894" y="218" text-anchor="middle">approved only</text></g><g class="ed k-a s-d1" data-id="e_rail_w"><path d="M936,32 L190,32 L190,44" marker-end="url(#r-aa)"/><text class="el o-d1" x="560" y="27" text-anchor="middle">confirmation</text><text class="el f-m12" x="560" y="27" text-anchor="middle">approved reminder, confirmation</text></g><g class="ed k-a s-m12" data-id="e_rail_p"><path d="M936,32 L1016,32 L1016,44" marker-end="url(#r-aa)"/><text class="el" x="974" y="27" text-anchor="middle">approved payment</text></g><path class="bus" d="M512,287 L512,497"/><line class="bus-t s-d1" x1="512" y1="287" x2="524" y2="287"/><line class="bus-t s-m12" x1="512" y1="329" x2="524" y2="329"/><line class="bus-t s-m12" x1="512" y1="371" x2="524" y2="371"/><line class="bus-t s-y3" x1="512" y1="413" x2="524" y2="413"/><line class="bus-t s-y3" x1="512" y1="455" x2="524" y2="455"/><line class="bus-t s-m12" x1="512" y1="497" x2="524" y2="497"/><g class="actor"><rect x="40" y="44" width="18" height="26" rx="3"/><line x1="46" y1="65" x2="52" y2="65"/><text class="ts" x="49" y="85" text-anchor="middle">Client</text></g><g class="chk"><path d="M470,416 L484,430 L470,444 L456,430 Z"/><text class="el" x="470" y="410" text-anchor="middle">checks</text></g><g class="flag"><path d="M300,372 L426,372 L440,391 L426,410 L300,410 Z"/><text class="tn" x="364" y="387" text-anchor="middle">Claude API</text><text class="ts" x="364" y="402" text-anchor="middle">abroad</text></g><text class="zn" x="712" y="268" text-anchor="middle">Draft side</text><text class="zn" x="860" y="268">Official side</text><g class="never"><text class="nh" x="880" y="452">NowAI never</text><text class="nt" x="880" y="472">signs or files for a client</text><text class="nt" x="880" y="490">holds a client's ASAN İmza</text><text class="nt" x="880" y="508">holds client money</text></g><g class="tb"><rect x="868" y="540" width="224" height="116"/><line x1="868" y1="564" x2="1092" y2="564"/><line x1="868" y1="588" x2="1092" y2="588"/><line x1="868" y1="612" x2="1092" y2="612"/><line x1="868" y1="634" x2="1092" y2="634"/><text class="tbh" x="880" y="557">NowAI Blueprint</text><text class="tbt" x="880" y="581">Sheet 1: Backend map</text><text class="tbt o-d1" x="880" y="605">Stage: Day 1</text><text class="tbt o-d1" x="880" y="628">Parts that exist: 21 of 29</text><text class="tbt o-m12" x="880" y="605">Stage: Month 12</text><text class="tbt o-m12" x="880" y="628">Parts that exist: 27 of 29</text><text class="tbt o-y3" x="880" y="605">Stage: Year 3</text><text class="tbt o-y3" x="880" y="628">Parts that exist: 29 of 29</text><text class="tbt" x="880" y="650">Status: design proposal</text></g><g class="key"><text class="nh" x="28" y="358">Key</text><line class="kl" x1="28" y1="378" x2="64" y2="378" marker-end="url(#r-ad)"/><text class="ts" x="74" y="382">data or a draft</text><line class="kl ka" x1="28" y1="402" x2="64" y2="402" marker-end="url(#r-aa)"/><text class="ts" x="74" y="406">approved</text><line class="kl kf" x1="28" y1="426" x2="64" y2="426" marker-end="url(#r-ad)"/><text class="ts" x="74" y="430">file, moved by hand</text><rect class="kb" x="28" y="442" width="36" height="18" rx="3"/><text class="ts" x="74" y="456">does not exist yet</text><path class="kd" d="M46,468 L56,478 L46,488 L36,478 Z"/><text class="ts" x="74" y="482">automatic check</text></g><g class="trails"><path class="trail" data-sc="clean" data-step="1" data-dot="0" d="M49,58 L160,58 L160,116"/><path class="trail" data-sc="clean" data-step="2" data-dot="0" d="M160,116 L160,137 L116,137 L116,211 L180,211 L180,306 L180,211 L192,211"/><path class="trail" data-sc="clean" data-step="3" data-dot="0" d="M192,211 L370,211 L370,312 L340,312 L340,391 L400,391 L400,312 L370,312 L370,211 L244,211 L244,232"/><path class="trail" data-sc="clean" data-step="4" data-dot="0" d="M244,232 L244,430 L470,430 L470,590 L470,430"/><path class="trail" data-sc="clean" data-step="5" data-dot="0" d="M470,430 L512,430 L512,287 L524,287"/><path class="trail" data-sc="clean" data-step="6" data-dot="0" d="M524,287 L512,287 L512,312 L340,312 L340,391 L400,391 L400,312 L512,312 L512,287 L524,287"/><path class="trail" data-sc="clean" data-step="7" data-dot="0" d="M524,287 L828,287 L828,137 L776,137 L776,287 L802,287"/><path class="trail" data-sc="clean" data-step="8" data-dot="0" d="M802,287 L1016,287 L1016,377 L1016,262"/><path class="trail" data-sc="clean" data-step="9" data-dot="0" d="M1016,262 L1016,158"/><path class="trail" data-sc="clean" data-step="9" data-dot="1" d="M802,287 L802,224 L936,224 L936,32 L190,32 L190,74 L74,74"/><path class="trail" data-sc="hard" data-step="1" data-dot="0" d="M49,58 L160,58 L160,116"/><path class="trail" data-sc="hard" data-step="2" data-dot="0" d="M160,116 L160,137 L116,137 L116,211 L180,211 L180,306 L180,211 L192,211"/><path class="trail" data-sc="hard" data-step="3" data-dot="0" d="M192,211 L370,211 L370,312 L340,312 L340,391 L400,391 L400,312 L370,312 L370,211 L244,211 L244,232"/><path class="trail" data-sc="hard" data-step="4" data-dot="0" d="M244,232 L244,430 L470,430 L244,430 L244,211 L370,211 L370,312 L340,312 L340,391 L400,391 L400,312 L370,312 L370,211 L244,211 L244,430 L470,430 L470,590 L470,430"/><path class="trail" data-sc="hard" data-step="5" data-dot="0" d="M470,430 L512,430 L512,287 L524,287"/><path class="trail" data-sc="hard" data-step="6" data-dot="0" d="M524,287 L512,287 L512,312 L340,312 L340,391 L400,391 L400,312 L512,312 L512,287 L524,287"/><path class="trail" data-sc="hard" data-step="7" data-dot="0" d="M524,287 L828,287 L828,137 L776,137 L776,287 L802,287"/><path class="trail" data-sc="hard" data-step="8" data-dot="0" d="M802,287 L1016,287 L1016,377 L1016,262"/><path class="trail" data-sc="hard" data-step="9" data-dot="0" d="M1016,262 L1016,158"/><path class="trail" data-sc="hard" data-step="9" data-dot="1" d="M802,287 L802,224 L936,224 L936,32 L190,32 L190,74 L74,74"/></g><g class="pt s-d1" data-id="wa_provider" data-owner="integ" data-bb="Buy"><rect x="116" y="44" width="140" height="42" rx="3"/><text class="tn" x="186.0" y="69.5" text-anchor="middle">WhatsApp provider</text></g><g class="pt s-d1" data-id="banks" data-owner="integ" data-bb="Build"><rect x="650" y="44" width="130" height="42" rx="3"/><text class="tn" x="715.0" y="62.0" text-anchor="middle">Banks</text><text class="ts o-d1" x="715.0" y="77.0" text-anchor="middle">files</text><text class="ts f-m12" x="715.0" y="77.0" text-anchor="middle">files, later API</text></g><g class="pt s-d1" data-id="etaxes" data-owner="integ" data-bb="Build"><rect x="796" y="44" width="120" height="42" rx="3"/><text class="tn" x="856.0" y="62.0" text-anchor="middle">E-taxes, e-qaimə</text><text class="ts" x="856.0" y="77.0" text-anchor="middle">files only</text></g><g class="pt s-m12" data-id="partner" data-owner="integ" data-bb="Buy"><rect x="952" y="44" width="128" height="42" rx="3"/><text class="tn" x="1016.0" y="62.0" text-anchor="middle">Licensed payment</text><text class="ts" x="1016.0" y="77.0" text-anchor="middle">partner, planned</text></g><g class="pt s-d1" data-id="wa_number" data-owner="integ" data-bb="Buy"><rect x="40" y="116" width="152" height="42" rx="3"/><text class="tn" x="116.0" y="134.0" text-anchor="middle">WhatsApp number</text><text class="ts" x="116.0" y="149.0" text-anchor="middle">clients</text></g><g class="pt s-d1" data-id="webapp" data-owner="front" data-bb="Build"><rect x="702" y="116" width="200" height="42" rx="3"/><text class="tn" x="802.0" y="134.0" text-anchor="middle">Accountant web app</text><text class="ts" x="802.0" y="149.0" text-anchor="middle">the accountant works here</text></g><g class="pt s-m12" data-id="c1" data-owner="integ" data-bb="Build"><rect x="952" y="116" width="128" height="42" rx="3"/><text class="tn" x="1016.0" y="134.0" text-anchor="middle">1C connector</text><text class="ts o-d1" x="1016.0" y="149.0" text-anchor="middle">Day 1: file by hand</text><text class="ts f-m12" x="1016.0" y="149.0" text-anchor="middle">to accountant's 1C</text></g><g class="pt s-d1" data-id="gateway" data-owner="backend" data-bb="Build"><rect x="40" y="190" width="152" height="42" rx="3"/><text class="tn" x="116.0" y="208.0" text-anchor="middle">Gateway and queue</text><text class="ts" x="116.0" y="223.0" text-anchor="middle">saves, sorts, queues</text></g><g class="pt s-d1" data-id="reader" data-owner="backend" data-bb="Buy"><rect x="232" y="190" width="208" height="42" rx="3"/><text class="tn" x="336.0" y="208.0" text-anchor="middle">Document reader</text><text class="ts" x="336.0" y="223.0" text-anchor="middle">photo into fields</text></g><g class="pt s-d1" data-id="importers" data-owner="integ" data-bb="Build"><rect x="500" y="190" width="140" height="42" rx="3"/><text class="tn" x="570.0" y="208.0" text-anchor="middle">Bank and e-qaimə</text><text class="ts" x="570.0" y="223.0" text-anchor="middle">file importers</text></g><g class="pt s-d1" data-id="docstore" data-owner="lead" data-bb="Buy"><rect x="40" y="284" width="152" height="44" rx="3"/><text class="tn" x="116.0" y="303.0" text-anchor="middle">Document store</text><text class="ts" x="116.0" y="318.0" text-anchor="middle">original photos</text></g><g class="pt s-d1" data-id="router" data-owner="backend" data-bb="Build"><rect x="300" y="290" width="140" height="44" rx="3"/><text class="tn" x="370.0" y="309.0" text-anchor="middle">Model router</text><text class="ts" x="370.0" y="324.0" text-anchor="middle">Haiku or Sonnet</text></g><g class="pt s-d1" data-id="books" data-owner="backend" data-bb="Build"><rect x="524" y="270" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="291.5" text-anchor="middle">Books</text></g><g class="pt s-m12" data-id="cash" data-owner="backend" data-bb="Build"><rect x="524" y="312" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="333.5" text-anchor="middle">Cash</text></g><g class="pt s-m12" data-id="tax" data-owner="backend" data-bb="Build"><rect x="524" y="354" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="375.5" text-anchor="middle">Tax</text></g><g class="pt s-y3" data-id="people" data-owner="backend" data-bb="Build"><rect x="524" y="396" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="417.5" text-anchor="middle">People</text></g><g class="pt s-y3" data-id="comply" data-owner="backend" data-bb="Build"><rect x="524" y="438" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="459.5" text-anchor="middle">Comply</text></g><g class="pt s-m12" data-id="builder" data-owner="backend" data-bb="Build"><rect x="524" y="480" width="108" height="34" rx="3"/><text class="tn" x="578.0" y="501.5" text-anchor="middle">Builder (internal)</text></g><g class="pt s-m12" data-id="workflow" data-owner="backend" data-bb="Buy"><rect x="506" y="522" width="126" height="34" rx="3"/><text class="tn" x="569.0" y="543.5" text-anchor="middle">Workflow engine</text></g><g class="pt s-d1" data-id="suppliers" data-owner="acct" data-bb="Build"><rect x="228" y="602" width="124" height="44" rx="3"/><text class="tn" x="290.0" y="621.0" text-anchor="middle">Supplier map</text><text class="ts" x="290.0" y="636.0" text-anchor="middle">tax ID to supplier</text></g><g class="pt s-d1" data-id="rules" data-owner="acct" data-bb="Build"><rect x="364" y="602" width="124" height="44" rx="3"/><text class="tn" x="426.0" y="621.0" text-anchor="middle">Rules library</text><text class="ts" x="426.0" y="636.0" text-anchor="middle">versioned rules</text></g><g class="pt s-d1" data-id="memory" data-owner="acct" data-bb="Build"><rect x="500" y="602" width="136" height="44" rx="3"/><text class="tn" x="568.0" y="621.0" text-anchor="middle">Client memory</text><text class="ts" x="568.0" y="636.0" text-anchor="middle">per client</text></g><g class="pt s-d1" data-id="ledger" data-owner="lead" data-bb="Build"><rect x="952" y="262" width="128" height="50" rx="3"/><text class="tn" x="1016.0" y="284.0" text-anchor="middle">Ledger</text><text class="ts" x="1016.0" y="299.0" text-anchor="middle">the books</text></g><g class="pt s-d1" data-id="audit" data-owner="lead" data-bb="Build"><rect x="952" y="356" width="128" height="42" rx="3"/><text class="tn" x="1016.0" y="374.0" text-anchor="middle">Audit trail</text><text class="ts" x="1016.0" y="389.0" text-anchor="middle">who did what</text></g><g class="pt s-d1" data-id="hosting" data-owner="lead" data-bb="Buy"><rect x="40" y="702" width="244" height="44" rx="3"/><text class="tn" x="162.0" y="721.0" text-anchor="middle">Hosting</text><text class="ts" x="162.0" y="736.0" text-anchor="middle">undecided</text></g><g class="pt s-d1" data-id="secrets" data-owner="infra" data-bb="Build"><rect x="300" y="702" width="244" height="44" rx="3"/><text class="tn" x="422.0" y="721.0" text-anchor="middle">Secrets and key proxy</text><text class="ts" x="422.0" y="736.0" text-anchor="middle">agents hold no keys</text></g><g class="pt s-d1" data-id="harness" data-owner="evals" data-bb="Build"><rect x="560" y="702" width="244" height="44" rx="3"/><text class="tn" x="682.0" y="721.0" text-anchor="middle">Test and simulation harness</text><text class="ts" x="682.0" y="736.0" text-anchor="middle">replays past documents</text></g><g class="pt s-d1" data-id="monitoring" data-owner="infra" data-bb="Buy"><rect x="820" y="702" width="244" height="44" rx="3"/><text class="tn" x="942.0" y="721.0" text-anchor="middle">Monitoring and backups</text><text class="ts" x="942.0" y="736.0" text-anchor="middle">alerts, nightly copies</text></g><g class="pt pt-gate" data-id="gate" data-owner="backend" data-bb="Build"><rect class="wall" x="752" y="196" width="100" height="476"/><rect class="wall-cap" x="744" y="196" width="116" height="6"/><line class="gt" x1="752" y1="287" x2="762" y2="287"/><line class="gt" x1="752" y1="329" x2="762" y2="329"/><line class="gt" x1="752" y1="371" x2="762" y2="371"/><line class="gt" x1="752" y1="413" x2="762" y2="413"/><line class="gt" x1="752" y1="455" x2="762" y2="455"/><line class="gt" x1="752" y1="497" x2="762" y2="497"/><line class="gt" x1="752" y1="624" x2="762" y2="624"/><line class="gt" x1="842" y1="224" x2="852" y2="224"/><line class="gt" x1="842" y1="287" x2="852" y2="287"/><text class="gn" x="802.0" y="226" text-anchor="middle">6</text><text class="gh" x="802.0" y="314" text-anchor="middle">Human</text><text class="gh" x="802.0" y="333" text-anchor="middle">approval</text><text class="gh" x="802.0" y="352" text-anchor="middle">queue</text><circle class="gc" cx="802.0" cy="390" r="14"/><path class="gk" d="M796.0,390 l4.5,5 l8,-10"/><text class="gs" x="802.0" y="430" text-anchor="middle">Nothing</text><text class="gs" x="802.0" y="446" text-anchor="middle">passes</text><text class="gs" x="802.0" y="462" text-anchor="middle">without an</text><text class="gs" x="802.0" y="478" text-anchor="middle">accountant's</text><text class="gs" x="802.0" y="494" text-anchor="middle">click</text></g><circle class="dot" id="dot0" r="7" cx="160" cy="116"/><circle class="dot" id="dot1" r="7" cx="160" cy="116" style="display:none"/></svg></div></div>
+      <figcaption>The green line is the path so far. The dot is the receipt. It may run along a line and come back, because some steps ask a part a question and wait for the answer. An amber line marks the second read of a hard receipt.</figcaption>
+    </figure>
+    <aside class="side" aria-label="Current step">
+      <div id="stepPanel" aria-live="polite"><p class="kicker">Step 1 of 9</p><h2>Client sends a photo</h2><p class="plain">The client photographs the receipt and sends it on WhatsApp. The photo and phone number arrive at NowAI's number. Inbound messages are free.</p><dl><div><dt>Parts used</dt><dd>WhatsApp number, provider webhook (the provider's instant notice to us)</dd></div><div><dt>Time for this step</dt><dd>1 second</dd></div><div><dt>Cost of this step</dt><dd>$0</dd></div></dl></div>
+      <div class="meter" aria-label="Running totals">
+        <div><b id="mMachine">1 s</b><span>Machine time so far</span></div>
+        <div><b id="mHuman">0 s</b><span>Accountant time so far</span></div>
+        <div><b id="mWait">None yet</b><span>Waiting for the accountant</span></div>
+        <div><b id="mCost">$0</b><span>Cost so far</span></div>
+      </div>
+      <p class="pathcall" id="endCall"></p>
+    </aside>
+  </div>
+  <div class="costp">
+    <div>
+      <h2>What it costs per client</h2>
+      <div class="sum">
+        <span>60 documents a month × $0.0136</span><b>$0.82</b>
+        <span>Messages: 10 × $0.0212</span><b>$0.21</b>
+        <span>Other model use</span><b>$0.30</b>
+        <span class="tot">A month, per client</span><b class="tot">$1.33</b>
+      </div>
+      <div class="bar2" role="img" aria-label="About 2.3 AZN of cost against about 14.5 AZN of revenue a month"><i style="width:15.9%"></i></div>
+      <div class="barcap"><span>Cost about 2.3 AZN</span><span>Revenue about 14.5 AZN a month</span></div>
+    </div>
+    <div>
+      <h3>What this assumes</h3>
+      <ul style="margin-top:6px">
+        <li>60 documents per client per month. The real number is unknown.</li>
+        <li>80 percent clean at $0.002, 20 percent hard at $0.06. That blends to $0.0136.</li>
+        <li>10 WhatsApp utility messages and $0.30 of other model use.</li>
+        <li>1 USD = 1.70 AZN. Hosting, the WhatsApp provider fee, partner fees and salaries are left out.</li>
+      </ul>
+      <p class="warn">Accuracy on real Azerbaijani receipts is untested, so the 20 percent is a guess. The bigger cost is people. Model fees are small next to accountant time and salaries.</p>
+      <p class="warn"><b>Two numbers still need reconciling.</b> The financial model puts the direct cost per client at about 5.7 AZN a month. This design estimate is about 2.3 AZN. The model uses a cautious reading cost and counts more cost lines. Until the two are reconciled, treat 2.3 AZN as the low case and 5.7 AZN as the safe case.</p>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="route" role="tabpanel" aria-labelledby="t-route">
+  <div class="head">
+    <h1>The route to $1B</h1>
+    <p class="sub">Six steps. Steps 1 and 2 are the Base case of our model. Steps 3 to 5 show what you would need to believe. They are illustrations, and nobody can forecast them.</p>
+  </div>
+  <div class="stepchips" role="group" aria-label="Choose a step"><button class="chip" type="button" data-step="0" aria-pressed="false">0. Prove it</button><button class="chip" type="button" data-step="1" aria-pressed="false">1. Books live</button><button class="chip" type="button" data-step="2" aria-pressed="false">2. Azerbaijan leader, Cash added</button><button class="chip" type="button" data-step="3" aria-pressed="false">3. Three countries, money flow live</button><button class="chip" type="button" data-step="4" aria-pressed="false">4. Region: five countries</button><button class="chip" type="button" data-step="5" aria-pressed="false">5. $1B</button></div>
+  <div class="mapgrid">
+    <figure>
+      <div class="scroll" tabindex="0" role="region" aria-label="Staircase drawing, scrolls sideways"><div class="stage2" id="stairStage"><svg class="stair" viewBox="0 0 1040 452" role="img" aria-label="Staircase of six steps rising from 90 client firms in the first 90 days to 180,000 in year 10. Time runs left to right. Height is on a scale where each line is ten times the one below."><defs><pattern id="sh" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#0E5A3C" stroke-width="1" opacity=".35"/></pattern></defs><line class="sg" x1="84" y1="334.0" x2="1024" y2="334.0"/><text class="sa" x="76" y="338.0" text-anchor="end">100</text><line class="sg" x1="84" y1="264.0" x2="1024" y2="264.0"/><text class="sa" x="76" y="268.0" text-anchor="end">1,000</text><line class="sg" x1="84" y1="194.0" x2="1024" y2="194.0"/><text class="sa" x="76" y="198.0" text-anchor="end">10,000</text><line class="sg" x1="84" y1="124.0" x2="1024" y2="124.0"/><text class="sa" x="76" y="128.0" text-anchor="end">100,000</text><text class="sal" x="0" y="22">Client firms</text><text class="sa" x="0" y="38">each line is 10 times</text><text class="sa" x="0" y="52">the one below</text><g class="st st-b" data-step="0"><rect class="sb" x="84.0" y="337.2" width="83.9" height="66.80000000000001"/><line class="stread" x1="84.0" y1="337.2" x2="167.9" y2="337.2"/><text class="sn" x="94.0" y="356.2">0</text><text class="st1" x="110.0" y="356.2">Prove it</text><text class="sf" x="94.0" y="329.2">90</text></g><g class="st st-b" data-step="1"><rect class="sb" x="167.9" y="291.6" width="167.9" height="112.39999999999998"/><line class="stread" x1="167.9" y1="291.6" x2="335.8" y2="291.6"/><text class="sn" x="177.9" y="310.6">1</text><text class="st1" x="193.9" y="310.6">Books live</text><text class="sf" x="177.9" y="283.6">403</text></g><g class="st st-b" data-step="2"><rect class="sb" x="335.8" y="236.4" width="167.8" height="167.6"/><line class="stread" x1="335.8" y1="236.4" x2="503.6" y2="236.4"/><text class="sn" x="345.8" y="255.4">2</text><text class="st1" x="361.8" y="255.4">Azerbaijan leader,</text><text class="st1" x="361.8" y="271.4">Cash added</text><text class="sf" x="345.8" y="228.4">2,477</text></g><g class="st st-i" data-step="3"><rect class="sb" x="503.6" y="167.4" width="167.9" height="236.6"/><rect class="sh" x="503.6" y="167.4" width="167.9" height="236.6" fill="url(#sh)"/><line class="stread" x1="503.6" y1="167.4" x2="671.5" y2="167.4"/><text class="sn" x="513.6" y="186.4">3</text><text class="st1" x="529.6" y="186.4">Three countries,</text><text class="st1" x="529.6" y="202.4">money flow live</text><text class="sf" x="513.6" y="159.4">24,000</text></g><g class="st st-i" data-step="4"><rect class="sb" x="671.5" y="127.2" width="251.8" height="276.8"/><rect class="sh" x="671.5" y="127.2" width="251.8" height="276.8" fill="url(#sh)"/><line class="stread" x1="671.5" y1="127.2" x2="923.3" y2="127.2"/><text class="sn" x="681.5" y="146.2">4</text><text class="st1" x="697.5" y="146.2">Region: five countries</text><text class="sf" x="681.5" y="119.2">90,000</text></g><g class="st st-i" data-step="5"><rect class="sb" x="923.3" y="106.1" width="100.7" height="297.9"/><rect class="sh" x="923.3" y="106.1" width="100.7" height="297.9" fill="url(#sh)"/><line class="stread" x1="923.3" y1="106.1" x2="1024.0" y2="106.1"/><text class="sn" x="933.3" y="125.1">5</text><text class="st1" x="949.3" y="125.1">$1B</text><text class="sf" x="933.3" y="98.1">180,000</text></g><line class="sx" x1="84.0" y1="404" x2="84.0" y2="410"/><text class="sa" x="84.0" y="424">Start</text><line class="sx" x1="167.9" y1="404" x2="167.9" y2="410"/><text class="sa" x="167.9" y="424">Year 1</text><line class="sx" x1="335.8" y1="404" x2="335.8" y2="410"/><text class="sa" x="335.8" y="424">Year 3</text><line class="sx" x1="503.6" y1="404" x2="503.6" y2="410"/><text class="sa" x="503.6" y="424">Year 5</text><line class="sx" x1="671.5" y1="404" x2="671.5" y2="410"/><text class="sa" x="671.5" y="424">Year 7</text><line class="sx" x1="923.3" y1="404" x2="923.3" y2="410"/><text class="sa" x="923.3" y="424">Year 10</text><text class="sa" x="107.0" y="440">Step 0 runs for the first 90 days</text><line class="sref" x1="84" y1="106.1" x2="923.3" y2="106.1"/><text class="srt" x="92" y="99.1">Omie: about 180,000 clients, the same level as step 5</text><line class="scall" x1="931.3" y1="30" x2="931.3" y2="84.1"/><circle class="sdot" cx="931.3" cy="30" r="3"/><text class="srt" x="921.3" y="34" text-anchor="end">Pennylane: about 6,000 accounting partners. Step 5 has 6,000 practices.</text><circle class="sdot" cx="931.3" cy="49" r="3"/><text class="srt" x="921.3" y="53" text-anchor="end">DataSnipper: about 130 staff at $1B. Step 5 plans 250.</text><circle class="sdot" cx="931.3" cy="68" r="3"/><text class="srt" x="921.3" y="72" text-anchor="end">Basis: about $138M raised. Step 5 plans $150M.</text></svg><button class="shit" type="button" data-step="0" style="left:8.077%;top:69.735%;width:8.067%;height:19.646%" aria-pressed="false">Step 0. Prove it</button><button class="shit" type="button" data-step="1" style="left:16.144%;top:59.646%;width:16.144%;height:29.735%" aria-pressed="false">Step 1. Books live</button><button class="shit" type="button" data-step="2" style="left:32.288%;top:47.434%;width:16.135%;height:41.947%" aria-pressed="false">Step 2. Azerbaijan leader, Cash added</button><button class="shit" type="button" data-step="3" style="left:48.423%;top:32.168%;width:16.144%;height:57.212%" aria-pressed="false">Step 3. Three countries, money flow live</button><button class="shit" type="button" data-step="4" style="left:64.567%;top:23.274%;width:24.212%;height:66.106%" aria-pressed="false">Step 4. Region: five countries</button><button class="shit" type="button" data-step="5" style="left:88.779%;top:18.606%;width:9.683%;height:70.774%" aria-pressed="false">Step 5. $1B</button></div></div>
+      <div class="lg"><span><i class="solid"></i>Steps 0 to 2: pilot plan and Base case</span><span><i class="hat"></i>Steps 3 to 5: what you would need to believe</span></div>
+      <figcaption>Time runs left to right at true scale. Height shows client firms, and each line is 10 times the one below, so the top steps are far bigger than they look. Click a step to open it.</figcaption>
+    </figure>
+    <aside class="side" id="routePanel" aria-live="polite" aria-label="Selected step"><p class="kicker">First 90 days</p><h2>Step 0. Prove it</h2><dl class="kv"><div><dt>Client firms</dt><dd>90</dd></div><div><dt>Practices</dt><dd>3</dd></div><div><dt>AZN per client a month</dt><dd>0 (free pilot)</dd></div><div><dt>Annual revenue</dt><dd>$0</dd></div><div><dt>Value at 10x</dt><dd>n/a</dd></div><div><dt>Value at $3,000 a client</dt><dd>n/a</dd></div><div><dt>Team</dt><dd>3</dd></div><div><dt>Capital raised</dt><dd>$0.9M</dd></div></dl><dl class="proof"><dt>What must be proven before climbing</dt><dd>Reading accuracy on 200+ real receipts. 30% of client hours saved. Three practices agree to pay. Overdue invoices measured at 30 firms. Written legal answer on payments.</dd></dl><p class="pathcall">The pilot plan.</p></aside>
+  </div>
+  <p class="alert"><b>On Azerbaijani subscriptions alone the Base case runs out of cash around month 45 and shows no profit within 60 months.</b> New funding and new countries are required to climb past step 2.</p>
+
+  <div class="two">
+    <div>
+      <h2>Two sums, same answer</h2>
+      <div class="sums">
+        <div class="sumc"><h3>From revenue</h3><p>$1B at 10x is <b>$100M a year</b>. At about 80 AZN a client a month that takes about <b>177,000 firms</b>.</p></div>
+        <div class="sumc"><h3>From what buyers paid</h3><p>Buyers paid <b>$3,000 to $3,900</b> a client. At those prices $1B takes about <b>257,000 to 333,000 firms</b>.</p></div>
+        <p class="ans">Roughly 180,000 to 330,000 paying firms.</p>
+      </div>
+    </div>
+    <figure>
+      <h2>Revenue per customer a year</h2>
+      <div class="lg" style="padding:4px 0 6px"><span><i class="c" style="background:#1A8A5C"></i>Has a money layer</span><span><i class="c" style="background:#D08A1E"></i>Partly, or adding one</span><span><i class="c" style="background:#7F8C87"></i>No money layer</span></div>
+      <div class="scroll" style="border:0" tabindex="0" role="region" aria-label="Revenue per customer chart, scrolls sideways"><svg class="rev" viewBox="0 0 640 304" role="img" aria-label="Revenue per customer a year on a scale where each line is ten times the last, from $102 for NowAI at launch to $50,000 for Slash."><line class="sg" x1="149.2" y1="20" x2="149.2" y2="300"/><text class="sa" x="149.2" y="14" text-anchor="middle">$100</text><line class="sg" x1="272.8" y1="20" x2="272.8" y2="300"/><text class="sa" x="272.8" y="14" text-anchor="middle">$1,000</text><line class="sg" x1="396.4" y1="20" x2="396.4" y2="300"/><text class="sa" x="396.4" y="14" text-anchor="middle">$10,000</text><line class="sg" x1="520.0" y1="20" x2="520.0" y2="300"/><text class="sa" x="520.0" y="14" text-anchor="middle">$100,000</text><g class="rb"><title>NowAI launch: $102. Launch price, per client firm.</title><rect class="rhit" x="0" y="26" width="640" height="34"/><text class="rn" x="102" y="47" text-anchor="end">NowAI launch</text><path class="rbar r-no" d="M112,32 H146.3 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 H112 Z"/><text class="rv" x="158.3" y="47">$102</text></g><g class="rb"><title>NowAI year 3: $162. 22.975 AZN a month x 12 / 1.7, at list price. Per client firm, with modules.</title><rect class="rhit" x="0" y="60" width="640" height="34"/><text class="rn" x="102" y="81" text-anchor="end">NowAI year 3</text><path class="rbar r-part" d="M112,66 H171.1 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 H112 Z"/><text class="rv" x="183.1" y="81">$162</text></g><g class="rb"><title>Omie: $606. R$600M a year over about 180,000 clients.</title><rect class="rhit" x="0" y="94" width="640" height="34"/><text class="rn" x="102" y="115" text-anchor="end">Omie</text><path class="rbar r-part" d="M112,100 H241.9 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 H112 Z"/><text class="rv" x="253.9" y="115">$606</text></g><g class="rb"><title>Qonto: $950. EUR 495M from one French report, about 600,000 customers.</title><rect class="rhit" x="0" y="128" width="640" height="34"/><text class="rn" x="102" y="149" text-anchor="end">Qonto</text><path class="rbar r-yes" d="M112,134 H266.1 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 H112 Z"/><text class="rv" x="278.1" y="149">$950</text></g><g class="rb"><title>Melio: $1,913. $153M revenue FY25, 80,000 customers.</title><rect class="rhit" x="0" y="162" width="640" height="34"/><text class="rn" x="102" y="183" text-anchor="end">Melio</text><path class="rbar r-yes" d="M112,168 H303.6 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 H112 Z"/><text class="rv" x="315.6" y="183">$1,913</text></g><g class="rb"><title>Gusto: $2,000. Cash collected in 12 months, which is different from ARR.</title><rect class="rhit" x="0" y="196" width="640" height="34"/><text class="rn" x="102" y="217" text-anchor="end">Gusto</text><path class="rbar r-part" d="M112,202 H306.0 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 H112 Z"/><text class="rv" x="318.0" y="217">$2,000</text></g><g class="rb"><title>Vanta: $18,750. More than $300M ARR, 16,000 customers.</title><rect class="rhit" x="0" y="230" width="640" height="34"/><text class="rn" x="102" y="251" text-anchor="end">Vanta</text><path class="rbar r-no" d="M112,236 H426.1 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 H112 Z"/><text class="rv" x="438.1" y="251">$18,750</text></g><g class="rb"><title>Slash: $50,000. CEO-stated $250M, customer count from one outlet.</title><rect class="rhit" x="0" y="264" width="640" height="34"/><text class="rn" x="102" y="285" text-anchor="end">Slash</text><path class="rbar r-yes" d="M112,270 H478.8 a4,4 0 0 1 4,4 v10 a4,4 0 0 1 -4,4 H112 Z"/><text class="rv" x="490.8" y="285">$50,000</text></g></svg></div>
+      <figcaption>The smaller the customer, the more money flow matters. A money layer means earning on payments as well as on software. Each line is 10 times the last. NowAI year 3 is 22.975 AZN × 12 / 1.7 = $162 at list price. Gusto's figure is cash collected. Slash's rests on a CEO statement. Vanta passed $1B with no money layer, selling to customers who can pay far more.</figcaption>
+    </figure>
+  </div>
+
+  <div class="block">
+    <h2>The same rails</h2>
+    <p>Only the rules change, so a new country means a new rule pack on the same product. This is our inference and it is unproven.</p>
+    <div class="rails"><div class="railc"><h3>Azerbaijan</h3><p class="big">424,437</p><p class="sml">active SMEs, 2024</p><dl><dt>Accountant channel</dt><dd>Accountant practices</dd><dt>Main software</dt><dd>1C</dd><dt>E-invoice</dt><dd>E-qaimə, files the accountant handles</dd></dl></div><div class="railc"><h3>Georgia</h3><p class="big">Unclear</p><p class="sml">One outlet says about 921,500 active enterprises in 2023. That looks high.</p><dl><dt>Accountant channel</dt><dd>Outsourced accountants, common for small firms</dd><dt>Main software</dt><dd>1C, with Dynamics 365, Apricot and Balance</dd><dt>E-invoice</dt><dd>Mandatory for VAT payers on rs.ge since 2012</dd></dl></div><div class="railc"><h3>Uzbekistan</h3><p class="big">1,236,126</p><p class="sml">operating small businesses, 1 July 2026, with sole traders and farms</p><dl><dt>Accountant channel</dt><dd>Outsourced accounting exists, size not found</dd><dt>Main software</dt><dd>1C, called the leader in a 2023 paper</dd><dt>E-invoice</dt><dd>Phasing in for all businesses, SME dates not found</dd></dl></div><div class="railc"><h3>Kazakhstan</h3><p class="big">About 2.18 million</p><p class="sml">operating SMEs, 1 January 2026</p><dl><dt>Accountant channel</dt><dd>Outsourced accountants and 1C partners</dd><dt>Main software</dt><dd>1C, including cloud 1C</dd><dt>E-invoice</dt><dd>Mandatory for VAT payers through IS ESF</dd></dl></div><div class="railc diff"><h3>Türkiye</h3><p class="big">3,936,542</p><p class="sml">SMEs, 2024</p><dl><dt>Accountant channel</dt><dd>Licensed mali müşavir file for most SMEs. Contested.</dd><dt>Main software</dt><dd>Logo, Mikro, Paraşüt</dd><dt>E-invoice</dt><dd>Mandatory from 3m TRY in sales since 1 July 2026</dd></dl></div></div>
+  </div>
+
+  <div class="block">
+    <h2>Three routes, honestly</h2>
+    <div class="routes">
+      <div class="routec"><h3>1. Regional money flow</h3><span class="odds">Main route. Long shot.</span><p>Needs 180,000+ firms across the region, earning on money that moves through a licensed partner.</p></div>
+      <div class="routec"><h3>2. Higher-price markets: UAE, Saudi Arabia</h3><span class="odds">A plausible few million dollars a year</span><p>Bookkeeping costs 15 to 70 times more there. It needs Arabic, a certified e-invoicing provider, local partners and local hosting, and Wafeq, Qoyod, Zoho and OCTA are ahead. It does not reach $1B on its own.</p></div>
+      <div class="routec best"><h3>3. Strategic sale</h3><span class="odds">The most likely good outcome</span><p>Buyers such as Visma and Xero have paid for this kind of company. At Conta Azul's price per client: about $7M at 2,500 clients, about $72M at 24,000 clients.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">Design proposal. Nothing here is built yet. Prices from public pages on 6 November 2026. Steps 3 to 5 of the route are illustrations.</footer>
+</main>
+
+<script>
+window.BP={"W":1104,"parts":[{"id":"wa_number","name":"WhatsApp number","layer":"front","stage":"d1","when":"Day 1","bb":"Buy","owner":"integ","plain":"The number clients message. They send photos of invoices and receipts and get a short confirmation back.","use":"WhatsApp Business Platform (Meta's Cloud API), through a Business Solution Provider. An API is a doorway that lets one program talk to another.","cost":"Azerbaijan rates quoted by aggregators, because Meta's page failed to load: utility about $0.0212, marketing about $0.0860, replies inside the 24-hour window free. One source shows $0.0244 and $0.0989 from 1 January 2026. Provider fee unknown.","alt":"A Telegram bot, email forwarding or a web upload link.","layerN":"1","layerName":"Front doors","ocol":"integ"},{"id":"webapp","name":"Accountant web app","layer":"front","stage":"d1","when":"Day 1","bb":"Build","owner":"front","plain":"The accountant's desk: client list, approval queue, the photo beside the proposed entry, edit and approve buttons, and reports. In Azerbaijani, Russian and English.","use":"A standard web app: React (a common toolkit for building screens) with an API behind it.","cost":"Hosting only. Engineer time is the real cost.","alt":"A low-code tool such as Retool for the first queue, rebuilt later.","layerN":"1","layerName":"Front doors","ocol":"front"},{"id":"c1","name":"1C connector","layer":"front","stage":"m12","when":"Month 12. On Day 1 this is an export file the accountant imports by hand.","bb":"Build","owner":"integ","plain":"Puts approved entries into the accountant's 1C and reads the chart of accounts (the list of account codes) and counterparties. 1C is the accounting software the accountant already works in.","use":"Day 1: an export file. Month 12: a small connector installed near the accountant's 1C, using 1C's standard OData interface (a standard way to read and write its data) or a custom HTTP service.","cost":"No licence cost found. Effort is per 1C configuration, and the accountant's 1C administrator must publish OData.","alt":"COM automation on the accountant's PC (fragile), exchange files only, or bridge products like VAT Portal.","layerN":"1","layerName":"Front doors","ocol":"integ"},{"id":"gateway","name":"Gateway and queue","layer":"intake","stage":"d1","when":"Day 1","bb":"Build","owner":"backend","plain":"The front desk. It receives each message, saves the original, matches the phone number to a client, rejects duplicates, checks sharpness and queues the job. A queue is a waiting list for jobs.","use":"A small service plus a job table in Postgres. Postgres is a free, widely used database.","cost":"Negligible.","alt":"SQS or Redis queue.","layerN":"2","layerName":"Intake","ocol":"backend"},{"id":"reader","name":"Document reader","layer":"intake","stage":"d1","when":"Day 1","bb":"Buy","owner":"backend","owner_note":"The Evals and AI engineer tracks its accuracy per language.","plain":"Reads a photo into supplier, tax ID, date, lines, VAT, total, currency and language, with a confidence score: how sure it is of each reading.","use":"Claude vision: Haiku 5.5 for normal documents, Sonnet 5.5 for hard ones, Opus 5.5 as last resort. Per million tokens, in and out: Haiku $0.10 and $0.50, Sonnet $2 and $10, Opus $4 and $20. A token is a small piece of text or image. Models charge by the token.","cost":"About $0.002 for a clean document, about $0.06 for a hard one. No Azerbaijani receipt benchmark exists for any engine, so a pilot on 200+ real receipts is mandatory.","alt":"Google Document AI, Azure Document Intelligence (Read lists Azerbaijani Latin and Russian), Mistral OCR 3.","layerN":"2","layerName":"Intake","ocol":"backend"},{"id":"importers","name":"Bank and e-qaimə importers","layer":"intake","stage":"d1","when":"Day 1","bb":"Build","owner":"integ","plain":"Turns the bank statement files and e-qaimə files the accountant downloads into clean lines the agents can use. E-qaimə is the state electronic invoice.","use":"One parser per bank, written as we meet each bank. A parser is a small program that reads one file format. No Azerbaijani bank statement format was verified yet.","cost":"Negligible.","alt":"A direct bank API (ABB offers one by contract). Open banking: the framework exists, third-party access is unconfirmed.","layerN":"2","layerName":"Intake","ocol":"integ"},{"id":"books","name":"Books","layer":"brain","stage":"d1","when":"Day 1","bb":"Build","owner":"backend","plain":"Codes each document to accounts, VAT and counterparty, proposes a balanced entry with reasons, and matches bank lines to documents.","use":"Claude with tool calls (fixed functions the model may use), with the rules library and client memory as context.","cost":"Cents per client per month at launch volumes.","alt":"Fixed rules only: cheaper, much less coverage.","layerN":"3","layerName":"Agent brain","ocol":"backend"},{"id":"cash","name":"Cash","layer":"brain","stage":"m12","when":"Month 12","bb":"Build","owner":"backend","plain":"Shows who owes the client and whom the client owes, drafts reminders and a cash forecast. Collecting and paying happen only through a licensed partner, after the accountant approves.","use":"Claude plus plain forecasting code. A payment partner API such as Epoint or Payriff.","cost":"Partner fees unknown. Legal route not confirmed.","alt":"Forecast only, with no collection, until the legal route is confirmed.","layerN":"3","layerName":"Agent brain","ocol":"backend"},{"id":"tax","name":"Tax","layer":"brain","stage":"m12","when":"Month 12","bb":"Build","owner":"backend","plain":"Prepares VAT and simplified-tax figures and checklists from the ledger. The accountant files them.","use":"A rules pack plus Claude for exceptions.","cost":"Negligible. The accountant files by hand, since no public tax API was found.","alt":"Human only.","layerN":"3","layerName":"Agent brain","ocol":"backend"},{"id":"people","name":"People","layer":"brain","stage":"y3","when":"Year 3","bb":"Build","owner":"backend","plain":"Prepares HR files and payroll drafts.","use":"The same engine with a new rule pack. EMAS is the state platform for labour contracts.","cost":"No EMAS API found, so the output is data for manual entry.","alt":"Partner products.","layerN":"3","layerName":"Agent brain","ocol":"backend"},{"id":"comply","name":"Comply","layer":"brain","stage":"y3","when":"Year 3","bb":"Build","owner":"backend","plain":"Watches licence and certificate deadlines.","use":"The same engine with a new rule pack.","cost":"No EMAS API found, so the output is data for manual entry.","alt":"Partner products.","layerN":"3","layerName":"Agent brain","ocol":"backend"},{"id":"builder","name":"Builder (internal)","layer":"brain","stage":"m12","when":"Month 12","bb":"Build","owner":"backend","plain":"A staff-only agent. It sets up new clients (chart of accounts, supplier map, rules) and drafts new rule packs, tested in a sandbox before any accountant sees them. A sandbox is a safe copy where a mistake harms nothing.","use":"Claude with a sandbox and the same test suite as the other agents.","cost":"Internal.","alt":"Staff set up clients by hand until volume justifies it.","layerN":"3","layerName":"Agent brain","ocol":"backend"},{"id":"router","name":"Model router","layer":"brain","stage":"d1","when":"Day 1","bb":"Build","owner":"backend","plain":"The traffic officer for AI calls. Easy documents go to Haiku 5.5, hard ones to Sonnet 5.5, rare disputes to Opus 5.5. It escalates on low confidence or failed checks and logs every call.","use":"Our own thin router in front of the Anthropic API. It also holds the API keys. These calls send client documents abroad, so client contracts need written consent and a lawyer should confirm.","cost":"Negligible. It saves money.","alt":"A gateway product such as LiteLLM.","layerN":"3","layerName":"Agent brain","ocol":"backend"},{"id":"workflow","name":"Workflow engine","layer":"brain","stage":"m12","when":"Month 12. On Day 1 a job table in Postgres does this work.","bb":"Buy","owner":"backend","plain":"Runs jobs with many steps that wait for people and survive restarts. For example: send a reminder in 3 days, or retry a failed import.","use":"Day 1: a job table in Postgres. Month 12: Temporal Cloud, a hosted service for long-running jobs.","cost":"Temporal docs say $50 per million actions. A third party cites a $200 monthly minimum. Unverified.","alt":"Self-hosted Temporal, Inngest or Celery.","layerN":"3","layerName":"Agent brain","ocol":"backend"},{"id":"wa_provider","name":"WhatsApp provider","layer":"outside","stage":"d1","when":"Day 1","bb":"Buy","owner":"integ","plain":"The company that connects NowAI's number to WhatsApp. Photos arrive through it and messages leave through it.","use":"A Business Solution Provider able to register an Azerbaijani business. No Meta-listed provider based in Baku was confirmed.","cost":"Provider fee unknown. Message rates are listed on the WhatsApp number part.","alt":"Messaggio routes WhatsApp to Azerbaijan. Reelpresso (Baku, founded 2025) is a possibility. Neither is verified as a Meta partner.","layerN":"7","layerName":"Outside systems","ocol":"integ"},{"id":"banks","name":"Banks","layer":"outside","stage":"d1","when":"Day 1 for files. Month 12 for the API.","bb":"Build","owner":"integ","plain":"Statement files at launch, a bank API later. The accountant downloads the files.","use":"Day 1: files. Month 12: ABB Business API, under a contract and with joint testing.","cost":"Unknown.","alt":"Open banking: the central bank framework has been live since January 2025, non-bank access is unconfirmed.","layerN":"7","layerName":"Outside systems","ocol":"integ"},{"id":"etaxes","name":"E-taxes and e-qaimə","layer":"outside","stage":"d1","when":"Day 1","bb":"Build","owner":"integ","plain":"The state tax portal and e-invoice system. The accountant downloads and uploads the files. Signing needs ASAN İmza or SIMA, and NowAI never holds a client's ASAN İmza.","use":"File export and import only. No public API was found.","cost":"None.","alt":"Certified bridge partners, or asking the State Tax Service for an integration agreement.","layerN":"7","layerName":"Outside systems","ocol":"integ"},{"id":"partner","name":"Licensed payment partner","layer":"outside","stage":"m12","when":"Month 12. Planned.","bb":"Buy","owner":"integ","plain":"A licensed company that collects and pays, so NowAI never holds money. This route is planned and legally unconfirmed.","use":"Epoint or Payriff through their APIs.","cost":"Fees not published. Route not legally confirmed.","alt":"Show a payment link only.","layerN":"7","layerName":"Outside systems","ocol":"integ"},{"id":"memory","name":"Client memory","layer":"know","stage":"d1","when":"Day 1","bb":"Build","owner":"impl","owner_note":"Our proposal. The team plan does not name this part.","plain":"What we know about each client: chart of accounts, usual suppliers, past corrections by the accountant, preferences.","use":"Postgres tables plus pgvector search, which finds similar past items by meaning.","cost":"In the database bill.","alt":"A dedicated vector database, not needed at this size.","layerN":"4","layerName":"Knowledge","ocol":"acct"},{"id":"rules","name":"Rules library","layer":"know","stage":"d1","when":"Day 1","bb":"Build","owner":"domain","plain":"Written, versioned rules: VAT treatment, deductible costs, which account for which expense. A qualified accountant writes them.","use":"Versioned records in Postgres with change history. People write them and Claude helps draft.","cost":"The domain expert's salary is the cost. This is the moat: the part a rival finds hardest to copy.","alt":"Prompt text only, which cannot be audited.","layerN":"4","layerName":"Knowledge","ocol":"acct"},{"id":"suppliers","name":"Supplier map","layer":"know","stage":"d1","when":"Day 1","bb":"Build","owner":"impl","owner_note":"Our proposal. The team plan does not name this part.","plain":"Links each tax ID to a supplier, default accounts and known name spellings in Azerbaijani, Russian and English.","use":"A Postgres table shared across clients, with per-client overrides.","cost":"Negligible.","alt":"None.","layerN":"4","layerName":"Knowledge","ocol":"acct"},{"id":"ledger","name":"Ledger","layer":"records","stage":"d1","when":"Day 1","bb":"Build","owner":"lead","plain":"The books. A double-entry journal: every entry balances, no entry is ever edited, corrections are reversing entries, and a retry cannot post twice.","use":"Postgres tables with check constraints and a unique idempotency key, a stamp that stops a retry from posting twice. 1C stays the legal book at launch.","cost":"In the database bill.","alt":"A Pennylane-style product ledger, or TigerBeetle (overkill).","layerN":"5","layerName":"Records","ocol":"lead"},{"id":"docstore","name":"Document store","layer":"records","stage":"d1","when":"Day 1","bb":"Buy","owner":"lead","owner_note":"Our proposal. The team plan does not name this part.","plain":"Keeps original photos and PDFs for the legal retention period, linked to their entries. The original is saved on arrival, so this part sits left of the gate. It holds copies, and copies change nothing in the books.","use":"Object storage (a bulk file store in the cloud) with versioning.","cost":"Cents per GB per month. Unverified.","alt":"Self-hosted MinIO in an Azerbaijani data centre.","layerN":"5","layerName":"Records","ocol":"lead"},{"id":"audit","name":"Audit trail","layer":"records","stage":"d1","when":"Day 1","bb":"Build","owner":"lead","plain":"A permanent log: who or what proposed, which model and prompt version, which rule version, who approved and when.","use":"A write-once event table in Postgres, exported nightly to cold storage (cheap long-term storage).","cost":"Negligible.","alt":"Event streaming (Kafka) is not needed.","layerN":"5","layerName":"Records","ocol":"lead"},{"id":"gate","name":"Human approval queue","layer":"gate","stage":"d1","when":"Day 1","bb":"Build","owner":"backend","plain":"The safety gate. Every proposed entry, reminder or payment waits here and shows its evidence, its confidence and what changed. The accountant approves, edits or rejects. Rejections feed client memory. Nothing reaches the ledger or leaves to an outside system without going through it.","use":"A queue table plus accountant app screens. Later, auto-approve only for rules the accountant switches on per client.","cost":"Free to run. Accountant time is the product.","alt":"None. Do not skip.","note":"One thing does leave before approval: model calls. Photos go to Claude abroad to be read. Nothing is posted or sent by that call, and it needs client consent.","layerN":"6","layerName":"Human approval queue","ocol":"backend"},{"id":"hosting","name":"Hosting","layer":"found","stage":"d1","when":"Day 1","bb":"Buy","owner":"lead","plain":"The computers that run the app, database and storage.","use":"Undecided. One managed cloud region on Day 1, with Azerbaijani hosting only if law or clients demand it. No rule requiring servers in Azerbaijan was found, but a lawyer must confirm.","cost":"AzInTelecom price unknown. Cloud cost at 10 to 15 person scale unknown.","alt":"AzInTelecom Tier III data centres in Baku and Yevlakh, the Gcore-AzInTelecom sovereign cloud, Google or Azure in Doha, Google in Warsaw. AWS has only an Istanbul Local Zone.","layerN":"8","layerName":"Foundation","ocol":"lead"},{"id":"secrets","name":"Secrets and key proxy","layer":"found","stage":"d1","when":"Day 1","bb":"Build","owner":"infra","plain":"Keeps keys away from the agents. Agents never hold keys. A proxy (a go-between program) outside the agent adds them and counts spend.","use":"The pattern from Sierra's Agency post: proxy outside the sandbox, filtered outbound traffic, and each part gets only the access it needs.","cost":"Negligible.","alt":"A managed secrets vault.","layerN":"8","layerName":"Foundation","ocol":"infra"},{"id":"harness","name":"Test and simulation harness","layer":"found","stage":"d1","when":"Day 1","bb":"Build","owner":"evals","plain":"The exam the agents sit before every change. It replays hundreds of past documents and compares the results with accountant-approved answers. Azerbaijani and Russian are scored separately.","use":"Our own test set, grown from accountant corrections. Offline checks first, then a small live share.","cost":"Model calls on batch at half price.","alt":"Hosted eval tools.","layerN":"8","layerName":"Foundation","ocol":"evals"},{"id":"monitoring","name":"Monitoring and backups","layer":"found","stage":"d1","when":"Day 1","bb":"Buy","owner":"infra","plain":"Alerts on errors, cost spikes, queue age and accuracy drift. Nightly backups with tested restores.","use":"Managed error tracking and metrics, plus database point-in-time recovery (restore to any moment).","cost":"Unknown.","alt":"Self-hosted Grafana.","layerN":"8","layerName":"Foundation","ocol":"infra"}],"owners":{"lead":{"role":"Technical lead (founding engineer)"},"backend":{"role":"Two backend engineers"},"evals":{"role":"Evals and AI engineer"},"integ":{"role":"Integrations engineer"},"front":{"role":"Front-end engineer"},"infra":{"role":"Part-time infrastructure and security"},"domain":{"role":"Chartered accountant (domain lead)"},"impl":{"role":"One or two implementation accountants"}},"steps":[{"n":1,"title":"Client sends a photo","text":"The client photographs the receipt and sends it on WhatsApp. The photo and phone number arrive at NowAI's number. Inbound messages are free.","parts":["wa_provider","wa_number"],"names":"WhatsApp number, provider webhook (the provider's instant notice to us)","sec":"1 second","lo":1,"hi":1,"cost":0,"ctext":"$0"},{"n":2,"title":"Intake","text":"The original is saved. The phone number tells us which client this is. Duplicate and sharpness checks run, then the job joins the queue, a waiting list for jobs. A blurry photo triggers a retake request.","parts":["gateway","docstore"],"names":"Gateway, document store, queue in Postgres (our database)","sec":"1 to 2 seconds","lo":1,"hi":2,"cost":2e-05,"ctext":"about $0.00002 (estimate)"},{"n":3,"title":"Read the receipt","text":"Haiku 5.5 reads supplier, tax ID, date, lines, VAT, total and language. That is about 3,000 image tokens in and 600 out. A token is a small piece of text or image, and models charge by the token.","hard":"Haiku 5.5 tries first. This receipt is blurry and mixes Azerbaijani and Russian, so its reading comes back unsure.","parts":["reader","router"],"names":"Document reader, model router","sec":"3 to 6 seconds","lo":3,"hi":6,"cost":0.0008,"ctext":"$0.0008"},{"n":4,"title":"Checks","text":"Lines must add to the total, the VAT sum must work, the tax ID must be in the supplier map, and the receipt must not already be in the ledger. A failure or low confidence re-runs the read on Sonnet 5.5, assumed for 20 percent of documents.","hard":"The check fails. The router re-runs the read on Sonnet 5.5: about 9,000 tokens in and 1,500 out. Then the checks run again. About 1 in 10 hard documents goes on to Opus 5.5, adding about $0.10.","parts":["rules","suppliers","router"],"names":"Rules library, supplier map, router","sec":"1 second","lo":1,"hi":1,"cost":0,"ctext":"$0","hsec":"1 second, plus 10 to 20 for the second read","hlo_m":11,"hhi_m":21,"hcost":0.033,"hctext":"$0.033, about $0.03 as the research rounds it"},{"n":5,"title":"Propose the entry","text":"The Books agent uses client memory and the chart of accounts, the list of account codes, to propose a balanced entry with a one-line reason per line.","hard":"The Books agent stays on Sonnet 5.5 for this document: about 8,000 tokens in and 800 out. It proposes a balanced entry with a one-line reason per line.","parts":["books","memory","rules"],"names":"Books agent, client memory, rules library","sec":"3 to 5 seconds","lo":3,"hi":5,"cost":0.00055,"ctext":"$0.00055","hcost":0.024,"hctext":"$0.024"},{"n":6,"title":"Independent check","text":"A second cheap call checks the entry against the rules and the receipt text and flags any disagreement.","parts":["books","harness"],"names":"Books agent, prompts proven in the test harness","sec":"2 to 3 seconds","lo":2,"hi":3,"cost":0.0005,"ctext":"$0.0005"},{"n":7,"title":"Approval queue","text":"The accountant sees the photo beside the entry and approves, edits or rejects. Edits teach client memory.","hard":"The accountant sees a flag: this receipt was read twice. They compare the photo with the entry and approve, edit or reject. Edits teach client memory.","parts":["gate","webapp"],"names":"Approval queue, accountant web app","sec":"10 to 30 seconds of human time. The wait is between minutes and a day.","lo":0,"hi":0,"hlo":10,"hhi":30,"cost":0,"ctext":"$0"},{"n":8,"title":"Post to the ledger","text":"One database transaction, where all of it saves or none of it does, writes the balanced entry with its idempotency key, a stamp that stops a retry from posting twice. An audit event names the model, prompt version, rule version and approver.","parts":["ledger","audit"],"names":"Ledger, audit trail","sec":"under 1 second","lo":0,"hi":1,"cost":1e-05,"ctext":"about $0.00001 (estimate)"},{"n":9,"title":"Export and confirm","text":"The entry goes into the next 1C export file on Day 1, or straight to 1C from Month 12. The client gets a short WhatsApp confirmation. Inside the 24-hour window it is free. Outside it, a utility template costs about $0.0212 by aggregator tables.","parts":["c1","wa_number","wa_provider"],"names":"1C connector, WhatsApp number","sec":"1 to 3 seconds of machine time","lo":1,"hi":3,"cost":0,"ctext":"$0 inside the window, about $0.0212 outside"}],"routes":{"clean":[[[[49,58],[160,58],[160,116]]],[[[160,116],[160,137],[116,137],[116,211],[180,211],[180,306],[180,211],[192,211]]],[[[192,211],[370,211],[370,312],[340,312],[340,391],[400,391],[400,312],[370,312],[370,211],[244,211],[244,232]]],[[[244,232],[244,430],[470,430],[470,590],[470,430]]],[[[470,430],[512,430],[512,287],[524,287]]],[[[524,287],[512,287],[512,312],[340,312],[340,391],[400,391],[400,312],[512,312],[512,287],[524,287]]],[[[524,287],[828,287],[828,137],[776,137],[776,287],[802,287]]],[[[802,287],[1016,287],[1016,377],[1016,262]]],[[[1016,262],[1016,158]],[[802,287],[802,224],[936,224],[936,32],[190,32],[190,74],[74,74]]]],"hard":[[[[49,58],[160,58],[160,116]]],[[[160,116],[160,137],[116,137],[116,211],[180,211],[180,306],[180,211],[192,211]]],[[[192,211],[370,211],[370,312],[340,312],[340,391],[400,391],[400,312],[370,312],[370,211],[244,211],[244,232]]],[[[244,232],[244,430],[470,430],[244,430],[244,211],[370,211],[370,312],[340,312],[340,391],[400,391],[400,312],[370,312],[370,211],[244,211],[244,430],[470,430],[470,590],[470,430]]],[[[470,430],[512,430],[512,287],[524,287]]],[[[524,287],[512,287],[512,312],[340,312],[340,391],[400,391],[400,312],[512,312],[512,287],[524,287]]],[[[524,287],[828,287],[828,137],[776,137],[776,287],[802,287]]],[[[802,287],[1016,287],[1016,377],[1016,262]]],[[[1016,262],[1016,158]],[[802,287],[802,224],[936,224],[936,32],[190,32],[190,74],[74,74]]]]},"route":[{"n":0,"name":"Prove it","full":"0. Prove it","when":"First 90 days","t0":0,"t1":1,"practices":"3","firms":90,"firmsT":"90","rpc":"0 (free pilot)","rev":"$0","x10":"n/a","x3k":"n/a","team":"3","cap":"$0.9M","base":"plan","proof":"Reading accuracy on 200+ real receipts. 30% of client hours saved. Three practices agree to pay. Overdue invoices measured at 30 firms. Written legal answer on payments.","l":["Prove it"],"status":"The pilot plan."},{"n":1,"name":"Books live","full":"1. Books live","when":"Year 1","t0":1,"t1":3,"practices":"13","firms":403,"firmsT":"403","rpc":"14.50","rev":"$41,000","x10":"$0.4M","x3k":"$1.2M","team":"5","cap":"$0.9M","base":"base","proof":"Practices renew after the free month. Entries approved with few edits.","l":["Books live"],"status":"From the Base case of our model."},{"n":2,"name":"Azerbaijan leader, Cash added","full":"2. Azerbaijan leader, Cash added","when":"Year 3","t0":3,"t1":5,"practices":"81","firms":2477,"firmsT":"2,477","rpc":"24.95","rev":"$436,000","x10":"$4.4M","x3k":"$7.4M","team":"10","cap":"$0.9M","base":"base","proof":"Cash adds revenue in real clients. New funding found: the Base case runs out of cash without it.","l":["Azerbaijan leader,","Cash added"],"status":"From the Base case of our model."},{"n":3,"name":"Three countries, money flow live","full":"3. Three countries, money flow live","when":"Year 5","t0":5,"t1":7,"practices":"800","firms":24000,"firmsT":"24,000","rpc":"35","rev":"$5.9M","x10":"$59M","x3k":"$72M","team":"40","cap":"$10M","base":"ill","proof":"Licensed partner live. A second country reaches the same accuracy in under 6 months. The internal builder cuts set-up time.","l":["Three countries,","money flow live"],"status":"What you would need to believe. An illustration."},{"n":4,"name":"Region: five countries","full":"4. Region: five countries","when":"Year 7","t0":7,"t1":10,"practices":"3,000","firms":90000,"firmsT":"90,000","rpc":"50","rev":"$31.8M","x10":"$318M","x3k":"$270M","team":"120","cap":"$50M","base":"ill","proof":"Money flow earns as much as subscriptions. Local teams work without Baku hand-holding.","l":["Region: five countries"],"status":"What you would need to believe. An illustration."},{"n":5,"name":"$1B","full":"5. $1B","when":"Year 10","t0":10,"t1":11.2,"practices":"6,000","firms":180000,"firmsT":"180,000","rpc":"80","rev":"$101.6M","x10":"$1.02B","x3k":"$540M","team":"250","cap":"$150M","base":"ill","proof":"About Pennylane's number of partner firms, Omie's revenue per client and Omie's client count.","l":["$1B"],"status":"What you would need to believe. An illustration."}],"notes":{"d1":"Day 1: 21 of 29 parts exist. One agent, Books. Banks and the state are files the accountant carries.","m12":"Month 12: 27 of 29 parts. Cash, Tax, Builder, the 1C connector, the workflow engine and the payment partner join.","y3":"Year 3: all 29 parts. People and Comply join on the same engine."},"pathNotes":{"clean":"Haiku reads it. About $0.002.","hard":"Blurry, mixed Azerbaijani and Russian. The check fails, the reader escalates to Sonnet, about $0.06, and the accountant gets a flag."},"ckeyOwner":[["Technical lead","#DDF1E7","#1A8A5C"],["Two backend engineers","#DFEAF7","#2F6FBF"],["Evals and AI engineer","#FBEBD2","#D08A1E"],["Integrations engineer","#EAE3F7","#7B55C7"],["Front-end engineer","#F8E0EA","#C4487A"],["Infrastructure and security, part-time","#D9F1F5","#16A0B5"],["Accountants on the team","#EFEBCF","#7A6C10"]],"ckeyBB":[["Build","#DDF1E7","#1A8A5C"],["Buy","#DFEAF7","#2F6FBF"]]};
+(function () {
+  "use strict";
+  var D = window.BP;
+  var byId = {}; D.parts.forEach(function (p) { byId[p.id] = p; });
+  var $ = function (id) { return document.getElementById(id); };
+  var all = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var esc = function (t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;"); };
+
+  /* tabs */
+  var VIEWS = ["backend", "receipt", "route"];
+  function show(view, focusTab) {
+    VIEWS.forEach(function (v) {
+      var on = v === view, tab = $("t-" + v);
+      $(v).hidden = !on;
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.tabIndex = on ? 0 : -1;
+      if (on && focusTab) tab.focus();
+    });
+    if (view !== "receipt") stopPlay();
+  }
+  function applyHash() {
+    var bits = (location.hash || "#backend").slice(1).split(":");
+    var view = VIEWS.indexOf(bits[0]) >= 0 ? bits[0] : "backend";
+    show(view);
+    if (view === "backend") {
+      if (bits[1]) setRadio("stage", bits[1]);
+      if (bits[2]) setRadio("colour", bits[2]);
+      if (bits[3] && byId[bits[3]]) selectPart(bits[3]);
+    } else if (view === "receipt") {
+      if (bits[1]) setRadio("path", bits[1]);
+      if (bits[2]) gotoStep(+bits[2], false);
+    } else if (view === "route" && bits[1]) {
+      selectStair(+bits[1]);
+    }
+  }
+  function setRadio(name, value) {
+    var r = document.querySelector('input[name="' + name + '"][value="' + value + '"]');
+    if (r && !r.checked) { r.checked = true; r.dispatchEvent(new Event("change", { bubbles: true })); }
+  }
+  all(".tab").forEach(function (t, i, tabs) {
+    t.addEventListener("click", function () { history.replaceState(null, "", "#" + t.getAttribute("aria-controls")); show(t.getAttribute("aria-controls")); });
+    t.addEventListener("keydown", function (e) {
+      var k = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+      if (k === undefined) return;
+      e.preventDefault();
+      var n = tabs[(k + tabs.length) % tabs.length];
+      history.replaceState(null, "", "#" + n.getAttribute("aria-controls"));
+      show(n.getAttribute("aria-controls"), true);
+    });
+  });
+  window.addEventListener("hashchange", applyHash);
+
+  /* backend map */
+  var mapSvg = document.querySelector("#mapStage svg"), lastPart = null, sel = "gate";
+  function partHtml(p) {
+    var own = D.owners[p.owner];
+    var tag = '<span class="tag ' + p.bb.toLowerCase() + '">' + p.bb + "</span>";
+    return '<p class="kicker">Layer ' + esc(p.layerN) + ": " + esc(p.layerName) + "</p><h2>" + esc(p.name) + '</h2><p class="plain">' + esc(p.plain) + "</p><dl>" +
+      "<div><dt>What we would use</dt><dd>" + esc(p.use) + "</dd></div><div><dt>Build or buy</dt><dd>" + tag + "</dd></div><div><dt>When it is needed</dt><dd>" + esc(p.when) +
+      "</dd></div><div><dt>Who owns it</dt><dd>" + esc(own.role) + (p.owner_note ? ". " + esc(p.owner_note) : "") + "</dd></div><div><dt>Cost note</dt><dd>" + esc(p.cost) + "</dd></div></dl>" +
+      (p.note ? '<p class="warn">' + esc(p.note) + "</p>" : "") + "<details><summary>Other options</summary><p>" + esc(p.alt) + '</p></details><button class="back" type="button">Back to the map</button>';
+  }
+  function selectPart(id, fromUser) {
+    sel = id;
+    all("#mapStage .pt").forEach(function (g) { g.classList.toggle("sel", g.getAttribute("data-id") === id); });
+    all(".hit, .pbtn").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-id") === id ? "true" : "false"); });
+    $("partPanel").innerHTML = partHtml(byId[id]);
+    if (fromUser && window.matchMedia("(max-width: 1240px)").matches) $("partPanel").scrollIntoView({ block: "start" });
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".hit, .pbtn");
+    if (b) { lastPart = b; selectPart(b.getAttribute("data-id"), true); return; }
+    if (e.target.classList && e.target.classList.contains("back")) { if (lastPart) { lastPart.focus(); lastPart.scrollIntoView({ block: "center" }); } }
+  });
+  function renderKey(mode) {
+    var k = $("ckey");
+    k.hidden = mode === "plain";
+    if (mode === "plain") { k.innerHTML = ""; return; }
+    var src = mode === "owner" ? D.ckeyOwner : D.ckeyBB;
+    k.innerHTML = src.map(function (c) { return '<span><i style="background:' + c[1] + ";border-color:" + c[2] + '"></i>' + esc(c[0]) + "</span>"; }).join("");
+  }
+  all('input[name="stage"]').forEach(function (r) {
+    r.addEventListener("change", function () {
+      mapSvg.setAttribute("data-stage", r.value);
+      $("stageNote").textContent = D.notes[r.value];
+      all(".pbtn").forEach(function (b) {
+        var st = b.getAttribute("data-stage");
+        b.classList.toggle("later", (r.value === "d1" && st !== "d1") || (r.value === "m12" && st === "y3"));
+      });
+    });
+  });
+  all('input[name="colour"]').forEach(function (r) {
+    r.addEventListener("change", function () { mapSvg.setAttribute("data-colour", r.value); renderKey(r.value); });
+  });
+
+  /* receipt walk */
+  var rc = { sc: "clean", step: 1, timer: 0, raf: 0, playing: false };
+  var rcSvg = document.querySelector("#rcStage svg"), dots = [$("dot0"), $("dot1")], rcScroll = $("rcScroll");
+  function lens(pts) {
+    var out = [0], i;
+    for (i = 1; i < pts.length; i++) out.push(out[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    return out;
+  }
+  function pointAt(pts, ls, d) {
+    for (var i = 1; i < pts.length; i++) if (d <= ls[i]) {
+      var t = (d - ls[i - 1]) / ((ls[i] - ls[i - 1]) || 1);
+      return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * t, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * t];
+    }
+    return pts[pts.length - 1];
+  }
+  function trail(sc, step, j) { return rcSvg.querySelector('.trail[data-sc="' + sc + '"][data-step="' + step + '"][data-dot="' + j + '"]'); }
+  function cumul(sc, step) {
+    var o = { lo: 0, hi: 0, hlo: 0, hhi: 0, cost: 0, wait: false, hsec: false };
+    D.steps.slice(0, step).forEach(function (s) {
+      var hard = sc === "hard";
+      o.lo += hard && s.hlo_m !== undefined ? s.hlo_m : s.lo;
+      o.hi += hard && s.hhi_m !== undefined ? s.hhi_m : s.hi;
+      o.hlo += s.hlo || 0; o.hhi += s.hhi || 0;
+      o.cost += hard && s.hcost !== undefined ? s.hcost : s.cost;
+      if (s.n === 7) o.wait = true;
+    });
+    return o;
+  }
+  function fmtCost(c) { return c === 0 ? "$0" : c < 0.01 ? "$" + c.toFixed(5) : "$" + c.toFixed(3); }
+  function range(a, b) { return a === b ? a + " s" : a + " to " + b + " s"; }
+  function stepHtml(s, sc) {
+    var hard = sc === "hard";
+    var text = hard && s.hard ? s.hard : s.text;
+    var sec = hard && s.hsec ? s.hsec : s.sec, cost = hard && s.hctext ? s.hctext : s.ctext;
+    return '<p class="kicker">Step ' + s.n + " of 9</p><h2>" + esc(s.title) + '</h2><p class="plain">' + esc(text) + "</p><dl><div><dt>Parts used</dt><dd>" + esc(s.names) +
+      "</dd></div><div><dt>Time for this step</dt><dd>" + esc(sec) + "</dd></div><div><dt>Cost of this step</dt><dd>" + esc(cost) + "</dd></div></dl>";
+  }
+  function paint(step) {
+    var s = D.steps[step - 1], c = cumul(rc.sc, step);
+    $("stepPanel").innerHTML = stepHtml(s, rc.sc);
+    $("mMachine").textContent = c.lo === c.hi ? c.lo + " s" : range(c.lo, c.hi);
+    $("mHuman").textContent = c.hhi ? range(c.hlo, c.hhi) : "0 s";
+    $("mWait").textContent = c.wait ? "Minutes to a day" : "None yet";
+    $("mCost").textContent = fmtCost(c.cost);
+    $("endCall").textContent = step < 9 ? "" : (rc.sc === "clean" ? "Total for this document: about $0.002." : "Total for this document: about $0.06, and the accountant got a flag.") + " Add about $0.0212 if the confirmation falls outside the 24-hour window.";
+    all(".num").forEach(function (b) {
+      var n = +b.getAttribute("data-step");
+      b.classList.toggle("done", n < step);
+      if (n === step) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
+    });
+    $("rBack").disabled = step === 1;
+    $("rNext").disabled = step === 9;
+    all("#rcStage .pt").forEach(function (g) {
+      var on = s.parts.indexOf(g.getAttribute("data-id")) >= 0 || (step === 4 && rc.sc === "hard" && g.getAttribute("data-id") === "reader");
+      g.classList.toggle("lit", on);
+    });
+    all("#rcStage .trail").forEach(function (t) {
+      var n = +t.getAttribute("data-step"), mine = t.getAttribute("data-sc") === rc.sc;
+      t.classList.toggle("on", mine && n <= step);
+      t.classList.toggle("amb", rc.sc === "hard" && n === 4);
+      t.style.strokeDasharray = ""; t.style.strokeDashoffset = "";
+    });
+    dots.forEach(function (d) { d.classList.toggle("amb", rc.sc === "hard" && step === 4); });
+  }
+  function place(step, frac) {
+    var routes = D.routes[rc.sc][step - 1];
+    dots[1].style.display = routes.length > 1 ? "" : "none";
+    routes.forEach(function (pts, j) {
+      var ls = lens(pts), total = ls[ls.length - 1], p = pointAt(pts, ls, total * frac);
+      dots[j].setAttribute("cx", p[0]); dots[j].setAttribute("cy", p[1]);
+      var t = trail(rc.sc, step, j);
+      if (frac < 1) { t.style.strokeDasharray = total; t.style.strokeDashoffset = total * (1 - frac); } else { t.style.strokeDasharray = ""; t.style.strokeDashoffset = ""; }
+    });
+    if (rcScroll.scrollWidth > rcScroll.clientWidth + 4) {
+      var k = rcScroll.scrollWidth / D.W, cx = +dots[0].getAttribute("cx");
+      rcScroll.scrollLeft = Math.max(0, cx * k - rcScroll.clientWidth / 2);
+    }
+  }
+  function gotoStep(step, animate, done) {
+    cancelAnimationFrame(rc.raf); clearTimeout(rc.timer);
+    rc.step = step; paint(step);
+    if (!animate || reduced) { place(step, 1); if (done) rc.timer = setTimeout(done, 2200); return; }
+    var routes = D.routes[rc.sc][step - 1], ls = lens(routes[routes.length > 1 ? 1 : 0]);
+    var dur = Math.min(3600, Math.max(900, ls[ls.length - 1] * 2.6)), start = performance.now();
+    (function tick(now) {
+      var f = Math.min(1, (now - start) / dur);
+      place(step, f < .5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2);
+      if (f < 1) rc.raf = requestAnimationFrame(tick); else if (done) rc.timer = setTimeout(done, 1300);
+    })(start);
+  }
+  function stopPlay() {
+    rc.playing = false; cancelAnimationFrame(rc.raf); clearTimeout(rc.timer);
+    if (rcSvg) place(rc.step, 1);
+    $("rPlay").textContent = rc.step === 9 ? "Replay" : "Play";
+  }
+  function playFrom(step) {
+    rc.playing = true; $("rPlay").textContent = "Pause";
+    gotoStep(step, true, function () { if (step < 9) playFrom(step + 1); else stopPlay(); });
+  }
+  $("rPlay").addEventListener("click", function () {
+    if (rc.playing) { stopPlay(); return; }
+    playFrom(rc.step === 9 ? 1 : (rc.step === 1 ? 1 : rc.step + 1));
+  });
+  $("rNext").addEventListener("click", function () { var w = rc.playing; stopPlay(); if (rc.step < 9) { gotoStep(rc.step + 1, !w || true); $("rPlay").textContent = rc.step === 9 ? "Replay" : "Play"; } });
+  $("rBack").addEventListener("click", function () { stopPlay(); if (rc.step > 1) gotoStep(rc.step - 1, false); $("rPlay").textContent = "Play"; });
+  all(".num").forEach(function (b) { b.addEventListener("click", function () { stopPlay(); gotoStep(+b.getAttribute("data-step"), true); $("rPlay").textContent = rc.step === 9 ? "Replay" : "Play"; }); });
+  all('input[name="path"]').forEach(function (r) {
+    r.addEventListener("change", function () {
+      stopPlay(); rc.sc = r.value;
+      $("pathNote").textContent = D.pathNotes[r.value];
+      gotoStep(rc.step, false);
+    });
+  });
+
+  /* staircase */
+  function stairHtml(s) {
+    return '<p class="kicker">' + esc(s.when) + '</p><h2>Step ' + esc(s.full) + '</h2><dl class="kv"><div><dt>Client firms</dt><dd>' + esc(s.firmsT) + "</dd></div><div><dt>Practices</dt><dd>" + esc(s.practices) +
+      "</dd></div><div><dt>AZN per client a month</dt><dd>" + esc(s.rpc) + "</dd></div><div><dt>Annual revenue</dt><dd>" + esc(s.rev) + "</dd></div><div><dt>Value at 10x</dt><dd>" + esc(s.x10) +
+      "</dd></div><div><dt>Value at $3,000 a client</dt><dd>" + esc(s.x3k) + "</dd></div><div><dt>Team</dt><dd>" + esc(s.team) + "</dd></div><div><dt>Capital raised</dt><dd>" + esc(s.cap) +
+      '</dd></div></dl><dl class="proof"><dt>What must be proven before climbing</dt><dd>' + esc(s.proof) + "</dd></dl><p class=\"pathcall\">" + esc(s.status) + "</p>";
+  }
+  function selectStair(n) {
+    all(".st").forEach(function (g) { g.classList.toggle("sel", +g.getAttribute("data-step") === n); });
+    all(".shit, .chip").forEach(function (b) { b.setAttribute("aria-pressed", +b.getAttribute("data-step") === n ? "true" : "false"); });
+    $("routePanel").innerHTML = stairHtml(D.route[n]);
+  }
+  all(".shit, .chip").forEach(function (b) { b.addEventListener("click", function () { selectStair(+b.getAttribute("data-step")); }); });
+
+  selectPart("gate");
+  selectStair(0);
+  gotoStep(1, false);
+  applyHash();
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
+  window.addEventListener("load", function () { window.scrollTo(0, 0); });
+})();
+
+</script>
+</body>
+</html>

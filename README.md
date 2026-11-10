@@ -20,3 +20,7 @@ The site is in English and Azerbaijani. The company in its story, Aventa Group, 
 The files below are from an earlier plan (6 November 2026). They are kept so that existing links keep working; the site above replaces them.
 
 `demo.html`, `blueprint.html`, `deck.html`, `NowAI_Investor_Deck.pdf`, `NowAI_Six_Pager.pdf`, `NowAI_Investment_Memo.pdf`, `NowAI_Model_Summary.pdf`, `Latest_1B_Companies.pdf`, `NowAI_Backend_Design.pdf`, `NowAI_Share_Pack.zip`
+
+## Website refinement branch
+
+Read [WEBSITE_HANDOFF.md](WEBSITE_HANDOFF.md) for the 10 November implementation, checks and remaining contact destination. This branch is a review version; the live link above continues to serve `main` until publication.

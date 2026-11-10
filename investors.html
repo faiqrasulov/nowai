@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Investors · NowAI</title>
+<meta name="description" content="NowAI&#x27;s plan in numbers: client value, economics, growth, stress tests, competition and risks. Every figure is labelled model or target.">
+<meta property="og:title" content="Investors · NowAI">
+<meta property="og:description" content="NowAI&#x27;s plan in numbers: client value, economics, growth, stress tests, competition and risks. Every figure is labelled model or target.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="az_AZ">
+<meta name="theme-color" content="#07201A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%230E5A3C'/%3E%3Cpath d='M7 17V7.4l10 9.2V7' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='19.3' cy='4.7' r='2.1' fill='%233DDC97'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300..700&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<script>try{if(localStorage.getItem("nowai-lang")==="az")document.documentElement.classList.add("lang-pending")}catch(e){}</script>
+<style>
+/* Investors page only. Classes start with n-iv-. */
+
+/* Hero aside: the ask */
+.n-iv-ask { padding: 24px 28px; border: 1px solid var(--n-line-2); border-radius: var(--n-r-lg); background: #fff; }
+.n-iv-ask .n-figs { border: 0; background: transparent; margin: 0 0 12px; }
+.n-iv-ask .n-fig { padding: 4px 0 16px; }
+.n-iv-ask__dl { margin: 0; border-top: 2px solid var(--n-ink); }
+.n-iv-ask__dl > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--n-line); }
+.n-iv-ask__dl dt { color: var(--n-ink-2); font-size: 14.5px; }
+.n-iv-ask__dl dd { margin: 0; font-size: 14.5px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* The decision on one page, as a ledger of terms */
+.n-iv-dl { margin: 0; border-top: 2px solid var(--n-ink); }
+.n-iv-dl > div { display: grid; gap: 4px 32px; padding: 16px 0; border-bottom: 1px solid var(--n-line); }
+@media (min-width: 760px) { .n-iv-dl > div { grid-template-columns: 220px minmax(0, 1fr); } }
+.n-iv-dl dt { font-weight: 600; }
+.n-iv-dl dd { margin: 0; color: var(--n-ink-2); max-width: 72ch; }
+.n-iv-dl dd .n-lbl { margin-left: 4px; }
+.n-iv-dl__go dt, .n-iv-dl__change dt, .n-iv-dl__stop dt { display: flex; align-items: center; gap: 10px; }
+.n-iv-dl__go dt::before, .n-iv-dl__change dt::before, .n-iv-dl__stop dt::before { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; }
+.n-iv-dl__go dt::before { background: var(--n-green-500); }
+.n-iv-dl__change dt::before { background: var(--n-gate); }
+.n-iv-dl__stop dt::before { background: var(--n-ink); }
+.n-iv-foot { margin: 14px 0 0; max-width: 80ch; color: var(--n-mute); }
+
+/* Tables */
+.n-iv-table { background: #fff; }
+.n-section--soft .n-iv-table { border-radius: var(--n-r); }
+.n-iv-sub { margin: 56px 0 18px; font-size: var(--n-fs-h4); }
+.n-iv-buckets td:last-child { color: var(--n-ink-2); }
+.n-iv-buckets__hours td, .n-iv-buckets__hours th { color: var(--n-mute); }
+.n-iv-buckets tfoot td:last-child { font-weight: 400; color: var(--n-mute); font-size: 13.5px; }
+.n-iv-buckets .n-iv-buckets__once th, .n-iv-buckets .n-iv-buckets__once td { border-top: 1px solid var(--n-line); font-weight: 500; }
+.n-iv-notes { display: grid; gap: 12px; margin-top: 24px; max-width: 820px; }
+.n-iv-notes .n-small { margin: 0; color: var(--n-ink-2); }
+.n-iv-sizes { margin-top: 32px; }
+.n-iv-stress__base th, .n-iv-stress__base td { background: var(--n-soft); }
+.n-iv-risks tbody th { width: 24%; }
+.n-iv-risks td { color: var(--n-ink-2); }
+
+/* Growth over 48 months */
+.n-iv-grow { display: grid; gap: 32px; }
+@media (min-width: 1080px) { .n-iv-grow { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: start; } }
+.n-iv-cash { grid-template-columns: minmax(0, 1fr); }
+
+/* The ask, restated under the stress tests */
+.n-iv-askbox { margin: 28px 0 0; padding: 20px 24px; border-left: 3px solid var(--n-forest-700); border-radius: 0 var(--n-r-sm) var(--n-r-sm) 0; background: var(--n-green-100); max-width: 860px; }
+.n-iv-askbox p { margin: 0; }
+
+/* Five differences */
+.n-iv-diff { display: grid; gap: 0 32px; grid-template-columns: minmax(0, 1fr); list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--n-ink); }
+@media (min-width: 760px) { .n-iv-diff { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1080px) { .n-iv-diff { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.n-iv-diff li { padding: 18px 0; border-bottom: 1px solid var(--n-line-2); }
+.n-iv-diff__n { display: block; margin-bottom: 10px; color: var(--n-forest-700); font-size: 22px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums lining-nums; }
+.n-iv-diff h4 { margin: 0 0 6px; }
+.n-iv-diff p { margin: 0; color: var(--n-ink-2); font-size: 15px; }
+.n-iv-honest { margin-top: 28px; max-width: 820px; }
+
+/* What would prove us wrong */
+.n-iv-wrong { margin-top: 32px; padding: 28px; }
+.n-iv-wrong h3 { margin-bottom: 14px; }
+.n-iv-wrong__list { display: grid; gap: 10px; list-style: none; margin: 0; padding: 0; }
+@media (min-width: 960px) { .n-iv-wrong__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; } }
+.n-iv-wrong__list li { display: flex; gap: 10px; align-items: flex-start; color: var(--n-on-dark); font-size: 15.5px; }
+.n-iv-wrong__list .n-ic { flex: none; margin-top: 4px; color: var(--n-mint); }
+
+/* Files */
+.n-iv-files { display: flex; align-items: flex-start; gap: 12px; margin: 0; font-size: var(--n-fs-lead); color: var(--n-ink-2); max-width: 60ch; }
+.n-iv-files .n-ic { flex: none; margin-top: 4px; color: var(--n-forest-700); }
+</style>
+</head>
+<body data-page="investors" data-group="company">
+<svg class="n-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+<symbol id="ic-chat" viewBox="0 0 24 24"><path d="M4.5 5h15A1.5 1.5 0 0 1 21 6.5v9a1.5 1.5 0 0 1-1.5 1.5H11l-4.5 3.5V17h-2A1.5 1.5 0 0 1 3 15.5v-9A1.5 1.5 0 0 1 4.5 5z"/><path d="M7.5 9.5h9M7.5 12.5h5.5"/></symbol>
+<symbol id="ic-voice" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></symbol>
+<symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 3.5h2.6l1.4 4-2 1.3a10.5 10.5 0 0 0 6.6 6.6l1.3-2 4 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></symbol>
+<symbol id="ic-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/></symbol>
+<symbol id="ic-paper" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 15.5h6M9 8.5h2"/></symbol>
+<symbol id="ic-photo" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m21 16-5-5-8 8"/></symbol>
+<symbol id="ic-bank" viewBox="0 0 24 24"><path d="M3 9.5 12 4l9 5.5M4.5 10v8M9.5 10v8M14.5 10v8M19.5 10v8M3 20.5h18"/></symbol>
+<symbol id="ic-ledger" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M12 8h4M12 11.5h4M12 15h3"/></symbol>
+<symbol id="ic-stamp" viewBox="0 0 24 24"><path d="M9.5 3.5h5l-1 6.5h-3z"/><path d="M5 13.5c0-1.9 1.6-3.5 3.5-3.5h7c1.9 0 3.5 1.6 3.5 3.5v2H5zM6.5 20h11"/></symbol>
+<symbol id="ic-dm" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-6.5 18-4.5-7-7-4.5z"/></symbol>
+<symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M8 13.5h3M8 16.5h6"/></symbol>
+<symbol id="ic-terminal" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2"/><path d="M9 6h6v4H9zM9.5 14h.01M12 14h.01M14.5 14h.01M9.5 17h.01M12 17h.01M14.5 17h.01"/></symbol>
+<symbol id="ic-web" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="M3 8.5h18M6 6.5h.01M8.5 6.5h.01"/></symbol>
+<symbol id="ic-role-sales" viewBox="0 0 24 24"><path d="M5 8h14l-1 12.5H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8M9.5 14l2 2 3.5-3.5"/></symbol>
+<symbol id="ic-role-care" viewBox="0 0 24 24"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect x="3.5" y="13" width="4" height="6" rx="1.2"/><rect x="16.5" y="13" width="4" height="6" rx="1.2"/><path d="M18.5 19a4 4 0 0 1-4 2.5H12"/></symbol>
+<symbol id="ic-role-collections" viewBox="0 0 24 24"><circle cx="10" cy="12" r="7"/><path d="M10 8.5V12l2.3 1.6M20.5 7v10M18 14.5l2.5 2.5 2.5-2.5"/></symbol>
+<symbol id="ic-role-payables" viewBox="0 0 24 24"><path d="M12 21H5V3h9l4 4v4"/><path d="M14 3v4h4"/><circle cx="16.5" cy="16.5" r="3.5"/><path d="m19 19 2.5 2.5M8 9h3M8 12.5h4"/></symbol>
+<symbol id="ic-role-books" viewBox="0 0 24 24"><path d="M3 5.5c3-1 6-1 9 1 3-2 6-2 9-1V19c-3-1-6-1-9 1-3-2-6-2-9-1z"/><path d="M12 6.5V20"/></symbol>
+<symbol id="ic-role-people" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2"/><circle cx="12" cy="10" r="2.8"/><path d="M7.5 17.5a4.5 4.5 0 0 1 9 0"/></symbol>
+<symbol id="ic-role-brief" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M12 7.5v3.5l2.2 1.3"/></symbol>
+<symbol id="ic-box" viewBox="0 0 24 24"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9M7.8 5.3l8.4 4.5"/></symbol>
+<symbol id="ic-store" viewBox="0 0 24 24"><path d="M4.5 10.5V20h15v-9.5"/><path d="M3 9.5 5 4h14l2 5.5a2.5 2.5 0 0 1-4.5 1.5 2.5 2.5 0 0 1-4.5 0 2.5 2.5 0 0 1-4.5 0A2.5 2.5 0 0 1 3 9.5z"/><path d="M10 20v-5h4v5"/></symbol>
+<symbol id="ic-clinic" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M12 8v8M8 12h8"/></symbol>
+<symbol id="ic-cup" viewBox="0 0 24 24"><path d="M5 8h11v6a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5v2M11 3.5v2M3.5 21h14"/></symbol>
+<symbol id="ic-car" viewBox="0 0 24 24"><path d="M3.5 16.5v-4l2-5h13l2 5v4h-2M3.5 16.5h2M9 16.5h6"/><path d="M3.5 12.5h17"/><circle cx="7.3" cy="16.5" r="1.8"/><circle cx="16.7" cy="16.5" r="1.8"/></symbol>
+<symbol id="ic-truck" viewBox="0 0 24 24"><path d="M2.5 6h11v10.5h-11zM13.5 9.5h4l3 3.5v3.5h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></symbol>
+<symbol id="ic-crane" viewBox="0 0 24 24"><path d="M6 21V4h1.5M6 4h13M6 8l4-4M19 4v5M17.5 9h3v3h-3zM3.5 21h7M6 12h2M6 16h2"/></symbol>
+<symbol id="ic-school" viewBox="0 0 24 24"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6 11v5c2 2 10 2 12 0v-5M21.5 9v5"/></symbol>
+<symbol id="ic-signal" viewBox="0 0 24 24"><path d="M12 20.5v-8"/><circle cx="12" cy="10.5" r="1.6"/><path d="M8.5 7a5 5 0 0 0 0 7M15.5 7a5 5 0 0 1 0 7M5.5 4a9.5 9.5 0 0 0 0 13M18.5 4a9.5 9.5 0 0 1 0 13"/></symbol>
+<symbol id="ic-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="6.5" rx="5.5" ry="2.5"/><path d="M3.5 6.5v4c0 1.4 2.5 2.5 5.5 2.5s5.5-1.1 5.5-2.5v-4"/><ellipse cx="15" cy="13.5" rx="5.5" ry="2.5"/><path d="M9.5 13.5v4c0 1.4 2.5 2.5 5.5 2.5s5.5-1.1 5.5-2.5v-4"/></symbol>
+<symbol id="ic-gate" viewBox="0 0 24 24"><path d="M4.5 20.5V5M19.5 20.5V5M4.5 9h15M4.5 14.5h15M2.5 20.5h19"/><path d="M9.5 9v5.5M14.5 9v5.5"/></symbol>
+<symbol id="ic-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5v-3a4 4 0 0 1 8 0v3M12 14.5v2"/></symbol>
+<symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="ic-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></symbol>
+<symbol id="ic-users" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.3"/><path d="M2.5 19.5a6.5 6.5 0 0 1 13 0M15.5 5.8a3.3 3.3 0 0 1 0 6.4M17.5 13.6a6.5 6.5 0 0 1 4 5.9"/></symbol>
+<symbol id="ic-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-10.5"/></symbol>
+<symbol id="ic-x" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+<symbol id="ic-alert" viewBox="0 0 24 24"><path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.2h.01"/></symbol>
+<symbol id="ic-arrow-right" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
+<symbol id="ic-chevron-down" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+<symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="ic-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.4 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.4-3.5-8.5s1.1-6.1 3.5-8.5z"/></symbol>
+<symbol id="ic-external" viewBox="0 0 24 24"><path d="M14 4.5h5.5V10M19.5 4.5 11 13"/><path d="M18 14v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V7.5A1.5 1.5 0 0 1 5.5 6H10"/></symbol>
+<symbol id="ic-map" viewBox="0 0 24 24"><path d="M3.5 6.5 9 4l6 2.5L20.5 4v13.5L15 20l-6-2.5-5.5 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></symbol>
+<symbol id="ic-replay" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/><path d="m10.5 9.5 4 2.5-4 2.5z"/></symbol>
+<symbol id="ic-note" viewBox="0 0 24 24"><path d="M5.5 3.5h9l4 4v13h-13z"/><path d="M14.5 3.5v4h4M8.5 12h7M8.5 15.5h4.5"/></symbol>
+</svg>
+<a class="n-skip" href="#main" data-i="s.skip">Skip to content</a>
+<header class="n-hdr" id="top">
+  <div class="n-wrap n-hdr__in">
+    <a class="n-brand" href="index.html" data-ia="s.brand.home" aria-label="NowAI, home page"><svg class="n-mark" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" class="n-mark__a"/><path class="n-mark__b" d="M7 17V7.4l10 9.2V7"/><circle class="n-mark__c" cx="19.3" cy="4.7" r="2.1"/></svg><span class="n-brand__w">NowAI</span></a>
+    <nav class="n-nav" data-ia="s.nav.aria" aria-label="Main">
+      <ul class="n-nav__list">
+        <li class="n-nav__item n-nav__item--small">
+          <button class="n-nav__btn" type="button" aria-expanded="false" aria-controls="n-mm-platform"><span data-i="s.nav.platform">How it works</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+          <div class="n-mm n-mm--small" id="n-mm-platform" hidden>
+            <div class="n-mm__small">
+              <ul class="n-mm__plain">
+                <li><a href="platform.html#core"><svg class="n-ic" aria-hidden="true"><use href="#ic-ledger"/></svg><span data-i="s.nav.core">NowAI Core</span></a></li>
+                <li><a href="platform.html#gate"><svg class="n-ic" aria-hidden="true"><use href="#ic-gate"/></svg><span data-i="s.nav.gate">The Gate</span></a></li>
+                <li><a href="platform.html#languages"><svg class="n-ic" aria-hidden="true"><use href="#ic-globe"/></svg><span data-i="s.nav.languages">Languages</span></a></li>
+                <li><a href="platform.html#connectors"><svg class="n-ic" aria-hidden="true"><use href="#ic-stamp"/></svg><span data-i="s.nav.connectors">Planned connectors</span></a></li>
+                <li><a href="trust.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-lock"/></svg><span data-i="s.page.trust">How control works</span></a></li>
+              </ul>
+              <a class="n-mm__side" href="platform.html">
+                <span class="n-mm__side-h" data-i="s.mm.platform.h">One core under every role</span>
+                <span class="n-mm__side-p" data-i="s.mm.platform.p">Channels, reading, company memory, the Gate and measurement. Designed once, shared by every role.</span>
+                <span class="n-mm__side-go"><span data-i="s.cta.more">Read more</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="n-nav__item">
+          <button class="n-nav__btn" type="button" aria-expanded="false" aria-controls="n-mm-roles"><span data-i="s.nav.roles">Roles</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+          <div class="n-mm n-mm--wide" id="n-mm-roles" hidden>
+            <div class="n-wrap n-mm__in">
+              <div class="n-mm__main">
+                <p class="n-eyebrow"><span class="n-eyebrow__t">07</span><span data-i="s.mm.roles.eb">By function</span></p>
+                <div class="n-mm__cols n-mm__cols--3"><div class="n-mm__col"><p class="n-mm__h" data-i="s.mm.roles.front">Front office</p><ul class="n-mm__list"><li><a class="n-mm__link" href="solutions/sales-desk.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-sales"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.sales-desk">Sales Desk</span><span class="n-mm__line" data-i="s.role.sales-desk.line">Orders and quotes on every channel, day and night.</span><span class="n-bucket n-bucket--sales n-bucket--xs" data-i="s.bucket.sales">Extra sales</span></span></a></li><li><a class="n-mm__link" href="solutions/customer-care.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-care"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.customer-care">Customer Care</span><span class="n-mm__line" data-i="s.role.customer-care.line">Questions, deliveries, complaints and small credit notes.</span><span class="n-bucket n-bucket--care n-bucket--xs" data-i="s.bucket.care">Keeps customers (not charged)</span></span></a></li><li><a class="n-mm__link" href="solutions/collections.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-collections"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.collections">Collections</span><span class="n-mm__line" data-i="s.role.collections.line">Who owes what, and polite reminders every day.</span><span class="n-bucket n-bucket--cash n-bucket--xs" data-i="s.bucket.cash">Cash in sooner</span></span></a></li></ul></div><div class="n-mm__col"><p class="n-mm__h" data-i="s.mm.roles.back">Back office</p><ul class="n-mm__list"><li><a class="n-mm__link" href="solutions/payables-check.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-payables"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.payables-check">Payables Check</span><span class="n-mm__line" data-i="s.role.payables-check.line">Supplier invoices checked against order, delivery, contract and e-qaimə.</span><span class="n-bucket n-bucket--leak n-bucket--xs" data-i="s.bucket.leak">Leaks recovered</span></span></a></li><li><a class="n-mm__link" href="solutions/books.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-books"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.books">Books</span><span class="n-mm__line" data-i="s.role.books.line">1C entries and bank reconciliation, approved by the chief accountant.</span><span class="n-bucket n-bucket--hours n-bucket--xs" data-i="s.bucket.hours">Hours (shown, not charged)</span></span></a></li><li><a class="n-mm__link" href="solutions/people-desk.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-people"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.people-desk">People Desk (HR)</span><span class="n-mm__line" data-i="s.role.people-desk.line">Staff requests, leave, payroll changes and EMAS contract data.</span><span class="n-bucket n-bucket--fines n-bucket--xs" data-i="s.bucket.fines">Fewer fines (not charged)</span></span></a></li></ul></div><div class="n-mm__col"><p class="n-mm__h" data-i="s.mm.roles.owner">For the owner</p><ul class="n-mm__list"><li><a class="n-mm__link" href="solutions/owners-brief.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-brief"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.owners-brief">Owner's Brief</span><span class="n-mm__line" data-i="s.role.owners-brief.line">One message to the owner at 19:00.</span><span class="n-bucket n-bucket--renew n-bucket--xs" data-i="s.bucket.renew">Not charged: why owners renew</span></span></a></li></ul></div></div>
+              </div>
+              <div class="n-mm__aside">
+                <a class="n-mm__side" href="solutions/index.html">
+                  <span class="n-mm__side-h" data-i="s.mm.roles.h">Seven roles, one core</span>
+                  <span class="n-mm__side-p" data-i="s.mm.roles.p">A client would start with the one or two roles that hold the most money.</span>
+                  <span class="n-mm__side-go"><span data-i="s.cta.roles">All seven roles</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
+                </a>
+                <a class="n-mm__sidelink" href="solutions/index.html#picking"><span data-i="s.mm.roles.pick">How a client would pick its first roles</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="n-nav__item">
+          <button class="n-nav__btn" type="button" aria-expanded="false" aria-controls="n-mm-industries"><span data-i="s.nav.industries">Industries</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+          <div class="n-mm n-mm--wide" id="n-mm-industries" hidden>
+            <div class="n-wrap n-mm__in">
+              <div class="n-mm__main">
+                <div class="n-mm__cols n-mm__cols--3"><div class="n-mm__col n-mm__col--first"><p class="n-mm__h"><span class="n-status n-status--first"><span data-i="s.status.first">First focus</span></span></p><ul class="n-mm__list"><li><a class="n-mm__link" href="industries/distribution.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-box"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.distribution">Distribution and wholesale</span><span class="n-mm__line" data-i="s.ind.distribution.line">Food, FMCG and household-goods distributors and wholesalers.</span></span></a></li><li><a class="n-mm__link" href="industries/retail-pharmacy.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-store"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.retail-pharmacy">Retail and pharmacy chains</span><span class="n-mm__line" data-i="s.ind.retail-pharmacy.line">Grocery, electronics and home-goods chains; multi-branch pharmacies.</span></span></a></li><li><a class="n-mm__link" href="industries/healthcare.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-clinic"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.healthcare">Private healthcare</span><span class="n-mm__line" data-i="s.ind.healthcare.line">Clinic groups, diagnostic centres and private hospitals.</span></span></a></li></ul></div><div class="n-mm__col n-mm__col--next"><p class="n-mm__h"><span class="n-status n-status--next"><span data-i="s.status.next">Next</span></span></p><ul class="n-mm__list"><li><a class="n-mm__link" href="industries/logistics.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-truck"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.logistics">Logistics and freight</span><span class="n-mm__line" data-i="s.ind.logistics.line">Freight forwarders, trucking firms and customs brokers.</span></span></a></li><li><a class="n-mm__link" href="industries/construction.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-crane"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.construction">Construction and building materials</span><span class="n-mm__line" data-i="s.ind.construction.line">Building-materials suppliers and dealers; developers.</span></span></a></li><li><a class="n-mm__link" href="industries/hospitality.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-cup"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.hospitality">Hospitality and food service</span><span class="n-mm__line" data-i="s.ind.hospitality.line">Hotel groups, restaurant groups and caterers.</span></span></a></li><li><a class="n-mm__link" href="industries/automotive.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-car"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.automotive">Automotive</span><span class="n-mm__line" data-i="s.ind.automotive.line">Brand dealers, service centres and parts distributors.</span></span></a></li><li><a class="n-mm__link" href="industries/education.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-school"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.education">Private education</span><span class="n-mm__line" data-i="s.ind.education.line">Private school groups, universities and course centres.</span></span></a></li></ul></div><div class="n-mm__col n-mm__col--later"><p class="n-mm__h"><span class="n-status n-status--later"><span data-i="s.status.later">Later, with partners</span></span></p><ul class="n-mm__list"><li><a class="n-mm__link" href="industries/telecom.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-signal"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.telecom">Telecommunications and internet</span><span class="n-mm__line" data-i="s.ind.telecom.line">Regional internet providers, dealer networks. Not large operators.</span></span></a></li><li><a class="n-mm__link" href="industries/financial-services.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-coins"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.financial-services">Financial services</span><span class="n-mm__line" data-i="s.ind.financial-services.line">Insurers' agencies, microfinance, leasing. Not banks.</span></span></a></li></ul></div></div><div class="n-mm__fn"><span class="n-status n-status--function"><span data-i="s.status.function">By function</span></span><a class="n-mm__fnlink" href="solutions/people-desk.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-people"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.ind.hr">HR and staff</span><span class="n-mm__line" data-i="s.ind.hr.line">Staff requests, leave, payroll changes and EMAS contract data, in any industry. A function, not an industry: see People Desk (HR).</span></span></a></div>
+              </div>
+              <div class="n-mm__aside">
+                <a class="n-mm__side" href="industries/index.html">
+                  <span class="n-mm__side-h" data-i="s.mm.ind.all">All industries</span>
+                  <span class="n-mm__side-p" data-i="s.mm.ind.p">Ten industries, sorted by where we plan to start. Each page says what NowAI would do there.</span>
+                  <span class="n-mm__side-go"><span data-i="s.cta.more">Read more</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
+                </a>
+                <a class="n-mm__note" href="industries/index.html#not-served"><span data-i="s.mm.ind.not">Not first targets: large banks, large mobile and fixed-line operators, state utilities, state bodies, micro firms.</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="n-nav__item n-nav__item--small">
+          <button class="n-nav__btn" type="button" aria-expanded="false" aria-controls="n-mm-company"><span data-i="s.nav.company">Company</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+          <div class="n-mm n-mm--small n-mm--end" id="n-mm-company" hidden>
+            <div class="n-mm__small">
+              <ul class="n-mm__plain">
+                <li><a href="about.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-user"/></svg><span data-i="s.page.about">About</span></a></li>
+                <li><a href="careers.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-users"/></svg><span data-i="s.page.careers">Careers</span></a></li>
+                <li><a href="investors.html" aria-current="page"><svg class="n-ic" aria-hidden="true"><use href="#ic-coins"/></svg><span data-i="s.page.investors">Investors</span></a></li>
+                <li><a href="notes.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-note"/></svg><span data-i="s.page.notes">Notes</span></a></li>
+                <li><a href="glossary.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-paper"/></svg><span data-i="s.page.glossary">Glossary</span></a></li>
+                <li><a href="contact.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-chat"/></svg><span data-i="s.page.contact">Contact</span></a></li>
+              </ul>
+              <a class="n-mm__side" href="about.html#mission">
+                <span class="n-mm__side-h" data-i="s.mm.company.h">Mission and plan</span>
+                <span class="n-mm__side-p" data-i="s.mm.company.p">An AI operations team for every growing company in Azerbaijan.</span>
+                <span class="n-mm__side-go"><span data-i="s.cta.more">Read more</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="n-nav__item"><a class="n-nav__link" href="story.html"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-clock"/></svg><span data-i="s.nav.story">See a day</span></a></li>
+      </ul>
+    </nav>
+    <div class="n-hdr__tools">
+      <div class="n-lang" role="group" data-ia="s.lang.aria" aria-label="Language">
+        <button class="n-lang__b" type="button" data-lang="en" aria-pressed="true">EN<span class="n-vh" data-i="s.lang.en"> (English)</span></button>
+        <button class="n-lang__b" type="button" data-lang="az" aria-pressed="false">AZ<span class="n-vh" data-i="s.lang.az"> (Azerbaijani, draft)</span></button>
+      </div>
+      <a class="n-btn n-btn--primary n-btn--sm n-hdr__cta" href="sprint.html"><span class="n-hdr__cta-l" data-i="s.cta.sprint">Start with a Discovery Sprint</span><span class="n-hdr__cta-s" data-i="s.cta.sprint.short">Discovery Sprint</span></a>
+      <button class="n-burger" type="button" aria-expanded="false" aria-controls="n-drawer" data-ia="s.nav.open" aria-label="Open menu"><svg class="n-ic" aria-hidden="true"><use href="#ic-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="n-drawer" id="n-drawer" hidden>
+  <div class="n-drawer__scrim" data-close="1"></div>
+  <div class="n-drawer__panel" role="dialog" aria-modal="true" data-ia="s.nav.menu" aria-label="Menu">
+    <div class="n-drawer__top">
+      <a class="n-brand" href="index.html" data-ia="s.brand.home" aria-label="NowAI, home page"><svg class="n-mark" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" class="n-mark__a"/><path class="n-mark__b" d="M7 17V7.4l10 9.2V7"/><circle class="n-mark__c" cx="19.3" cy="4.7" r="2.1"/></svg><span class="n-brand__w">NowAI</span></a>
+      <button class="n-drawer__close" type="button" data-ia="s.nav.close" aria-label="Close menu"><svg class="n-ic" aria-hidden="true"><use href="#ic-close"/></svg></button>
+    </div>
+    <nav class="n-drawer__nav" data-ia="s.nav.menu" aria-label="Menu">
+      <div class="n-acc">
+        <button class="n-acc__btn" type="button" aria-expanded="false" aria-controls="n-dr-platform"><span data-i="s.nav.platform">How it works</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+        <div class="n-acc__panel" id="n-dr-platform" hidden>
+          <ul class="n-linklist">
+            <li><a href="platform.html" data-i="s.page.platform">NowAI Core</a></li>
+            <li><a href="platform.html#gate" data-i="s.nav.gate">The Gate</a></li>
+            <li><a href="platform.html#languages" data-i="s.nav.languages">Languages</a></li>
+            <li><a href="platform.html#connectors" data-i="s.nav.connectors">Planned connectors</a></li>
+            <li><a href="trust.html" data-i="s.page.trust">How control works</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="n-acc">
+        <button class="n-acc__btn" type="button" aria-expanded="false" aria-controls="n-dr-roles"><span data-i="s.nav.roles">Roles</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+        <div class="n-acc__panel" id="n-dr-roles" hidden>
+          <ul class="n-linklist"><li><a href="solutions/index.html" data-i="s.page.solutions">Roles</a></li><li><a href="solutions/sales-desk.html" data-i="s.page.sales-desk">Sales Desk</a></li><li><a href="solutions/customer-care.html" data-i="s.page.customer-care">Customer Care</a></li><li><a href="solutions/collections.html" data-i="s.page.collections">Collections</a></li><li><a href="solutions/payables-check.html" data-i="s.page.payables-check">Payables Check</a></li><li><a href="solutions/books.html" data-i="s.page.books">Books</a></li><li><a href="solutions/people-desk.html" data-i="s.page.people-desk">People Desk (HR)</a></li><li><a href="solutions/owners-brief.html" data-i="s.page.owners-brief">Owner's Brief</a></li></ul>
+          <p class="n-drawer__more"><a href="solutions/index.html#picking" data-i="s.mm.roles.pick">How a client would pick its first roles</a></p>
+        </div>
+      </div>
+      <div class="n-acc">
+        <button class="n-acc__btn" type="button" aria-expanded="false" aria-controls="n-dr-industries"><span data-i="s.nav.industries">Industries</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+        <div class="n-acc__panel" id="n-dr-industries" hidden>
+          <ul class="n-linklist"><li><a href="industries/index.html" data-i="s.page.industries">Industries</a></li></ul><p class="n-linklist__h" data-i="s.status.first">First focus</p><ul class="n-linklist"><li><a href="industries/distribution.html" data-i="s.page.distribution">Distribution and wholesale</a></li><li><a href="industries/retail-pharmacy.html" data-i="s.page.retail-pharmacy">Retail and pharmacy chains</a></li><li><a href="industries/healthcare.html" data-i="s.page.healthcare">Private healthcare</a></li></ul><p class="n-linklist__h" data-i="s.status.next">Next</p><ul class="n-linklist"><li><a href="industries/logistics.html" data-i="s.page.logistics">Logistics and freight</a></li><li><a href="industries/construction.html" data-i="s.page.construction">Construction and building materials</a></li><li><a href="industries/hospitality.html" data-i="s.page.hospitality">Hospitality and food service</a></li><li><a href="industries/automotive.html" data-i="s.page.automotive">Automotive</a></li><li><a href="industries/education.html" data-i="s.page.education">Private education</a></li></ul><p class="n-linklist__h" data-i="s.status.later">Later, with partners</p><ul class="n-linklist"><li><a href="industries/telecom.html" data-i="s.page.telecom">Telecommunications and internet</a></li><li><a href="industries/financial-services.html" data-i="s.page.financial-services">Financial services</a></li></ul><p class="n-linklist__h" data-i="s.foot.h.fn">By function</p><ul class="n-linklist"><li><a href="solutions/people-desk.html" data-i="s.ind.hr">HR and staff</a></li></ul>
+          <p class="n-drawer__more"><a href="industries/index.html#not-served" data-i="s.mm.ind.not">Not first targets: large banks, large mobile and fixed-line operators, state utilities, state bodies, micro firms.</a></p>
+        </div>
+      </div>
+      <div class="n-acc">
+        <button class="n-acc__btn" type="button" aria-expanded="false" aria-controls="n-dr-company"><span data-i="s.nav.company">Company</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+        <div class="n-acc__panel" id="n-dr-company" hidden>
+          <ul class="n-linklist">
+            <li><a href="about.html" data-i="s.page.about">About</a></li>
+            <li><a href="careers.html" data-i="s.page.careers">Careers</a></li>
+            <li><a href="investors.html" data-i="s.page.investors" aria-current="page">Investors</a></li>
+            <li><a href="notes.html" data-i="s.page.notes">Notes</a></li>
+            <li><a href="glossary.html" data-i="s.page.glossary">Glossary</a></li>
+            <li><a href="contact.html" data-i="s.page.contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <a class="n-drawer__story" href="story.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-clock"/></svg><span data-i="s.nav.story">See a day</span></a>
+      <a class="n-btn n-btn--primary n-drawer__cta" href="sprint.html"><span data-i="s.cta.sprint">Start with a Discovery Sprint</span></a>
+    </nav>
+  </div>
+</div>
+<main id="main">
+<section class="n-section n-pg-hero" id="iv-hero">
+  <div class="n-wrap">
+    <nav class="n-bc" data-ia="s.bc.aria" aria-label="Breadcrumb"><a href="index.html" data-i="s.bc.home">Home</a><span data-i="s.nav.company">Company</span><span aria-current="page" data-i="s.page.investors">Investors</span></nav>
+    <div class="n-pg-hero__in">
+      <div>
+        <p class="n-pg-hero__chips"><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span><span class="n-lbl n-lbl--target" data-i="s.lbl.target">target</span></p>
+        <h1 data-i="investors.hero.h">Every number labelled. The first 90 days will test them.</h1>
+        <p class="n-lead" data-i="investors.hero.lead">Client value, unit economics, growth, stress tests, competition and risks, in one place.</p>
+        <div class="n-note"><p data-i="investors.hero.note">Model figures are arithmetic on stated assumptions; targets are goals. The Discovery Sprints are designed to measure both on real company data.</p></div>
+        <div class="n-btns">
+          <a class="n-btn n-btn--primary" href="contact.html"><span data-i="s.cta.contact">How to reach us</span></a>
+          <a class="n-btn n-btn--secondary" href="#summary"><span data-i="investors.hero.cta2">The plan on one page</span></a>
+        </div>
+      </div>
+      <aside class="n-iv-ask" aria-labelledby="iv-ask-h">
+        <p class="n-eyebrow" id="iv-ask-h"><span class="n-eyebrow__t">48</span><span data-i="investors.ask.eb">The ask</span></p>
+        <div class="n-figs">
+          <p class="n-fig" data-label="target"><b class="n-fig__v"><span data-n="850000">850,000</span> <small>AZN</small></b><span class="n-fig__k" data-i="investors.ask.k">About 850,000 AZN, about $500,000.</span><span class="n-lbl n-lbl--target" data-i="s.lbl.target">target</span></p>
+        </div>
+        <dl class="n-iv-ask__dl">
+          <div><dt data-i="investors.ask.2.k">The base case needs</dt><dd data-i="investors.ask.2.v">500,000 AZN at the start (model)</dd></div>
+          <div><dt data-i="investors.ask.3.k">The worst stress test needs</dt><dd data-i="investors.ask.3.v">About 791,000 AZN in total (model)</dd></div>
+          <div><dt data-i="investors.ask.4.k">The rest</dt><dd data-i="investors.ask.4.v">A buffer</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="n-section" id="summary">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">01</span><span data-i="investors.sum.eb">Summary</span></p>
+      <h2 data-i="investors.sum.h">The decision on one page</h2>
+      <p class="n-lead" data-i="investors.sum.lead">The business on one page: what we will build, who we sell to, how we price it, and how day 90 decides what comes next.</p>
+    </header>
+    <dl class="n-iv-dl">
+      <div><dt data-i="investors.sum.1.k">What we will build</dt><dd data-i="investors.sum.1.v">The AI operations team for mid-size and large companies: seven roles on NowAI Core, with a person approving what matters at the Gate (the approval queue).</dd></div>
+      <div><dt data-i="investors.sum.2.k">Sell to</dt><dd data-i="investors.sum.2.v">The owner or finance director of distributors, retail and pharmacy chains, and private clinics in Azerbaijan. Not banks or telcos.</dd></div>
+      <div><dt data-i="investors.sum.3.k">Sell what</dt><dd data-i="investors.sum.3.v">Money found: Extra sales, Cash in sooner, Losses avoided, Leaks recovered. Hours are shown, not charged.</dd></div>
+      <div><dt data-i="investors.sum.4.k">Price</dt><dd data-i="investors.sum.4.v">A 3,500 AZN platform fee a month plus 20% of measured value (target). On the model's mix it blends to 6,571 AZN a month (model).</dd></div>
+      <div><dt data-i="investors.sum.5.k">Start with</dt><dd data-i="investors.sum.5.v">A two-week Discovery Sprint on one week of the client's own data, ending in a Money Map. Two roles would then run in replay on its past weeks. List price 5,000 AZN; the first three, with design partners, free or discounted (target).</dd></div>
+      <div><dt data-i="investors.sum.6.k">Why it can work</dt><dd data-i="investors.sum.6.v">The model's distributor gets 22,782 AZN a month of value, 3.2× its fee. NowAI breaks even between 5 and 15 clients and is profitable from month 18 in the base case (model).</dd></div>
+      <div><dt data-i="investors.sum.7.k">Why it might not</dt><dd data-i="investors.sum.7.v">Every value driver still has to be measured. At half the value, the fee fails the 2.5× test. At half the sales pace, profit moves to month 25 (model).</dd></div>
+      <div><dt data-i="investors.sum.8.k">Money</dt><dd data-i="investors.sum.8.v">About 850,000 AZN, about $500,000, which covers the worst stress test (target).</dd></div>
+      <div><dt data-i="investors.sum.9.k">Ceiling and stretch</dt><dd data-i="investors.sum.9.v">About $7.0M a year from Azerbaijan. $1B needs about 2,160 clients across the region (model).</dd></div>
+      <div><dt data-i="investors.sum.10.k">First 90 days</dt><dd data-i="investors.sum.10.v">15 owner interviews, 3 design-partner sprints, 2 roles measured in replay, legal answers in writing (target).</dd></div>
+      <div class="n-iv-dl__go"><dt data-i="investors.sum.11.k">Go</dt><dd data-i="investors.sum.11.v">At day 90, at least 2 of 3 sprints find at least 3× the proposed fee, and at least one company signs a paid contract (target).</dd></div>
+      <div class="n-iv-dl__change"><dt data-i="investors.sum.12.k">Change sector</dt><dd><span data-i="investors.sum.12.v">Value is found, but nobody signs.</span> <span class="n-lbl n-lbl--target" data-i="s.lbl.target">target</span></dd></div>
+      <div class="n-iv-dl__stop"><dt data-i="investors.sum.13.k">Stop</dt><dd><span data-i="investors.sum.13.v">The sprints find less than 2× the fee.</span> <span class="n-lbl n-lbl--target" data-i="s.lbl.target">target</span></dd></div>
+    </dl>
+    <p class="n-small n-iv-foot" data-i="s.fig.hours-note">Value includes Hours (shown, not charged); the fee is charged only on the four buckets.</p>
+  </div>
+</section>
+
+<section class="n-section n-section--soft" id="client-value">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">02</span><span data-i="investors.cv.eb">Client value</span></p>
+      <h2 data-i="investors.cv.h">Three example clients, all from the model</h2>
+      <p class="n-lead" data-i="investors.cv.lead">A sprint would measure each client's own numbers before any fee is set.</p>
+    </header>
+    <table class="n-table n-iv-table">
+      <caption data-i="investors.cv.cap">The model's three examples, AZN a month. All figures: model.</caption>
+      <thead><tr><th scope="col" data-i="investors.cv.c1">Example</th><th scope="col" class="n-num" data-i="s.fig.value">Value a month</th><th scope="col" class="n-num" data-i="s.fig.fee">Fee a month</th><th scope="col" class="n-num" data-i="s.fig.ratio">Value ÷ fee</th><th scope="col" class="n-num" data-i="s.fig.low">If only half the value shows up</th></tr></thead>
+      <tbody>
+        <tr><th scope="row" data-i="investors.cv.ex1">Distributor, 25M AZN of sales</th><td class="n-num"><span data-n="22782">22,782</span></td><td class="n-num"><span data-n="7065">7,065</span></td><td class="n-num"><span data-n="3.2">3.2</span>×</td><td class="n-num"><span data-n="2.2">2.2</span>×</td></tr>
+        <tr><th scope="row" data-i="investors.cv.ex2">Retail or pharmacy chain, 40M AZN</th><td class="n-num"><span data-n="17037">17,037</span></td><td class="n-num"><span data-n="5845">5,845</span></td><td class="n-num"><span data-n="2.9">2.9</span>×</td><td class="n-num"><span data-n="1.8">1.8</span>×</td></tr>
+        <tr><th scope="row" data-i="investors.cv.ex3">Private clinic group, 12M AZN</th><td class="n-num"><span data-n="20642">20,642</span></td><td class="n-num"><span data-n="6637">6,637</span></td><td class="n-num"><span data-n="3.1">3.1</span>×</td><td class="n-num"><span data-n="2.0">2.0</span>×</td></tr>
+      </tbody>
+    </table>
+    <p class="n-small n-iv-foot" data-i="s.fig.hours-note">Value includes Hours (shown, not charged); the fee is charged only on the four buckets.</p>
+
+    <h3 class="n-iv-sub" data-i="investors.cv.b.h">The distributor, bucket by bucket</h3>
+    <table class="n-table n-iv-table n-iv-buckets">
+      <caption data-i="investors.cv.b.cap">The model's distributor, 25M AZN of sales. AZN a month unless marked. All figures: model.</caption>
+      <thead><tr><th scope="col" data-i="investors.cv.b.c1">Bucket</th><th scope="col" class="n-num" data-i="investors.cv.b.c2">AZN a month</th><th scope="col" data-i="investors.cv.b.c3">How it would be counted</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><span class="n-bucket n-bucket--sales" data-i="s.bucket.sales">Extra sales</span></th><td class="n-num"><span data-n="4688">4,688</span></td><td data-i="investors.cv.b.sales">Extra sales, counted at their margin.</td></tr>
+        <tr><th scope="row"><span class="n-bucket n-bucket--cash" data-i="s.bucket.cash">Cash in sooner</span></th><td class="n-num"><span data-n="5993">5,993</span></td><td data-i="investors.cv.b.cash">The cost of waiting for money, at 15% a year (estimate).</td></tr>
+        <tr><th scope="row"><span class="n-bucket n-bucket--loss" data-i="s.bucket.loss">Losses avoided</span></th><td class="n-num"><span data-n="3646">3,646</span></td><td data-i="investors.cv.b.loss">Bad debts that did not happen.</td></tr>
+        <tr><th scope="row"><span class="n-bucket n-bucket--leak" data-i="s.bucket.leak">Leaks recovered</span></th><td class="n-num"><span data-n="3500">3,500</span></td><td data-i="investors.cv.b.leak">Overcharges and lost input VAT, found in purchases.</td></tr>
+        <tr class="n-iv-buckets__hours"><th scope="row"><span class="n-bucket n-bucket--hours" data-i="s.bucket.hours">Hours (shown, not charged)</span></th><td class="n-num"><span data-n="4956">4,956</span></td><td data-i="investors.cv.b.hours">Staff time saved. Shown, not charged.</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><th scope="row" data-i="s.fig.value">Value a month</th><td class="n-num"><span data-n="22782">22,782</span></td><td data-i="s.fig.hours-note">Value includes Hours (shown, not charged); the fee is charged only on the four buckets.</td></tr>
+        <tr class="n-iv-buckets__once"><th scope="row" data-i="investors.cv.b.once.k">Cash back once</th><td class="n-num"><span data-n="479452">479,452</span></td><td data-i="investors.cv.b.once">One time, from customers paying 10 days sooner.</td></tr>
+      </tfoot>
+    </table>
+    <div class="n-iv-notes">
+      <div class="n-note n-note--honest"><p data-i="investors.cv.bar">The default price fails the 2.5× value bar in the low case for all three examples (2.2×, 1.8×, 2.0×). So the sprint measures value before a price is set (model).</p></div>
+      <p class="n-small" data-i="s.price.none">If nothing is measured, you pay only the 3,500 AZN platform fee (target).</p>
+    </div>
+  </div>
+</section>
+
+<section class="n-section" id="economics">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">03</span><span data-i="investors.ec.eb">Economics</span></p>
+      <h2 data-i="investors.ec.h">What a client would pay, and what it would cost to serve</h2>
+      <p class="n-lead"><span data-i="investors.ec.lead">Steady-month figures from the model. The volumes and most unit costs are assumptions.</span> <span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+    </header>
+    <div class="n-figs n-figs--sm">
+      <p class="n-fig" data-label="model"><b class="n-fig__v"><span data-n="6571">6,571</span> <small>AZN</small></b><span class="n-fig__k" data-i="investors.ec.f1">Blended fee a month on the 40/30/30 mix; about $46,400 a year</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+      <p class="n-fig" data-label="model"><b class="n-fig__v"><span data-n="5035">5,035</span> <small>AZN</small></b><span class="n-fig__k" data-i="investors.ec.f2">Blended fee a month in the low case</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+      <p class="n-fig" data-label="model"><b class="n-fig__v"><span data-n="851">851</span> <small>AZN</small></b><span class="n-fig__k" data-i="investors.ec.f3">Direct technology cost a client a month</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+      <p class="n-fig" data-label="model"><b class="n-fig__v">5–15</b><span class="n-fig__k" data-i="investors.ec.f4">Clients to break even: −$0.17M a year at 5, +$0.21M at 15</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+    </div>
+    <table class="n-table n-iv-table n-iv-sizes">
+      <caption data-i="investors.ec.cap">NowAI at three sizes, one steady month, shown per year. All figures: model.</caption>
+      <thead><tr><th scope="col" data-i="investors.ec.c0">At</th><th scope="col" class="n-num" data-i="investors.ec.c30">30 clients</th><th scope="col" class="n-num" data-i="investors.ec.c100">100 clients</th><th scope="col" class="n-num" data-i="investors.ec.c150">150 clients</th></tr></thead>
+      <tbody>
+        <tr><th scope="row" data-i="investors.ec.r1">Revenue a year</th><td class="n-num" data-i="investors.ec.v.r30">$1.50M</td><td class="n-num" data-i="investors.ec.v.r100">$4.85M</td><td class="n-num" data-i="investors.ec.v.r150">$7.17M</td></tr>
+        <tr><th scope="row" data-i="investors.ec.r2">Operating profit a year</th><td class="n-num" data-i="investors.ec.v.p30">$0.75M</td><td class="n-num" data-i="investors.ec.v.p100">$3.19M</td><td class="n-num" data-i="investors.ec.v.p150">$4.95M</td></tr>
+        <tr><th scope="row" data-i="investors.ec.r3">Gross margin</th><td class="n-num"><span data-n="73">73</span>%</td><td class="n-num"><span data-n="75">75</span>%</td><td class="n-num"><span data-n="76">76</span>%</td></tr>
+        <tr><th scope="row" data-i="investors.ec.r4">People</th><td class="n-num"><span data-n="15">15</span></td><td class="n-num"><span data-n="30">30</span></td><td class="n-num"><span data-n="38">38</span></td></tr>
+      </tbody>
+    </table>
+    <p class="n-small n-iv-foot" data-i="investors.ec.note">The 73-76% gross margin depends on keeping setup as configuration, not code (model).</p>
+  </div>
+</section>
+
+<section class="n-section n-section--soft" id="ramp">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">04</span><span data-i="investors.rp.eb">Growth</span></p>
+      <h2 data-i="investors.rp.h">Growth over 48 months</h2>
+      <p class="n-lead" data-i="investors.rp.lead">The base case. It needs no money beyond the 500,000 AZN start (model).</p>
+    </header>
+    <div class="n-iv-grow">
+      <table class="n-table n-iv-table n-iv-months">
+        <caption data-i="investors.rp.cap">Base case, at four points in time. All figures: model.</caption>
+        <thead><tr><th scope="col" data-i="investors.rp.c0">Month</th><th scope="col" class="n-num">12</th><th scope="col" class="n-num">24</th><th scope="col" class="n-num">36</th><th scope="col" class="n-num">48</th></tr></thead>
+        <tbody>
+          <tr><th scope="row" data-i="investors.rp.r1">Clients</th><td class="n-num"><span data-n="4">4</span></td><td class="n-num"><span data-n="21">21</span></td><td class="n-num"><span data-n="47">47</span></td><td class="n-num"><span data-n="76">76</span></td></tr>
+          <tr><th scope="row" data-i="investors.rp.r2">Run-rate a year</th><td class="n-num" data-i="investors.rp.v12">$0.16M</td><td class="n-num" data-i="investors.rp.v24">$0.93M</td><td class="n-num" data-i="investors.rp.v36">$2.35M</td><td class="n-num" data-i="investors.rp.v48">$3.72M</td></tr>
+        </tbody>
+      </table>
+      <div class="n-figs n-figs--sm n-iv-cash">
+        <p class="n-fig" data-label="model"><b class="n-fig__v"><span data-n="500000">500,000</span> <small>AZN</small></b><span class="n-fig__k" data-i="investors.rp.f1">Cash at the start</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+        <p class="n-fig" data-label="model"><b class="n-fig__v">18</b><span class="n-fig__k" data-i="investors.rp.f2">First profitable month</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+        <p class="n-fig" data-label="model"><b class="n-fig__v"><span data-n="64000">64,000</span> <small>AZN</small></b><span class="n-fig__k" data-i="investors.rp.f3">Lowest cash balance, about</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="n-section" id="stress">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">05</span><span data-i="investors.st.eb">Stress tests</span></p>
+      <h2 data-i="investors.st.h">Four ways the plan could go worse</h2>
+      <p class="n-lead" data-i="investors.st.lead">Each test ran on a copy of the model. The plan is most sensitive to how fast companies buy, then to how much value shows up.</p>
+    </header>
+    <table class="n-table n-iv-table n-iv-stress">
+      <caption data-i="investors.st.cap">Base case and four stress tests. All figures: model.</caption>
+      <thead><tr><th scope="col" data-i="investors.st.c1">Test</th><th scope="col" data-i="investors.st.c2">First profitable month</th><th scope="col" data-i="investors.st.c3">Extra funding needed</th><th scope="col" data-i="investors.st.c4">At month 36</th></tr></thead>
+      <tbody>
+        <tr class="n-iv-stress__base"><th scope="row" data-i="investors.st.0">Base case</th><td data-i="investors.st.0.m">Month 18</td><td data-i="investors.st.0.f">None</td><td data-i="investors.st.0.r">47 clients, $2.35M a year</td></tr>
+        <tr><th scope="row" data-i="investors.st.1">Half the sales pace</th><td data-i="investors.st.1.m">Month 25</td><td data-i="investors.st.1.f">About 164,000 AZN</td><td data-i="investors.st.1.r">23 clients, $1.18M a year</td></tr>
+        <tr><th scope="row" data-i="investors.st.2">Half the value</th><td data-i="investors.st.2.m">Month 22</td><td data-i="investors.st.2.f">About 38,000 AZN</td><td data-i="investors.st.2.r">47 clients, $1.84M a year</td></tr>
+        <tr><th scope="row" data-i="investors.st.3">Both at once</th><td data-i="investors.st.3.m">Month 27</td><td data-i="investors.st.3.f">About 291,000 AZN</td><td data-i="investors.st.3.r">23 clients, $0.92M a year</td></tr>
+        <tr><th scope="row" data-i="investors.st.4">5 clients per deployment engineer, not 8</th><td data-i="investors.st.4.m">Month 19</td><td data-i="investors.st.4.f">None</td><td data-i="investors.st.4.r">47 clients, 23 people (not 19)</td></tr>
+      </tbody>
+    </table>
+    <p class="n-small n-iv-foot" data-i="investors.st.kind">The model does not raise churn when value is low. In reality it would, so the low-value cases are kinder than life.</p>
+    <div class="n-iv-askbox"><p data-ih="investors.st.ask"><b>The ask: about 850,000 AZN, about $500,000 (target).</b> The base case needs 500,000 AZN. The worst test needs about 791,000 AZN in total. The rest is a buffer. With it, none of the four tests runs out of cash (model).</p></div>
+
+    <h3 class="n-iv-sub" data-i="investors.ce.h">The ceiling, and what $1B would take</h3>
+    <div class="n-figs n-figs--sm">
+      <p class="n-fig" data-label="estimate"><b class="n-fig__v"><span data-n="150">150</span></b><span class="n-fig__k" data-i="investors.ce.1">Winnable clients in Azerbaijan: 600 firms able to pay × 25%</span><span class="n-lbl n-lbl--estimate" data-i="s.lbl.estimate">estimate</span></p>
+      <p class="n-fig" data-label="model"><b class="n-fig__v" data-i="investors.ce.2.v">$7.0M</b><span class="n-fig__k" data-i="investors.ce.2">A year from Azerbaijan at that ceiling</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+      <p class="n-fig" data-label="model"><b class="n-fig__v"><span data-n="2160">2,160</span></b><span class="n-fig__k" data-i="investors.ce.3">Clients needed for $1B at 10× revenue, which is $100M a year</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+      <p class="n-fig" data-label="model"><b class="n-fig__v"><span data-n="270">270</span></b><span class="n-fig__k" data-i="investors.ce.4">Deployment engineers at that size</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+    </div>
+    <p class="n-small n-iv-foot" data-i="investors.ce.note">At 20× revenue, about 1,080 clients would be enough. Azerbaijan alone is 7% of the 10× need (model). A strong regional business is the likely good outcome. $1B is the stretch.</p>
+  </div>
+</section>
+
+<section class="n-section n-section--soft" id="competition">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">06</span><span data-i="investors.co.eb">Competition</span></p>
+      <h2 data-i="investors.co.h">Who else does this work, without names</h2>
+      <p class="n-lead" data-i="investors.co.lead">This site names no companies. These are categories.</p>
+    </header>
+    <ul class="n-grid n-grid--3">
+      <li class="n-card"><h3 data-i="investors.co.1.h">Global AI-agent companies</h3><p data-i="investors.co.1.p">They sell to banks, telcos and government (reported).</p></li>
+      <li class="n-card"><h3 data-i="investors.co.2.h">Local accounting and ERP tools</h3><p data-i="investors.co.2.p">Each does part of the back office (reported).</p></li>
+      <li class="n-card"><h3 data-i="investors.co.3.h">In-house staff and outsourcers</h3><p data-i="investors.co.3.p">The real alternative today. We would sell growth without new hires, not layoffs.</p></li>
+    </ul>
+    <h3 class="n-iv-sub" data-i="investors.co.d.h">Five differences</h3>
+    <ol class="n-iv-diff">
+      <li><span class="n-iv-diff__n">01</span><h4 data-i="investors.co.d1.h">The tier</h4><p data-i="investors.co.d1.p">Mid-size and large private firms, below the banks and telcos those companies chase first (estimate).</p></li>
+      <li><span class="n-iv-diff__n">02</span><h4 data-i="investors.co.d2.h">Front office and back office together</h4><p data-i="investors.co.d2.p">From a shop's WhatsApp message to the 1C entry, the bank line and the e-qaimə.</p></li>
+      <li><span class="n-iv-diff__n">03</span><h4 data-i="investors.co.d3.h">Local systems</h4><p data-i="investors.co.d3.p">1C exports, e-qaimə files, EMAS, local bank statements, and Azerbaijani and Russian voice (planned).</p></li>
+      <li><span class="n-iv-diff__n">04</span><h4 data-i="investors.co.d4.h">Price</h4><p data-i="investors.co.d4.p">About 6,600 AZN a month on the model's mix (target). Only the platform fee if nothing is found.</p></li>
+      <li><span class="n-iv-diff__n">05</span><h4 data-i="investors.co.d5.h">The sprint</h4><p data-i="investors.co.d5.p">A paid two-week start that ends in a Money Map, before any contract (target).</p></li>
+    </ol>
+    <div class="n-note n-note--honest n-iv-honest"><p data-i="investors.co.honest">We found nobody here joining front office and back office for mid-size firms. That is a search result, not proof.</p></div>
+  </div>
+</section>
+
+<section class="n-section" id="risks">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">07</span><span data-i="investors.rk.eb">Risks</span></p>
+      <h2 data-i="investors.rk.h">What could go wrong, and what we would watch</h2>
+      <p class="n-lead" data-i="investors.rk.lead">Four risks decide the plan: becoming an agency, sales pace, unmeasured value and a larger player moving down-market.</p>
+    </header>
+    <table class="n-table n-iv-table n-iv-risks">
+      <caption data-i="investors.rk.cap">Risks, early signs and what we would do. Early-sign thresholds are targets.</caption>
+      <thead><tr><th scope="col" data-i="investors.rk.c1">Risk</th><th scope="col" data-i="investors.rk.c2">Early sign</th><th scope="col" data-i="investors.rk.c3">What we would do</th></tr></thead>
+      <tbody>
+        <tr><th scope="row" data-i="investors.rk.1">Becoming an agency</th><td data-i="investors.rk.1.s">Each client needs custom code; fewer than 5 clients per deployment engineer.</td><td data-i="investors.rk.1.d">A fixed menu of roles; setup is configuration, not code; clients per engineer tracked every month.</td></tr>
+        <tr><th scope="row" data-i="investors.rk.2">Sales slower than planned</th><td data-i="investors.rk.2.s">Fewer than 2 sprints signed by month 6.</td><td data-i="investors.rk.2.d">Paid sprints after the design partners; narrow to the sector that converts.</td></tr>
+        <tr><th scope="row" data-i="investors.rk.3">Value smaller than modelled</th><td data-i="investors.rk.3.s">Money Maps below 3× the fee.</td><td data-i="investors.rk.3.d">Price from the measured Money Map; a lower platform fee and a higher outcome share.</td></tr>
+        <tr><th scope="row" data-i="investors.rk.4">No local late-payment data</th><td data-i="investors.rk.4.s">Receivables in sprints close to terms.</td><td data-i="investors.rk.4.d">Lead with Leaks recovered and Extra sales instead.</td></tr>
+        <tr><th scope="row" data-i="investors.rk.5">A larger player moves down-market</th><td data-i="investors.rk.5.s">Global players pitching distributors and clinics.</td><td data-i="investors.rk.5.d">Speed, local systems, price, and front office through to back office.</td></tr>
+        <tr><th scope="row" data-i="investors.rk.6">Data and law</th><td data-i="investors.rk.6.s">A lawyer says consent or local hosting is needed.</td><td data-i="investors.rk.6.d">Get the answer before the first sprint; a quote for local hosting.</td></tr>
+        <tr><th scope="row" data-i="investors.rk.7">Accuracy on local documents and voice</th><td data-i="investors.rk.7.s">Replay match below 95% on the client's own month.</td><td data-i="investors.rk.7.d">The Gate holds anything unsure; improve before going live.</td></tr>
+      </tbody>
+    </table>
+    <div class="n-card n-card--dark n-iv-wrong">
+      <h3 data-i="investors.rk.wrong.h">What would prove us wrong</h3>
+      <ul class="n-iv-wrong__list">
+        <li><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-x"/></svg><span data-i="investors.rk.wrong.1">Two of three sprints find less than twice the fee.</span></li>
+        <li><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-x"/></svg><span data-i="investors.rk.wrong.2">No company pays for a sprint or a contract by day 90.</span></li>
+        <li><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-x"/></svg><span data-i="investors.rk.wrong.3">Companies want a chatbot, not a role that finishes the job.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="n-section n-section--tight n-section--line" id="files">
+  <div class="n-wrap">
+    <p class="n-eyebrow"><span class="n-eyebrow__t">08</span><span data-i="investors.fi.eb">Files</span></p>
+    <p class="n-iv-files"><svg class="n-ic" aria-hidden="true"><use href="#ic-note"/></svg><span data-i="investors.fi.p">The deck, the pitch and the model are shared directly. Tell the person who shared this site.</span></p>
+  </div>
+</section>
+
+<section class="n-section n-section--dark n-ctaband" aria-labelledby="n-ctaband-h">
+  <div class="n-wrap n-ctaband__in">
+    <div class="n-ctaband__main">
+      <p class="n-eyebrow n-eyebrow--on-dark"><span class="n-eyebrow__t">19:00</span><span data-i="s.cta.contact">How to reach us</span></p>
+      <h2 class="n-ctaband__h" id="n-ctaband-h" data-i="s.ctaband2.h">Talk to the founder.</h2>
+      <p class="n-lead" data-i="s.ctaband2.p">Tell the person who shared this site with you. They will pass your message straight to the founder.</p>
+    </div>
+    <div class="n-ctaband__side">
+      <div class="n-btns">
+        <a class="n-btn n-btn--on-dark" href="contact.html"><span data-i="s.cta.contact">How to reach us</span></a>
+        <a class="n-btn n-btn--ghost n-btn--ghost-dark" href="story.html"><span data-i="s.cta.story.ind">See an example day at a distributor</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="n-foot">
+  <div class="n-wrap">
+    <div class="n-foot__grid">
+      <div class="n-foot__brand">
+        <a class="n-brand" href="index.html" data-ia="s.brand.home" aria-label="NowAI, home page"><svg class="n-mark" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" class="n-mark__a"/><path class="n-mark__b" d="M7 17V7.4l10 9.2V7"/><circle class="n-mark__c" cx="19.3" cy="4.7" r="2.1"/></svg><span class="n-brand__w">NowAI</span></a>
+        <p class="n-foot__line" data-i="s.foot.line">The AI operations team for companies in Azerbaijan.</p>
+        <a class="n-btn n-btn--on-dark n-btn--sm" href="sprint.html"><span data-i="s.cta.sprint">Start with a Discovery Sprint</span></a>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.platform">How it works</h2>
+        <ul class="n-linklist">
+          <li><a href="platform.html#core" data-i="s.nav.core">NowAI Core</a></li>
+          <li><a href="platform.html#gate" data-i="s.nav.gate">The Gate</a></li>
+          <li><a href="platform.html#languages" data-i="s.nav.languages">Languages</a></li>
+          <li><a href="platform.html#connectors" data-i="s.nav.connectors">Planned connectors</a></li>
+          <li><a href="trust.html" data-i="s.page.trust">How control works</a></li>
+        </ul>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.roles">Roles</h2>
+        <ul class="n-linklist"><li><a href="solutions/index.html" data-i="s.page.solutions">Roles</a></li><li><a href="solutions/sales-desk.html" data-i="s.page.sales-desk">Sales Desk</a></li><li><a href="solutions/customer-care.html" data-i="s.page.customer-care">Customer Care</a></li><li><a href="solutions/collections.html" data-i="s.page.collections">Collections</a></li><li><a href="solutions/payables-check.html" data-i="s.page.payables-check">Payables Check</a></li><li><a href="solutions/books.html" data-i="s.page.books">Books</a></li><li><a href="solutions/people-desk.html" data-i="s.page.people-desk">People Desk (HR)</a></li><li><a href="solutions/owners-brief.html" data-i="s.page.owners-brief">Owner's Brief</a></li></ul>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.industries">Industries</h2>
+        <ul class="n-linklist"><li><a href="industries/index.html" data-i="s.page.industries">Industries</a></li></ul><p class="n-linklist__h" data-i="s.status.first">First focus</p><ul class="n-linklist"><li><a href="industries/distribution.html" data-i="s.page.distribution">Distribution and wholesale</a></li><li><a href="industries/retail-pharmacy.html" data-i="s.page.retail-pharmacy">Retail and pharmacy chains</a></li><li><a href="industries/healthcare.html" data-i="s.page.healthcare">Private healthcare</a></li></ul><p class="n-linklist__h" data-i="s.status.next">Next</p><ul class="n-linklist"><li><a href="industries/logistics.html" data-i="s.page.logistics">Logistics and freight</a></li><li><a href="industries/construction.html" data-i="s.page.construction">Construction and building materials</a></li><li><a href="industries/hospitality.html" data-i="s.page.hospitality">Hospitality and food service</a></li><li><a href="industries/automotive.html" data-i="s.page.automotive">Automotive</a></li><li><a href="industries/education.html" data-i="s.page.education">Private education</a></li></ul><p class="n-linklist__h" data-i="s.status.later">Later, with partners</p><ul class="n-linklist"><li><a href="industries/telecom.html" data-i="s.page.telecom">Telecommunications and internet</a></li><li><a href="industries/financial-services.html" data-i="s.page.financial-services">Financial services</a></li></ul><p class="n-linklist__h" data-i="s.foot.h.fn">By function</p><ul class="n-linklist"><li><a href="solutions/people-desk.html" data-i="s.ind.hr">HR and staff</a></li></ul>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.company">Company</h2>
+        <ul class="n-linklist">
+          <li><a href="about.html" data-i="s.page.about">About</a></li>
+          <li><a href="careers.html" data-i="s.page.careers">Careers</a></li>
+          <li><a href="investors.html" data-i="s.page.investors" aria-current="page">Investors</a></li>
+          <li><a href="notes.html" data-i="s.page.notes">Notes</a></li>
+          <li><a href="glossary.html" data-i="s.page.glossary">Glossary</a></li>
+          <li><a href="contact.html" data-i="s.page.contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.start">Start</h2>
+        <ul class="n-linklist">
+          <li><a href="story.html" data-i="s.nav.story">See a day</a></li>
+          <li><a href="sprint.html" data-i="s.cta.sprint.short">Discovery Sprint</a></li>
+          <li><a href="sprint.html#after" data-i="s.nav.after">After the sprint</a></li>
+          <li><a href="sprint.html#pricing" data-i="s.nav.pricing">Pricing</a></li>
+          <li><a href="sprint.html#calculator" data-i="s.nav.calculator">Your company calculator</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="n-foot__base">
+      <p class="n-foot__disc" data-i="s.foot.disclaimer">NowAI is pre-launch: this site describes the service it will offer. Companies, people and amounts in the examples are invented, and every figure carries its label.</p>
+      <p class="n-foot__small" data-i="s.foot.drafts">Azerbaijani and Russian text on this site is a draft for a native speaker to check.</p>
+      <p class="n-foot__small" data-i="s.foot.privacy">This site has no forms, cookies or analytics. Your language choice is saved in this browser only. Fonts load from Google Fonts.</p>
+      <div class="n-foot__row">
+        <a href="notice.html" data-i="s.page.notice">Site notice</a>
+        <span data-i="s.foot.date">November 2026</span>
+        <a class="n-foot__top" href="#top"><span data-i="s.foot.top">Back to top</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>const I18N = {"investors.ask.2.k":{"en":"The base case needs","az":"Əsas ssenari tələb edir"},"investors.ask.2.v":{"en":"500,000 AZN at the start (model)","az":"Başlanğıcda 500 000 AZN (model)"},"investors.ask.3.k":{"en":"The worst stress test needs","az":"Ən pis stress-test tələb edir"},"investors.ask.3.v":{"en":"About 791,000 AZN in total (model)","az":"Cəmi təxminən 791 000 AZN (model)"},"investors.ask.4.k":{"en":"The rest","az":"Qalanı"},"investors.ask.4.v":{"en":"A buffer","az":"Ehtiyat"},"investors.ask.eb":{"en":"The ask","az":"Tələb olunan məbləğ"},"investors.ask.k":{"en":"About 850,000 AZN, about $500,000.","az":"Təxminən 850 000 AZN, təxminən 500 000 USD."},"investors.ce.1":{"en":"Winnable clients in Azerbaijan: 600 firms able to pay × 25%","az":"Azərbaycanda qazanıla bilən müştərilər: ödəyə bilən 600 firma × 25%"},"investors.ce.2":{"en":"A year from Azerbaijan at that ceiling","az":"Həmin tavanda Azərbaycandan illik gəlir"},"investors.ce.2.v":{"en":"$7.0M","az":"7,0 mln USD"},"investors.ce.3":{"en":"Clients needed for $1B at 10× revenue, which is $100M a year","az":"10× gəlir əmsalında 1 mlrd USD üçün lazım olan müştəri; bu, ildə 100 mln USD-dir"},"investors.ce.4":{"en":"Deployment engineers at that size","az":"Həmin ölçüdə tətbiq mühəndisləri"},"investors.ce.h":{"en":"The ceiling, and what $1B would take","az":"Tavan və 1 mlrd USD üçün nə lazımdır"},"investors.ce.note":{"en":"At 20× revenue, about 1,080 clients would be enough. Azerbaijan alone is 7% of the 10× need (model). A strong regional business is the likely good outcome. $1B is the stretch.","az":"20× gəlir əmsalında təxminən 1 080 müştəri kifayət edərdi. Təkcə Azərbaycan 10× ehtiyacın 7%-idir (model). Güclü regional biznes ehtimal olunan yaxşı nəticədir. 1 mlrd USD iddialı hədəfdir."},"investors.co.1.h":{"en":"Global AI-agent companies","az":"Qlobal süni intellekt agenti şirkətləri"},"investors.co.1.p":{"en":"They sell to banks, telcos and government (reported).","az":"Onlar banklara, telekom şirkətlərinə və dövlətə satır (mənbədə bildirilir)."},"investors.co.2.h":{"en":"Local accounting and ERP tools","az":"Yerli mühasibat və ERP alətləri"},"investors.co.2.p":{"en":"Each does part of the back office (reported).","az":"Hər biri arxa ofisin bir hissəsini görür (mənbədə bildirilir)."},"investors.co.3.h":{"en":"In-house staff and outsourcers","az":"Daxili işçilər və autsorsinq"},"investors.co.3.p":{"en":"The real alternative today. We would sell growth without new hires, not layoffs.","az":"Bu gün real alternativ budur. Biz ixtisar deyil, yeni işçi götürmədən böyümə satardıq."},"investors.co.d.h":{"en":"Five differences","az":"Beş fərq"},"investors.co.d1.h":{"en":"The tier","az":"Seqment"},"investors.co.d1.p":{"en":"Mid-size and large private firms, below the banks and telcos those companies chase first (estimate).","az":"Həmin şirkətlərin ilk növbədə hədəflədiyi banklar və telekom şirkətlərindən aşağıda olan orta və böyük özəl şirkətlər (təxmin)."},"investors.co.d2.h":{"en":"Front office and back office together","az":"Ön ofis və arxa ofis birlikdə"},"investors.co.d2.p":{"en":"From a shop's WhatsApp message to the 1C entry, the bank line and the e-qaimə.","az":"Mağazanın WhatsApp mesajından 1C yazılışına, bank sətrinə və e-qaiməyə qədər."},"investors.co.d3.h":{"en":"Local systems","az":"Yerli sistemlər"},"investors.co.d3.p":{"en":"1C exports, e-qaimə files, EMAS, local bank statements, and Azerbaijani and Russian voice (planned).","az":"1C ixracları, e-qaimə faylları, EMAS, yerli bank çıxarışları, Azərbaycan və rus dillərində səs (planlaşdırılıb)."},"investors.co.d4.h":{"en":"Price","az":"Qiymət"},"investors.co.d4.p":{"en":"About 6,600 AZN a month on the model's mix (target). Only the platform fee if nothing is found.","az":"Modelin qarışığında ayda təxminən 6 600 AZN (hədəf). Heç nə tapılmasa, yalnız platforma haqqı."},"investors.co.d5.h":{"en":"The sprint","az":"Sprint"},"investors.co.d5.p":{"en":"A paid two-week start that ends in a Money Map, before any contract (target).","az":"Hər hansı müqavilədən əvvəl Pul xəritəsi ilə bitən iki həftəlik ödənişli başlanğıc (hədəf)."},"investors.co.eb":{"en":"Competition","az":"Rəqabət"},"investors.co.h":{"en":"Who else does this work, without names","az":"Bu işi başqa kim görür, adsız"},"investors.co.honest":{"en":"We found nobody here joining front office and back office for mid-size firms. That is a search result, not proof.","az":"Burada orta şirkətlər üçün ön ofisi və arxa ofisi birləşdirən heç kəs tapmadıq. Bu, axtarış nəticəsidir, sübut deyil."},"investors.co.lead":{"en":"This site names no companies. These are categories.","az":"Bu sayt heç bir şirkətin adını çəkmir. Bunlar kateqoriyalardır."},"investors.cv.b.c1":{"en":"Bucket","az":"Səbət"},"investors.cv.b.c2":{"en":"AZN a month","az":"Aylıq AZN"},"investors.cv.b.c3":{"en":"How it would be counted","az":"Necə hesablanardı"},"investors.cv.b.cap":{"en":"The model's distributor, 25M AZN of sales. AZN a month unless marked. All figures: model.","az":"Modeldəki distribyutor, 25 mln AZN satış. Başqa qeyd yoxdursa, aylıq AZN. Bütün rəqəmlər: model."},"investors.cv.b.cash":{"en":"The cost of waiting for money, at 15% a year (estimate).","az":"Pulu gözləməyin dəyəri, ildə 15% (təxmin)."},"investors.cv.b.h":{"en":"The distributor, bucket by bucket","az":"Distribyutor, səbət-səbət"},"investors.cv.b.hours":{"en":"Staff time saved. Shown, not charged.","az":"Qənaət edilən işçi vaxtı. Göstərilir, haqq alınmır."},"investors.cv.b.leak":{"en":"Overcharges and lost input VAT, found in purchases.","az":"Alışlarda tapılan artıq hesablamalar və itirilmiş ƏDV."},"investors.cv.b.loss":{"en":"Bad debts that did not happen.","az":"Baş verməyən ümidsiz borclar."},"investors.cv.b.once":{"en":"One time, from customers paying 10 days sooner.","az":"Bir dəfə, müştərilərin 10 gün tez ödəməsindən."},"investors.cv.b.once.k":{"en":"Cash back once","az":"Birdəfəlik qayıdan pul"},"investors.cv.b.sales":{"en":"Extra sales, counted at their margin.","az":"Əlavə satış, marjası ilə hesablanır."},"investors.cv.bar":{"en":"The default price fails the 2.5× value bar in the low case for all three examples (2.2×, 1.8×, 2.0×). So the sprint measures value before a price is set (model).","az":"Standart qiymət aşağı ssenaridə hər üç nümunə üçün 2,5× dəyər həddindən keçmir (2,2×, 1,8×, 2,0×). Ona görə sprint qiymət qoyulmazdan əvvəl dəyəri ölçür (model)."},"investors.cv.c1":{"en":"Example","az":"Nümunə"},"investors.cv.cap":{"en":"The model's three examples, AZN a month. All figures: model.","az":"Modelin üç nümunəsi, aylıq AZN. Bütün rəqəmlər: model."},"investors.cv.eb":{"en":"Client value","az":"Müştəri dəyəri"},"investors.cv.ex1":{"en":"Distributor, 25M AZN of sales","az":"Distribyutor, 25 mln AZN satış"},"investors.cv.ex2":{"en":"Retail or pharmacy chain, 40M AZN","az":"Pərakəndə və ya aptek şəbəkəsi, 40 mln AZN"},"investors.cv.ex3":{"en":"Private clinic group, 12M AZN","az":"Özəl klinika qrupu, 12 mln AZN"},"investors.cv.h":{"en":"Three example clients, all from the model","az":"Üç nümunə müştəri, hamısı modeldən"},"investors.cv.lead":{"en":"A sprint would measure each client's own numbers before any fee is set.","az":"Sprint hər müştərinin öz rəqəmlərini haqq müəyyən edilməzdən əvvəl ölçərdi."},"investors.ec.c0":{"en":"At","az":"Ölçü"},"investors.ec.c100":{"en":"100 clients","az":"100 müştəri"},"investors.ec.c150":{"en":"150 clients","az":"150 müştəri"},"investors.ec.c30":{"en":"30 clients","az":"30 müştəri"},"investors.ec.cap":{"en":"NowAI at three sizes, one steady month, shown per year. All figures: model.","az":"NowAI üç ölçüdə, bir sabit ay, illik göstərilir. Bütün rəqəmlər: model."},"investors.ec.eb":{"en":"Economics","az":"İqtisadiyyat"},"investors.ec.f1":{"en":"Blended fee a month on the 40/30/30 mix; about $46,400 a year","az":"40/30/30 qarışığında orta aylıq haqq; ildə təxminən 46 400 USD"},"investors.ec.f2":{"en":"Blended fee a month in the low case","az":"Aşağı ssenaridə orta aylıq haqq"},"investors.ec.f3":{"en":"Direct technology cost a client a month","az":"Bir müştəri üçün aylıq birbaşa texnologiya xərci"},"investors.ec.f4":{"en":"Clients to break even: −$0.17M a year at 5, +$0.21M at 15","az":"Xərcləri ödəmək üçün müştəri sayı: 5-də ildə −0,17 mln USD, 15-də +0,21 mln USD"},"investors.ec.h":{"en":"What a client would pay, and what it would cost to serve","az":"Müştəri nə ödəyərdi və ona xidmət nəyə başa gələrdi"},"investors.ec.lead":{"en":"Steady-month figures from the model. The volumes and most unit costs are assumptions.","az":"Modeldən sabit ay rəqəmləri. Həcmlər və vahid xərclərin çoxu fərziyyədir."},"investors.ec.note":{"en":"The 73-76% gross margin depends on keeping setup as configuration, not code (model).","az":"73-76% ümumi marja quraşdırmanın kod deyil, tənzimləmə olaraq qalmasından asılıdır (model)."},"investors.ec.r1":{"en":"Revenue a year","az":"İllik gəlir"},"investors.ec.r2":{"en":"Operating profit a year","az":"İllik əməliyyat mənfəəti"},"investors.ec.r3":{"en":"Gross margin","az":"Ümumi marja"},"investors.ec.r4":{"en":"People","az":"İnsanlar"},"investors.ec.v.p100":{"en":"$3.19M","az":"3,19 mln USD"},"investors.ec.v.p150":{"en":"$4.95M","az":"4,95 mln USD"},"investors.ec.v.p30":{"en":"$0.75M","az":"0,75 mln USD"},"investors.ec.v.r100":{"en":"$4.85M","az":"4,85 mln USD"},"investors.ec.v.r150":{"en":"$7.17M","az":"7,17 mln USD"},"investors.ec.v.r30":{"en":"$1.50M","az":"1,50 mln USD"},"investors.fi.eb":{"en":"Files","az":"Fayllar"},"investors.fi.p":{"en":"The deck, the pitch and the model are shared directly. Tell the person who shared this site.","az":"Təqdimat, qısa təqdimat mətni və model birbaşa paylaşılır. Bu saytı paylaşan şəxsə deyin."},"investors.hero.cta2":{"en":"The plan on one page","az":"Plan bir səhifədə"},"investors.hero.h":{"en":"Every number labelled. The first 90 days will test them.","az":"Hər rəqəm etiketlidir. İlk 90 gün onları sınaqdan keçirəcək."},"investors.hero.lead":{"en":"Client value, unit economics, growth, stress tests, competition and risks, in one place.","az":"Müştəri dəyəri, vahid iqtisadiyyatı, artım, stress-testlər, rəqabət və risklər bir yerdə."},"investors.hero.note":{"en":"Model figures are arithmetic on stated assumptions; targets are goals. The Discovery Sprints are designed to measure both on real company data.","az":"Model rəqəmləri göstərilmiş fərziyyələr üzərində hesablamadır, hədəflər isə məqsədlərdir. Kəşf sprintləri hər ikisini real şirkət məlumatları üzərində ölçmək üçün nəzərdə tutulub."},"investors.meta.desc":{"en":"NowAI's plan in numbers: client value, economics, growth, stress tests, competition and risks. Every figure is labelled model or target.","az":"NowAI-ın planı rəqəmlərlə: müştəri dəyəri, iqtisadiyyat, artım, stress-testlər, rəqabət və risklər. Hər rəqəm model və ya hədəf kimi işarələnib."},"investors.rk.1":{"en":"Becoming an agency","az":"Agentliyə çevrilmək"},"investors.rk.1.d":{"en":"A fixed menu of roles; setup is configuration, not code; clients per engineer tracked every month.","az":"Rolların sabit menyusu; quraşdırma kod deyil, tənzimləmədir; hər mühəndisə düşən müştərilər hər ay izlənir."},"investors.rk.1.s":{"en":"Each client needs custom code; fewer than 5 clients per deployment engineer.","az":"Hər müştəri fərdi kod tələb edir; hər tətbiq mühəndisinə 5-dən az müştəri."},"investors.rk.2":{"en":"Sales slower than planned","az":"Satışlar plandan yavaş"},"investors.rk.2.d":{"en":"Paid sprints after the design partners; narrow to the sector that converts.","az":"Dizayn-tərəfdaşlardan sonra ödənişli sprintlər; nəticə verən sahəyə fokuslanmaq."},"investors.rk.2.s":{"en":"Fewer than 2 sprints signed by month 6.","az":"6-cı aya qədər 2-dən az sprint imzalanıb."},"investors.rk.3":{"en":"Value smaller than modelled","az":"Dəyər modeldən kiçik"},"investors.rk.3.d":{"en":"Price from the measured Money Map; a lower platform fee and a higher outcome share.","az":"Ölçülmüş Pul xəritəsinə görə qiymət; daha aşağı platforma haqqı və daha yüksək nəticə payı."},"investors.rk.3.s":{"en":"Money Maps below 3× the fee.","az":"Haqqın 3×-indən aşağı Pul xəritələri."},"investors.rk.4":{"en":"No local late-payment data","az":"Gecikmiş ödənişlər barədə yerli məlumat yoxdur"},"investors.rk.4.d":{"en":"Lead with Leaks recovered and Extra sales instead.","az":"Bunun əvəzinə Geri qaytarılan sızma və Əlavə satışla başlamaq."},"investors.rk.4.s":{"en":"Receivables in sprints close to terms.","az":"Sprintlərdə debitor borcları şərtlərə yaxındır."},"investors.rk.5":{"en":"A larger player moves down-market","az":"Daha böyük oyunçu aşağı seqmentə enir"},"investors.rk.5.d":{"en":"Speed, local systems, price, and front office through to back office.","az":"Sürət, yerli sistemlər, qiymət və ön ofisdən arxa ofisə qədər iş."},"investors.rk.5.s":{"en":"Global players pitching distributors and clinics.","az":"Qlobal oyunçular distribyutorlara və klinikalara təklif edir."},"investors.rk.6":{"en":"Data and law","az":"Məlumat və qanun"},"investors.rk.6.d":{"en":"Get the answer before the first sprint; a quote for local hosting.","az":"Cavabı ilk sprintdən əvvəl almaq; yerli hostinq üçün qiymət təklifi."},"investors.rk.6.s":{"en":"A lawyer says consent or local hosting is needed.","az":"Hüquqşünas razılıq və ya yerli hostinqin lazım olduğunu deyir."},"investors.rk.7":{"en":"Accuracy on local documents and voice","az":"Yerli sənədlərdə və səsdə dəqiqlik"},"investors.rk.7.d":{"en":"The Gate holds anything unsure; improve before going live.","az":"Təsdiq növbəsi şübhəli hər şeyi saxlayır; istifadəyə verməzdən əvvəl təkmilləşdirmək."},"investors.rk.7.s":{"en":"Replay match below 95% on the client's own month.","az":"Müştərinin öz ayında təkrar uyğunluğu 95%-dən aşağı."},"investors.rk.c1":{"en":"Risk","az":"Risk"},"investors.rk.c2":{"en":"Early sign","az":"Erkən əlamət"},"investors.rk.c3":{"en":"What we would do","az":"Nə edərdik"},"investors.rk.cap":{"en":"Risks, early signs and what we would do. Early-sign thresholds are targets.","az":"Risklər, erkən əlamətlər və nə edərdik. Erkən əlamət hədləri hədəfdir."},"investors.rk.eb":{"en":"Risks","az":"Risklər"},"investors.rk.h":{"en":"What could go wrong, and what we would watch","az":"Nə səhv gedə bilər və nəyi izləyərdik"},"investors.rk.lead":{"en":"Four risks decide the plan: becoming an agency, sales pace, unmeasured value and a larger player moving down-market.","az":"Planı dörd risk həll edir: agentliyə çevrilmək, satış tempi, ölçülməmiş dəyər və daha böyük oyunçunun aşağı seqmentə enməsi."},"investors.rk.wrong.1":{"en":"Two of three sprints find less than twice the fee.","az":"Üç sprintdən ikisi haqqın iki mislindən az dəyər tapır."},"investors.rk.wrong.2":{"en":"No company pays for a sprint or a contract by day 90.","az":"90-cı günə qədər heç bir şirkət sprint və ya müqavilə üçün ödəmir."},"investors.rk.wrong.3":{"en":"Companies want a chatbot, not a role that finishes the job.","az":"Şirkətlər işi sona çatdıran rol deyil, çatbot istəyir."},"investors.rk.wrong.h":{"en":"What would prove us wrong","az":"Yanıldığımızı nə sübut edərdi"},"investors.rp.c0":{"en":"Month","az":"Ay"},"investors.rp.cap":{"en":"Base case, at four points in time. All figures: model.","az":"Əsas ssenari, dörd zaman nöqtəsində. Bütün rəqəmlər: model."},"investors.rp.eb":{"en":"Growth","az":"Artım"},"investors.rp.f1":{"en":"Cash at the start","az":"Başlanğıcda pul"},"investors.rp.f2":{"en":"First profitable month","az":"İlk mənfəətli ay"},"investors.rp.f3":{"en":"Lowest cash balance, about","az":"Ən aşağı pul qalığı, təxminən"},"investors.rp.h":{"en":"Growth over 48 months","az":"48 ay ərzində artım"},"investors.rp.lead":{"en":"The base case. It needs no money beyond the 500,000 AZN start (model).","az":"Əsas ssenari. Başlanğıcdakı 500 000 AZN-dən əlavə pul tələb etmir (model)."},"investors.rp.r1":{"en":"Clients","az":"Müştərilər"},"investors.rp.r2":{"en":"Run-rate a year","az":"İllik gəlir tempi"},"investors.rp.v12":{"en":"$0.16M","az":"0,16 mln USD"},"investors.rp.v24":{"en":"$0.93M","az":"0,93 mln USD"},"investors.rp.v36":{"en":"$2.35M","az":"2,35 mln USD"},"investors.rp.v48":{"en":"$3.72M","az":"3,72 mln USD"},"investors.st.0":{"en":"Base case","az":"Əsas ssenari"},"investors.st.0.f":{"en":"None","az":"Yoxdur"},"investors.st.0.m":{"en":"Month 18","az":"18-ci ay"},"investors.st.0.r":{"en":"47 clients, $2.35M a year","az":"47 müştəri, ildə 2,35 mln USD"},"investors.st.1":{"en":"Half the sales pace","az":"Satış tempinin yarısı"},"investors.st.1.f":{"en":"About 164,000 AZN","az":"Təxminən 164 000 AZN"},"investors.st.1.m":{"en":"Month 25","az":"25-ci ay"},"investors.st.1.r":{"en":"23 clients, $1.18M a year","az":"23 müştəri, ildə 1,18 mln USD"},"investors.st.2":{"en":"Half the value","az":"Dəyərin yarısı"},"investors.st.2.f":{"en":"About 38,000 AZN","az":"Təxminən 38 000 AZN"},"investors.st.2.m":{"en":"Month 22","az":"22-ci ay"},"investors.st.2.r":{"en":"47 clients, $1.84M a year","az":"47 müştəri, ildə 1,84 mln USD"},"investors.st.3":{"en":"Both at once","az":"Hər ikisi birlikdə"},"investors.st.3.f":{"en":"About 291,000 AZN","az":"Təxminən 291 000 AZN"},"investors.st.3.m":{"en":"Month 27","az":"27-ci ay"},"investors.st.3.r":{"en":"23 clients, $0.92M a year","az":"23 müştəri, ildə 0,92 mln USD"},"investors.st.4":{"en":"5 clients per deployment engineer, not 8","az":"Hər tətbiq mühəndisinə 8 deyil, 5 müştəri"},"investors.st.4.f":{"en":"None","az":"Yoxdur"},"investors.st.4.m":{"en":"Month 19","az":"19-cu ay"},"investors.st.4.r":{"en":"47 clients, 23 people (not 19)","az":"47 müştəri, 23 nəfər (19 deyil)"},"investors.st.ask":{"en":"**The ask: about 850,000 AZN, about $500,000 (target).** The base case needs 500,000 AZN. The worst test needs about 791,000 AZN in total. The rest is a buffer. With it, none of the four tests runs out of cash (model).","az":"**Tələb olunan məbləğ: təxminən 850 000 AZN, təxminən 500 000 USD (hədəf).** Əsas ssenariyə 500 000 AZN lazımdır. Ən pis testə cəmi təxminən 791 000 AZN lazımdır. Qalanı ehtiyatdır. Bu məbləğlə dörd testin heç birində pul tükənmir (model)."},"investors.st.c1":{"en":"Test","az":"Test"},"investors.st.c2":{"en":"First profitable month","az":"İlk mənfəətli ay"},"investors.st.c3":{"en":"Extra funding needed","az":"Lazım olan əlavə maliyyə"},"investors.st.c4":{"en":"At month 36","az":"36-cı ayda"},"investors.st.cap":{"en":"Base case and four stress tests. All figures: model.","az":"Əsas ssenari və dörd stress-test. Bütün rəqəmlər: model."},"investors.st.eb":{"en":"Stress tests","az":"Stress-testlər"},"investors.st.h":{"en":"Four ways the plan could go worse","az":"Planın daha pis gedə biləcəyi dörd yol"},"investors.st.kind":{"en":"The model does not raise churn when value is low. In reality it would, so the low-value cases are kinder than life.","az":"Model dəyər aşağı olanda müştəri itkisini artırmır. Reallıqda artırardı, ona görə aşağı dəyərli ssenarilər həyatdan daha yumşaqdır."},"investors.st.lead":{"en":"Each test ran on a copy of the model. The plan is most sensitive to how fast companies buy, then to how much value shows up.","az":"Hər test modelin surətində aparılıb. Plan ən çox şirkətlərin nə qədər tez aldığına, sonra isə nə qədər dəyər gerçəkləşdiyinə həssasdır."},"investors.sum.1.k":{"en":"What we will build","az":"Nə quracağıq"},"investors.sum.1.v":{"en":"The AI operations team for mid-size and large companies: seven roles on NowAI Core, with a person approving what matters at the Gate (the approval queue).","az":"Orta və böyük şirkətlər üçün süni intellekt əməliyyat komandası: NowAI Core üzərində yeddi rol, vacib olanı Təsdiq növbəsində insan təsdiqləyir."},"investors.sum.10.k":{"en":"First 90 days","az":"İlk 90 gün"},"investors.sum.10.v":{"en":"15 owner interviews, 3 design-partner sprints, 2 roles measured in replay, legal answers in writing (target).","az":"15 sahibkar müsahibəsi, 3 dizayn-tərəfdaş sprinti, təkrar rejimində ölçülən 2 rol, yazılı hüquqi cavablar (hədəf)."},"investors.sum.11.k":{"en":"Go","az":"Davam"},"investors.sum.11.v":{"en":"At day 90, at least 2 of 3 sprints find at least 3× the proposed fee, and at least one company signs a paid contract (target).","az":"90-cı gündə 3 sprintdən ən azı 2-si təklif olunan haqqın ən azı 3× qədər dəyər tapır və ən azı bir şirkət ödənişli müqavilə imzalayır (hədəf)."},"investors.sum.12.k":{"en":"Change sector","az":"Sahəni dəyiş"},"investors.sum.12.v":{"en":"Value is found, but nobody signs.","az":"Dəyər tapılır, amma heç kim imzalamır."},"investors.sum.13.k":{"en":"Stop","az":"Dayan"},"investors.sum.13.v":{"en":"The sprints find less than 2× the fee.","az":"Sprintlər haqqın 2×-indən az dəyər tapır."},"investors.sum.2.k":{"en":"Sell to","az":"Kimə satırıq"},"investors.sum.2.v":{"en":"The owner or finance director of distributors, retail and pharmacy chains, and private clinics in Azerbaijan. Not banks or telcos.","az":"Azərbaycanda distribyutorların, pərakəndə və aptek şəbəkələrinin və özəl klinikaların sahibi və ya maliyyə direktoru. Banklar və telekom şirkətləri deyil."},"investors.sum.3.k":{"en":"Sell what","az":"Nə satırıq"},"investors.sum.3.v":{"en":"Money found: Extra sales, Cash in sooner, Losses avoided, Leaks recovered. Hours are shown, not charged.","az":"Tapılan pul: Əlavə satış, Pul daha tez gəlir, Qarşısı alınan itki, Geri qaytarılan sızma. Saatlar göstərilir, haqq alınmır."},"investors.sum.4.k":{"en":"Price","az":"Qiymət"},"investors.sum.4.v":{"en":"A 3,500 AZN platform fee a month plus 20% of measured value (target). On the model's mix it blends to 6,571 AZN a month (model).","az":"Ayda 3 500 AZN platforma haqqı və ölçülən dəyərin 20%-i (hədəf). Modelin qarışığında orta hesabla ayda 6 571 AZN edir (model)."},"investors.sum.5.k":{"en":"Start with","az":"Nə ilə başlayırıq"},"investors.sum.5.v":{"en":"A two-week Discovery Sprint on one week of the client's own data, ending in a Money Map. Two roles would then run in replay on its past weeks. List price 5,000 AZN; the first three, with design partners, free or discounted (target).","az":"Müştərinin öz məlumatlarının bir həftəsi üzərində iki həftəlik Kəşf sprinti; o, Pul xəritəsi ilə bitir. Sonra iki rol keçmiş həftələr üzərində təkrar rejimində işləyərdi. Siyahı qiyməti 5 000 AZN; dizayn-tərəfdaşlarla ilk üçü pulsuz və ya endirimlə (hədəf)."},"investors.sum.6.k":{"en":"Why it can work","az":"Niyə işləyə bilər"},"investors.sum.6.v":{"en":"The model's distributor gets 22,782 AZN a month of value, 3.2× its fee. NowAI breaks even between 5 and 15 clients and is profitable from month 18 in the base case (model).","az":"Modeldəki distribyutor ayda 22 782 AZN dəyər alır, haqqının 3,2× qədər. NowAI 5 ilə 15 müştəri arasında xərclərini ödəyir və əsas ssenaridə 18-ci aydan mənfəətlidir (model)."},"investors.sum.7.k":{"en":"Why it might not","az":"Niyə işləməyə bilər"},"investors.sum.7.v":{"en":"Every value driver still has to be measured. At half the value, the fee fails the 2.5× test. At half the sales pace, profit moves to month 25 (model).","az":"Dəyərin hər amili hələ ölçülməlidir. Dəyərin yarısında haqq 2,5× testindən keçmir. Satış tempi yarı olsa, mənfəət 25-ci aya keçir (model)."},"investors.sum.8.k":{"en":"Money","az":"Pul"},"investors.sum.8.v":{"en":"About 850,000 AZN, about $500,000, which covers the worst stress test (target).","az":"Təxminən 850 000 AZN, təxminən 500 000 USD; ən pis stress-testi qarşılayır (hədəf)."},"investors.sum.9.k":{"en":"Ceiling and stretch","az":"Tavan və iddialı hədəf"},"investors.sum.9.v":{"en":"About $7.0M a year from Azerbaijan. $1B needs about 2,160 clients across the region (model).","az":"Azərbaycandan ildə təxminən 7,0 mln USD. 1 mlrd USD üçün region üzrə təxminən 2 160 müştəri lazımdır (model)."},"investors.sum.eb":{"en":"Summary","az":"Xülasə"},"investors.sum.h":{"en":"The decision on one page","az":"Qərar bir səhifədə"},"investors.sum.lead":{"en":"The business on one page: what we will build, who we sell to, how we price it, and how day 90 decides what comes next.","az":"Biznes bir səhifədə: nə quracağıq, kimə satacağıq, qiyməti necə qoyacağıq və növbəti addımı 90-cı gün necə müəyyən edəcək."},"s.bc.aria":{"en":"Breadcrumb","az":"Naviqasiya yolu"},"s.bc.home":{"en":"Home","az":"Ana səhifə"},"s.brand.home":{"en":"NowAI, home page","az":"NowAI, ana səhifə"},"s.bucket.care":{"en":"Keeps customers (not charged)","az":"Müştərini saxlayır (haqq alınmır)"},"s.bucket.cash":{"en":"Cash in sooner","az":"Pul daha tez gəlir"},"s.bucket.fines":{"en":"Fewer fines (not charged)","az":"Daha az cərimə (haqq alınmır)"},"s.bucket.hours":{"en":"Hours (shown, not charged)","az":"Saatlar (göstərilir, haqq alınmır)"},"s.bucket.leak":{"en":"Leaks recovered","az":"Geri qaytarılan sızma"},"s.bucket.loss":{"en":"Losses avoided","az":"Qarşısı alınan itki"},"s.bucket.renew":{"en":"Not charged: why owners renew","az":"Haqq alınmır: sahibkarların uzatma səbəbi"},"s.bucket.sales":{"en":"Extra sales","az":"Əlavə satış"},"s.cta.contact":{"en":"How to reach us","az":"Bizə necə çatmaq olar"},"s.cta.more":{"en":"Read more","az":"Ətraflı"},"s.cta.roles":{"en":"All seven roles","az":"Bütün yeddi rol"},"s.cta.sprint":{"en":"Start with a Discovery Sprint","az":"Kəşf sprinti ilə başlayın"},"s.cta.sprint.short":{"en":"Discovery Sprint","az":"Kəşf sprinti"},"s.cta.story.ind":{"en":"See an example day at a distributor","az":"Distribyutorda nümunə bir günə baxın"},"s.ctaband2.h":{"en":"Talk to the founder.","az":"Təsisçi ilə danışın."},"s.ctaband2.p":{"en":"Tell the person who shared this site with you. They will pass your message straight to the founder.","az":"Bu saytı sizinlə paylaşan şəxsə deyin. O, mesajınızı birbaşa təsisçiyə çatdıracaq."},"s.fig.fee":{"en":"Fee a month","az":"Aylıq haqq"},"s.fig.hours-note":{"en":"Value includes Hours (shown, not charged); the fee is charged only on the four buckets.","az":"Dəyərə Saatlar daxildir (göstərilir, haqq alınmır); haqq yalnız dörd dəyər səbəti üzrə alınır."},"s.fig.low":{"en":"If only half the value shows up","az":"Dəyərin yalnız yarısı gerçəkləşsə"},"s.fig.ratio":{"en":"Value ÷ fee","az":"Dəyər ÷ haqq"},"s.fig.value":{"en":"Value a month","az":"Aylıq dəyər"},"s.foot.date":{"en":"November 2026","az":"Noyabr 2026"},"s.foot.disclaimer":{"en":"NowAI is pre-launch: this site describes the service it will offer. Companies, people and amounts in the examples are invented, and every figure carries its label.","az":"NowAI hələ bazara çıxmayıb: bu sayt onun təqdim edəcəyi xidməti təsvir edir. Nümunələrdəki şirkətlər, insanlar və məbləğlər uydurulub, hər rəqəmin isə öz etiketi var."},"s.foot.drafts":{"en":"Azerbaijani and Russian text on this site is a draft for a native speaker to check.","az":"Bu saytdakı Azərbaycan və rus dilində mətnlər ana dili daşıyıcısının yoxlaması üçün qaralamadır."},"s.foot.h.company":{"en":"Company","az":"Şirkət"},"s.foot.h.fn":{"en":"By function","az":"Funksiya üzrə"},"s.foot.h.industries":{"en":"Industries","az":"Sahələr"},"s.foot.h.platform":{"en":"How it works","az":"Necə işləyir"},"s.foot.h.roles":{"en":"Roles","az":"Rollar"},"s.foot.h.start":{"en":"Start","az":"Başlanğıc"},"s.foot.line":{"en":"The AI operations team for companies in Azerbaijan.","az":"Azərbaycandakı şirkətlər üçün süni intellekt əməliyyat komandası."},"s.foot.privacy":{"en":"This site has no forms, cookies or analytics. Your language choice is saved in this browser only. Fonts load from Google Fonts.","az":"Bu saytda forma, kuki və analitika yoxdur. Dil seçiminiz yalnız bu brauzerdə saxlanılır. Şriftlər Google Fonts-dan yüklənir."},"s.foot.top":{"en":"Back to top","az":"Yuxarı qayıdın"},"s.ind.automotive.line":{"en":"Brand dealers, service centres and parts distributors.","az":"Brend dilerləri, servis mərkəzləri və ehtiyat hissələri distribyutorları."},"s.ind.construction.line":{"en":"Building-materials suppliers and dealers; developers.","az":"Tikinti materialları təchizatçıları və dilerləri; developerlər."},"s.ind.distribution.line":{"en":"Food, FMCG and household-goods distributors and wholesalers.","az":"Ərzaq, FMCG və məişət malları distribyutorları və topdan satıcılar."},"s.ind.education.line":{"en":"Private school groups, universities and course centres.","az":"Özəl məktəb qrupları, universitetlər və kurs mərkəzləri."},"s.ind.financial-services.line":{"en":"Insurers' agencies, microfinance, leasing. Not banks.","az":"Sığorta agentlikləri, mikromaliyyə, lizinq. Banklar deyil."},"s.ind.healthcare.line":{"en":"Clinic groups, diagnostic centres and private hospitals.","az":"Klinika qrupları, diaqnostika mərkəzləri və özəl xəstəxanalar."},"s.ind.hospitality.line":{"en":"Hotel groups, restaurant groups and caterers.","az":"Otel qrupları, restoran qrupları və ketərinq şirkətləri."},"s.ind.hr":{"en":"HR and staff","az":"HR və işçilər"},"s.ind.hr.line":{"en":"Staff requests, leave, payroll changes and EMAS contract data, in any industry. A function, not an industry: see People Desk (HR).","az":"İşçi müraciətləri, məzuniyyət, əmək haqqı dəyişiklikləri və EMAS müqavilə məlumatları, istənilən sahədə. Sahə deyil, funksiyadır: Kadr masasına (HR) baxın."},"s.ind.logistics.line":{"en":"Freight forwarders, trucking firms and customs brokers.","az":"Ekspeditorlar, yük avtomobili firmaları və gömrük brokerləri."},"s.ind.retail-pharmacy.line":{"en":"Grocery, electronics and home-goods chains; multi-branch pharmacies.","az":"Ərzaq, elektronika və ev əşyaları şəbəkələri; çoxfilialli apteklər."},"s.ind.telecom.line":{"en":"Regional internet providers, dealer networks. Not large operators.","az":"Regional internet provayderləri, diler şəbəkələri. Böyük operatorlar deyil."},"s.lang.aria":{"en":"Language","az":"Dil"},"s.lang.az":{"en":" (Azerbaijani, draft)","az":" (azərbaycanca, qaralama)"},"s.lang.en":{"en":" (English)","az":" (ingiliscə)"},"s.lbl.estimate":{"en":"estimate","az":"təxmin"},"s.lbl.model":{"en":"model","az":"model"},"s.lbl.target":{"en":"target","az":"hədəf"},"s.mm.company.h":{"en":"Mission and plan","az":"Missiya və plan"},"s.mm.company.p":{"en":"An AI operations team for every growing company in Azerbaijan.","az":"Azərbaycanda böyüyən hər şirkət üçün süni intellekt əməliyyat komandası."},"s.mm.ind.all":{"en":"All industries","az":"Bütün sahələr"},"s.mm.ind.not":{"en":"Not first targets: large banks, large mobile and fixed-line operators, state utilities, state bodies, micro firms.","az":"İlk hədəf deyil: böyük banklar, böyük mobil və sabit xətt operatorları, dövlət kommunal xidmətləri, dövlət qurumları, mikro firmalar."},"s.mm.ind.p":{"en":"Ten industries, sorted by where we plan to start. Each page says what NowAI would do there.","az":"On sahə, başlamağı planlaşdırdığımız ardıcıllıqla. Hər səhifə NowAI-ın orada nə edəcəyini deyir."},"s.mm.platform.h":{"en":"One core under every role","az":"Hər rolun altında bir nüvə"},"s.mm.platform.p":{"en":"Channels, reading, company memory, the Gate and measurement. Designed once, shared by every role.","az":"Kanallar, oxuma, şirkət yaddaşı, Təsdiq növbəsi və ölçmə. Bir dəfə layihələndirilir, bütün rollar üçün ortaqdır."},"s.mm.roles.back":{"en":"Back office","az":"Daxili əməliyyatlar"},"s.mm.roles.eb":{"en":"By function","az":"Funksiya üzrə"},"s.mm.roles.front":{"en":"Front office","az":"Müştəri tərəfi"},"s.mm.roles.h":{"en":"Seven roles, one core","az":"Yeddi rol, bir nüvə"},"s.mm.roles.owner":{"en":"For the owner","az":"Sahibkar üçün"},"s.mm.roles.p":{"en":"A client would start with the one or two roles that hold the most money.","az":"Müştəri ən çox pulun cəmləndiyi bir və ya iki rolla başlayardı."},"s.mm.roles.pick":{"en":"How a client would pick its first roles","az":"Müştəri ilk rollarını necə seçərdi"},"s.nav.after":{"en":"After the sprint","az":"Sprintdən sonra"},"s.nav.aria":{"en":"Main","az":"Əsas menyu"},"s.nav.calculator":{"en":"Your company calculator","az":"Şirkətiniz üçün kalkulyator"},"s.nav.close":{"en":"Close menu","az":"Menyunu bağlayın"},"s.nav.company":{"en":"Company","az":"Şirkət"},"s.nav.connectors":{"en":"Planned connectors","az":"Planlaşdırılan qoşulmalar"},"s.nav.core":{"en":"NowAI Core","az":"NowAI Core"},"s.nav.gate":{"en":"The Gate","az":"Təsdiq növbəsi"},"s.nav.industries":{"en":"Industries","az":"Sahələr"},"s.nav.languages":{"en":"Languages","az":"Dillər"},"s.nav.menu":{"en":"Menu","az":"Menyu"},"s.nav.open":{"en":"Open menu","az":"Menyunu açın"},"s.nav.platform":{"en":"How it works","az":"Necə işləyir"},"s.nav.pricing":{"en":"Pricing","az":"Qiymət"},"s.nav.roles":{"en":"Roles","az":"Rollar"},"s.nav.story":{"en":"See a day","az":"Bir günə baxın"},"s.page.about":{"en":"About","az":"Haqqımızda"},"s.page.automotive":{"en":"Automotive","az":"Avtomobil sahəsi"},"s.page.books":{"en":"Books","az":"Uçot"},"s.page.careers":{"en":"Careers","az":"Karyera"},"s.page.collections":{"en":"Collections","az":"Ödəniş nəzarəti"},"s.page.construction":{"en":"Construction and building materials","az":"Tikinti və tikinti materialları"},"s.page.contact":{"en":"Contact","az":"Əlaqə"},"s.page.customer-care":{"en":"Customer Care","az":"Müştəri xidməti"},"s.page.distribution":{"en":"Distribution and wholesale","az":"Distribusiya və topdan satış"},"s.page.education":{"en":"Private education","az":"Özəl təhsil"},"s.page.financial-services":{"en":"Financial services","az":"Maliyyə xidmətləri"},"s.page.glossary":{"en":"Glossary","az":"Lüğət"},"s.page.healthcare":{"en":"Private healthcare","az":"Özəl səhiyyə"},"s.page.home.title":{"en":"NowAI: the AI operations team for companies in Azerbaijan","az":"NowAI: Azərbaycandakı şirkətlər üçün süni intellekt əməliyyat komandası"},"s.page.hospitality":{"en":"Hospitality and food service","az":"Qonaqpərvərlik və iaşə"},"s.page.industries":{"en":"Industries","az":"Sahələr"},"s.page.investors":{"en":"Investors","az":"İnvestorlar"},"s.page.logistics":{"en":"Logistics and freight","az":"Logistika və yükdaşıma"},"s.page.notes":{"en":"Notes","az":"Qeydlər"},"s.page.notice":{"en":"Site notice","az":"Sayt bildirişi"},"s.page.owners-brief":{"en":"Owner's Brief","az":"Sahibkar hesabatı"},"s.page.payables-check":{"en":"Payables Check","az":"Alış yoxlaması"},"s.page.people-desk":{"en":"People Desk (HR)","az":"Kadr masası (HR)"},"s.page.platform":{"en":"NowAI Core","az":"NowAI Core"},"s.page.retail-pharmacy":{"en":"Retail and pharmacy chains","az":"Pərakəndə və aptek şəbəkələri"},"s.page.sales-desk":{"en":"Sales Desk","az":"Satış masası"},"s.page.solutions":{"en":"Roles","az":"Rollar"},"s.page.telecom":{"en":"Telecommunications and internet","az":"Telekommunikasiya və internet"},"s.page.trust":{"en":"How control works","az":"Nəzarət necə işləyir"},"s.price.none":{"en":"If nothing is measured, you pay only the 3,500 AZN platform fee (target).","az":"Heç nə ölçülməsə, yalnız 3 500 AZN platforma haqqını ödəyirsiniz (hədəf)."},"s.role.books.line":{"en":"1C entries and bank reconciliation, approved by the chief accountant.","az":"1C yazılışları və bank uzlaşması, baş mühasibin təsdiqi ilə."},"s.role.collections.line":{"en":"Who owes what, and polite reminders every day.","az":"Kim nə qədər borcludur, və hər gün nəzakətli xatırlatmalar."},"s.role.customer-care.line":{"en":"Questions, deliveries, complaints and small credit notes.","az":"Suallar, çatdırılmalar, şikayətlər və kiçik kredit-notalar."},"s.role.owners-brief.line":{"en":"One message to the owner at 19:00.","az":"Saat 19:00-da sahibkara bir mesaj."},"s.role.payables-check.line":{"en":"Supplier invoices checked against order, delivery, contract and e-qaimə.","az":"Təchizatçı qaimələri sifariş, təhvil, müqavilə və e-qaimə ilə yoxlanılır."},"s.role.people-desk.line":{"en":"Staff requests, leave, payroll changes and EMAS contract data.","az":"İşçi müraciətləri, məzuniyyət, əmək haqqı dəyişiklikləri və EMAS müqavilə məlumatları."},"s.role.sales-desk.line":{"en":"Orders and quotes on every channel, day and night.","az":"Hər kanalda sifarişlər və qiymət təklifləri, gecə-gündüz."},"s.skip":{"en":"Skip to content","az":"Məzmuna keçin"},"s.status.first":{"en":"First focus","az":"Birinci növbədə"},"s.status.function":{"en":"By function","az":"Funksiya üzrə"},"s.status.later":{"en":"Later, with partners","az":"Sonra, tərəfdaşlarla"},"s.status.next":{"en":"Next","az":"Növbəti"},"s.wk.pause":{"en":"Pause","az":"Fasilə"},"s.wk.play":{"en":"Play","az":"Oynat"},"s.wk.replay":{"en":"Play again","az":"Yenidən oynat"}};</script>
+<script src="assets/site.js"></script>
+
+</body>
+</html>

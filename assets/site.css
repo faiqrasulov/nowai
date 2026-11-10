@@ -1111,3 +1111,12 @@ body[data-group="industries"] .n-pg-hero .n-who { margin-bottom: 28px; }
   html { scroll-behavior: auto; }
   :where([class*="n-"], [class*="n-"]::before, [class*="n-"]::after) { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
 }
+
+/* Keep the customer next step visible on small screens. */
+@media(max-width:599px){.n-hdr .n-hdr__cta{display:inline-flex;padding:8px 12px;min-height:40px}.n-hdr__cta-l{display:none}.n-hdr__cta-s{display:inline}.n-hdr__tools{gap:8px}.n-lang__b{min-width:32px;padding:0 5px}.n-hdr__in{gap:8px}.n-hdr .n-brand{font-size:18px}.n-hdr .n-brand .n-mark{width:24px;height:24px}}
+.n-btn:active{transform:translateY(1px)}
+
+@media(min-width:960px){.n-foot__grid{grid-template-columns:1.5fr repeat(3,minmax(0,1fr));gap:40px}.n-foot__line{max-width:32ch}}
+.n-foot .n-linklist a{padding-block:8px}
+/* Narrow phones retain contact, language choice and menu; the named home link uses its mark. */
+@media(max-width:359px){.n-hdr .n-brand__w{display:none}.n-hdr .n-brand{flex:none}.n-hdr__tools{margin-left:auto}}

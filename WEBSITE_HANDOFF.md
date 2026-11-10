@@ -2,7 +2,7 @@
 
 ## Current state
 
-The customer-website refinement is saved on `codex/customer-website-refinement`. This is a review branch, not the live GitHub Pages version. The live site remains on `main`.
+The founder explicitly requested publication of this refinement to https://faiqrasulov.github.io/nowai/ on 10 November 2026. PR #1 carries the tested changes into `main`, which deploys through GitHub Pages. Check the Pages deployment status for completion; the private handoff records the live verification.
 
 The founder requested implementation of the supplied website review and a GitHub record so the next session can continue. Seven-role scope and regional ambition remain intact. All ten industry pages remain accessible. This pass does not approve funding, commercial terms, a narrower launch strategy or production-readiness claims.
 
@@ -31,7 +31,7 @@ The founder requested implementation of the supplied website review and a GitHub
 
 The founder must supply the public business email, WhatsApp destination or booking link for direct inquiries. The contact page still uses its earlier introduction route. Do not invent a destination or claim the conversion path is complete. A question was sent during this session; no answer had arrived when this handoff was written.
 
-After the destination is supplied, connect it, update the contact-page copy and appropriate notices, test the customer journey end to end, and review the branch for publication. Retain pre-launch and illustrative labels. Do not claim hosting, compliance or integrations are confirmed unless evidence is supplied.
+After the destination is supplied, connect it, update the contact-page copy and appropriate notices, test the customer journey end to end, and test the updated contact flow before publishing that follow-up. Retain pre-launch and illustrative labels. Do not claim hosting, compliance or integrations are confirmed unless evidence is supplied.
 
 Azerbaijani native-speaker review, real-phone checking, custom-domain selection, commercial launch/indexing and treatment of legacy PDFs/demo files remain separate tasks. Existing files and links were retained.
 

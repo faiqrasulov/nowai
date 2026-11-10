@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Careers · NowAI</title>
+<meta name="description" content="The first team NowAI will hire, what each job would own, and how to register interest.">
+<meta property="og:title" content="Careers · NowAI">
+<meta property="og:description" content="The first team NowAI will hire, what each job would own, and how to register interest.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="az_AZ">
+<meta name="theme-color" content="#07201A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%230E5A3C'/%3E%3Cpath d='M7 17V7.4l10 9.2V7' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='19.3' cy='4.7' r='2.1' fill='%233DDC97'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300..700&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<script>try{if(localStorage.getItem("nowai-lang")==="az")document.documentElement.classList.add("lang-pending")}catch(e){}</script>
+<style>
+/* Careers page only. Classes start with n-ca-. */
+
+.n-pg-hero h1.n-ca-h1 { max-width: 18ch; }
+
+/* Hero aside: the team plan as a short ledger */
+.n-ca-glance { padding: 24px 28px; border: 1px solid var(--n-line-2); border-radius: var(--n-r-lg); background: #fff; }
+.n-ca-glance__h { margin: 0 0 12px; color: var(--n-mute); font-size: var(--n-fs-micro); font-weight: 600; }
+.n-ca-glance__dl { margin: 0; border-top: 2px solid var(--n-ink); }
+.n-ca-glance__dl > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--n-line); }
+.n-ca-glance__dl dt { color: var(--n-ink-2); font-size: 15px; }
+.n-ca-glance__dl dd { margin: 0; font-size: 15px; font-weight: 600; color: var(--n-ink); }
+.n-ca-glance__dl dd .n-lbl { margin-left: 0; margin-top: 4px; }
+
+/* Job groups */
+.n-ca-group { display: grid; gap: 20px 48px; padding: 32px 0; border-top: 1px solid var(--n-line-2); }
+.n-ca-group:first-of-type { border-top: 2px solid var(--n-ink); }
+@media (min-width: 1080px) { .n-ca-group { grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); } }
+.n-ca-group__h { margin: 0 0 6px; font-size: 22px; }
+.n-ca-group__p { margin: 0; color: var(--n-mute); font-size: 14.5px; max-width: 32ch; }
+.n-ca-jobs { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); list-style: none; margin: 0; padding: 0; }
+@media (min-width: 760px) { .n-ca-jobs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.n-ca-job { display: flex; flex-direction: column; }
+.n-ca-job__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
+.n-ca-job__n { color: var(--n-forest-700); font-size: 22px; font-weight: 600; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums lining-nums; }
+.n-ca-job__h { margin: 0 0 6px; font-size: 20px; line-height: 1.25; }
+.n-ca-job > p { color: var(--n-ink-2); font-size: 15.5px; }
+.n-ca-job__dl { margin: auto 0 0; border-top: 1px solid var(--n-line); }
+.n-ca-job__dl > div { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--n-line); }
+.n-ca-job__dl > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.n-ca-job__dl dt { color: var(--n-mute); font-size: var(--n-fs-micro); font-weight: 600; padding-top: 2px; }
+.n-ca-job__dl dd { margin: 0; color: var(--n-ink); font-size: 14.5px; line-height: 1.5; }
+.n-ca-job--held { background: var(--n-soft); border-color: transparent; }
+.n-ca-job--many { border-style: dashed; border-color: var(--n-line-2); }
+.n-ca-held { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px 4px 9px; border-radius: 999px; background: #fff; border: 1px solid var(--n-line-2); color: var(--n-ink-2); font-size: var(--n-fs-micro); font-weight: 600; }
+
+.n-ca-sub { margin: 40px 0 16px; font-size: var(--n-fs-h4); }
+
+/* How we would work */
+@media (min-width: 960px) { .n-ca-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 36px; } }
+.n-ca-open { max-width: 760px; background: #fff; }
+
+/* Register interest */
+.n-ca-int { display: grid; gap: 20px; }
+.n-ca-int .n-card h3 { font-size: 19px; margin-bottom: 14px; }
+.n-ca-int .n-checks li { color: var(--n-ink-2); font-size: 15.5px; }
+.n-ca-int .n-small { margin: 0; color: var(--n-mute); }
+</style>
+</head>
+<body data-page="careers" data-group="company">
+<svg class="n-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+<symbol id="ic-chat" viewBox="0 0 24 24"><path d="M4.5 5h15A1.5 1.5 0 0 1 21 6.5v9a1.5 1.5 0 0 1-1.5 1.5H11l-4.5 3.5V17h-2A1.5 1.5 0 0 1 3 15.5v-9A1.5 1.5 0 0 1 4.5 5z"/><path d="M7.5 9.5h9M7.5 12.5h5.5"/></symbol>
+<symbol id="ic-voice" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></symbol>
+<symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 3.5h2.6l1.4 4-2 1.3a10.5 10.5 0 0 0 6.6 6.6l1.3-2 4 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></symbol>
+<symbol id="ic-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/></symbol>
+<symbol id="ic-paper" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 15.5h6M9 8.5h2"/></symbol>
+<symbol id="ic-photo" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m21 16-5-5-8 8"/></symbol>
+<symbol id="ic-bank" viewBox="0 0 24 24"><path d="M3 9.5 12 4l9 5.5M4.5 10v8M9.5 10v8M14.5 10v8M19.5 10v8M3 20.5h18"/></symbol>
+<symbol id="ic-ledger" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 3v18M12 8h4M12 11.5h4M12 15h3"/></symbol>
+<symbol id="ic-stamp" viewBox="0 0 24 24"><path d="M9.5 3.5h5l-1 6.5h-3z"/><path d="M5 13.5c0-1.9 1.6-3.5 3.5-3.5h7c1.9 0 3.5 1.6 3.5 3.5v2H5zM6.5 20h11"/></symbol>
+<symbol id="ic-dm" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-6.5 18-4.5-7-7-4.5z"/></symbol>
+<symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M8 13.5h3M8 16.5h6"/></symbol>
+<symbol id="ic-terminal" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2"/><path d="M9 6h6v4H9zM9.5 14h.01M12 14h.01M14.5 14h.01M9.5 17h.01M12 17h.01M14.5 17h.01"/></symbol>
+<symbol id="ic-web" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="M3 8.5h18M6 6.5h.01M8.5 6.5h.01"/></symbol>
+<symbol id="ic-role-sales" viewBox="0 0 24 24"><path d="M5 8h14l-1 12.5H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8M9.5 14l2 2 3.5-3.5"/></symbol>
+<symbol id="ic-role-care" viewBox="0 0 24 24"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect x="3.5" y="13" width="4" height="6" rx="1.2"/><rect x="16.5" y="13" width="4" height="6" rx="1.2"/><path d="M18.5 19a4 4 0 0 1-4 2.5H12"/></symbol>
+<symbol id="ic-role-collections" viewBox="0 0 24 24"><circle cx="10" cy="12" r="7"/><path d="M10 8.5V12l2.3 1.6M20.5 7v10M18 14.5l2.5 2.5 2.5-2.5"/></symbol>
+<symbol id="ic-role-payables" viewBox="0 0 24 24"><path d="M12 21H5V3h9l4 4v4"/><path d="M14 3v4h4"/><circle cx="16.5" cy="16.5" r="3.5"/><path d="m19 19 2.5 2.5M8 9h3M8 12.5h4"/></symbol>
+<symbol id="ic-role-books" viewBox="0 0 24 24"><path d="M3 5.5c3-1 6-1 9 1 3-2 6-2 9-1V19c-3-1-6-1-9 1-3-2-6-2-9-1z"/><path d="M12 6.5V20"/></symbol>
+<symbol id="ic-role-people" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2"/><circle cx="12" cy="10" r="2.8"/><path d="M7.5 17.5a4.5 4.5 0 0 1 9 0"/></symbol>
+<symbol id="ic-role-brief" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M12 7.5v3.5l2.2 1.3"/></symbol>
+<symbol id="ic-box" viewBox="0 0 24 24"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9M7.8 5.3l8.4 4.5"/></symbol>
+<symbol id="ic-store" viewBox="0 0 24 24"><path d="M4.5 10.5V20h15v-9.5"/><path d="M3 9.5 5 4h14l2 5.5a2.5 2.5 0 0 1-4.5 1.5 2.5 2.5 0 0 1-4.5 0 2.5 2.5 0 0 1-4.5 0A2.5 2.5 0 0 1 3 9.5z"/><path d="M10 20v-5h4v5"/></symbol>
+<symbol id="ic-clinic" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M12 8v8M8 12h8"/></symbol>
+<symbol id="ic-cup" viewBox="0 0 24 24"><path d="M5 8h11v6a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5v2M11 3.5v2M3.5 21h14"/></symbol>
+<symbol id="ic-car" viewBox="0 0 24 24"><path d="M3.5 16.5v-4l2-5h13l2 5v4h-2M3.5 16.5h2M9 16.5h6"/><path d="M3.5 12.5h17"/><circle cx="7.3" cy="16.5" r="1.8"/><circle cx="16.7" cy="16.5" r="1.8"/></symbol>
+<symbol id="ic-truck" viewBox="0 0 24 24"><path d="M2.5 6h11v10.5h-11zM13.5 9.5h4l3 3.5v3.5h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></symbol>
+<symbol id="ic-crane" viewBox="0 0 24 24"><path d="M6 21V4h1.5M6 4h13M6 8l4-4M19 4v5M17.5 9h3v3h-3zM3.5 21h7M6 12h2M6 16h2"/></symbol>
+<symbol id="ic-school" viewBox="0 0 24 24"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6 11v5c2 2 10 2 12 0v-5M21.5 9v5"/></symbol>
+<symbol id="ic-signal" viewBox="0 0 24 24"><path d="M12 20.5v-8"/><circle cx="12" cy="10.5" r="1.6"/><path d="M8.5 7a5 5 0 0 0 0 7M15.5 7a5 5 0 0 1 0 7M5.5 4a9.5 9.5 0 0 0 0 13M18.5 4a9.5 9.5 0 0 1 0 13"/></symbol>
+<symbol id="ic-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="6.5" rx="5.5" ry="2.5"/><path d="M3.5 6.5v4c0 1.4 2.5 2.5 5.5 2.5s5.5-1.1 5.5-2.5v-4"/><ellipse cx="15" cy="13.5" rx="5.5" ry="2.5"/><path d="M9.5 13.5v4c0 1.4 2.5 2.5 5.5 2.5s5.5-1.1 5.5-2.5v-4"/></symbol>
+<symbol id="ic-gate" viewBox="0 0 24 24"><path d="M4.5 20.5V5M19.5 20.5V5M4.5 9h15M4.5 14.5h15M2.5 20.5h19"/><path d="M9.5 9v5.5M14.5 9v5.5"/></symbol>
+<symbol id="ic-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5v-3a4 4 0 0 1 8 0v3M12 14.5v2"/></symbol>
+<symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="ic-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></symbol>
+<symbol id="ic-users" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.3"/><path d="M2.5 19.5a6.5 6.5 0 0 1 13 0M15.5 5.8a3.3 3.3 0 0 1 0 6.4M17.5 13.6a6.5 6.5 0 0 1 4 5.9"/></symbol>
+<symbol id="ic-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-10.5"/></symbol>
+<symbol id="ic-x" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+<symbol id="ic-alert" viewBox="0 0 24 24"><path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.2h.01"/></symbol>
+<symbol id="ic-arrow-right" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
+<symbol id="ic-chevron-down" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+<symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="ic-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.4 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.4-3.5-8.5s1.1-6.1 3.5-8.5z"/></symbol>
+<symbol id="ic-external" viewBox="0 0 24 24"><path d="M14 4.5h5.5V10M19.5 4.5 11 13"/><path d="M18 14v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V7.5A1.5 1.5 0 0 1 5.5 6H10"/></symbol>
+<symbol id="ic-map" viewBox="0 0 24 24"><path d="M3.5 6.5 9 4l6 2.5L20.5 4v13.5L15 20l-6-2.5-5.5 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></symbol>
+<symbol id="ic-replay" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/><path d="m10.5 9.5 4 2.5-4 2.5z"/></symbol>
+<symbol id="ic-note" viewBox="0 0 24 24"><path d="M5.5 3.5h9l4 4v13h-13z"/><path d="M14.5 3.5v4h4M8.5 12h7M8.5 15.5h4.5"/></symbol>
+</svg>
+<a class="n-skip" href="#main" data-i="s.skip">Skip to content</a>
+<header class="n-hdr" id="top">
+  <div class="n-wrap n-hdr__in">
+    <a class="n-brand" href="index.html" data-ia="s.brand.home" aria-label="NowAI, home page"><svg class="n-mark" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" class="n-mark__a"/><path class="n-mark__b" d="M7 17V7.4l10 9.2V7"/><circle class="n-mark__c" cx="19.3" cy="4.7" r="2.1"/></svg><span class="n-brand__w">NowAI</span></a>
+    <nav class="n-nav" data-ia="s.nav.aria" aria-label="Main">
+      <ul class="n-nav__list">
+        <li class="n-nav__item n-nav__item--small">
+          <button class="n-nav__btn" type="button" aria-expanded="false" aria-controls="n-mm-platform"><span data-i="s.nav.platform">How it works</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+          <div class="n-mm n-mm--small" id="n-mm-platform" hidden>
+            <div class="n-mm__small">
+              <ul class="n-mm__plain">
+                <li><a href="platform.html#core"><svg class="n-ic" aria-hidden="true"><use href="#ic-ledger"/></svg><span data-i="s.nav.core">NowAI Core</span></a></li>
+                <li><a href="platform.html#gate"><svg class="n-ic" aria-hidden="true"><use href="#ic-gate"/></svg><span data-i="s.nav.gate">The Gate</span></a></li>
+                <li><a href="platform.html#languages"><svg class="n-ic" aria-hidden="true"><use href="#ic-globe"/></svg><span data-i="s.nav.languages">Languages</span></a></li>
+                <li><a href="platform.html#connectors"><svg class="n-ic" aria-hidden="true"><use href="#ic-stamp"/></svg><span data-i="s.nav.connectors">Planned connectors</span></a></li>
+                <li><a href="trust.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-lock"/></svg><span data-i="s.page.trust">How control works</span></a></li>
+              </ul>
+              <a class="n-mm__side" href="platform.html">
+                <span class="n-mm__side-h" data-i="s.mm.platform.h">One core under every role</span>
+                <span class="n-mm__side-p" data-i="s.mm.platform.p">Channels, reading, company memory, the Gate and measurement. Designed once, shared by every role.</span>
+                <span class="n-mm__side-go"><span data-i="s.cta.more">Read more</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="n-nav__item">
+          <button class="n-nav__btn" type="button" aria-expanded="false" aria-controls="n-mm-roles"><span data-i="s.nav.roles">Roles</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+          <div class="n-mm n-mm--wide" id="n-mm-roles" hidden>
+            <div class="n-wrap n-mm__in">
+              <div class="n-mm__main">
+                <p class="n-eyebrow"><span class="n-eyebrow__t">07</span><span data-i="s.mm.roles.eb">By function</span></p>
+                <div class="n-mm__cols n-mm__cols--3"><div class="n-mm__col"><p class="n-mm__h" data-i="s.mm.roles.front">Front office</p><ul class="n-mm__list"><li><a class="n-mm__link" href="solutions/sales-desk.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-sales"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.sales-desk">Sales Desk</span><span class="n-mm__line" data-i="s.role.sales-desk.line">Orders and quotes on every channel, day and night.</span><span class="n-bucket n-bucket--sales n-bucket--xs" data-i="s.bucket.sales">Extra sales</span></span></a></li><li><a class="n-mm__link" href="solutions/customer-care.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-care"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.customer-care">Customer Care</span><span class="n-mm__line" data-i="s.role.customer-care.line">Questions, deliveries, complaints and small credit notes.</span><span class="n-bucket n-bucket--care n-bucket--xs" data-i="s.bucket.care">Keeps customers (not charged)</span></span></a></li><li><a class="n-mm__link" href="solutions/collections.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-collections"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.collections">Collections</span><span class="n-mm__line" data-i="s.role.collections.line">Who owes what, and polite reminders every day.</span><span class="n-bucket n-bucket--cash n-bucket--xs" data-i="s.bucket.cash">Cash in sooner</span></span></a></li></ul></div><div class="n-mm__col"><p class="n-mm__h" data-i="s.mm.roles.back">Back office</p><ul class="n-mm__list"><li><a class="n-mm__link" href="solutions/payables-check.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-payables"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.payables-check">Payables Check</span><span class="n-mm__line" data-i="s.role.payables-check.line">Supplier invoices checked against order, delivery, contract and e-qaimə.</span><span class="n-bucket n-bucket--leak n-bucket--xs" data-i="s.bucket.leak">Leaks recovered</span></span></a></li><li><a class="n-mm__link" href="solutions/books.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-books"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.books">Books</span><span class="n-mm__line" data-i="s.role.books.line">1C entries and bank reconciliation, approved by the chief accountant.</span><span class="n-bucket n-bucket--hours n-bucket--xs" data-i="s.bucket.hours">Hours (shown, not charged)</span></span></a></li><li><a class="n-mm__link" href="solutions/people-desk.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-people"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.people-desk">People Desk (HR)</span><span class="n-mm__line" data-i="s.role.people-desk.line">Staff requests, leave, payroll changes and EMAS contract data.</span><span class="n-bucket n-bucket--fines n-bucket--xs" data-i="s.bucket.fines">Fewer fines (not charged)</span></span></a></li></ul></div><div class="n-mm__col"><p class="n-mm__h" data-i="s.mm.roles.owner">For the owner</p><ul class="n-mm__list"><li><a class="n-mm__link" href="solutions/owners-brief.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-brief"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.owners-brief">Owner's Brief</span><span class="n-mm__line" data-i="s.role.owners-brief.line">One message to the owner at 19:00.</span><span class="n-bucket n-bucket--renew n-bucket--xs" data-i="s.bucket.renew">Not charged: why owners renew</span></span></a></li></ul></div></div>
+              </div>
+              <div class="n-mm__aside">
+                <a class="n-mm__side" href="solutions/index.html">
+                  <span class="n-mm__side-h" data-i="s.mm.roles.h">Seven roles, one core</span>
+                  <span class="n-mm__side-p" data-i="s.mm.roles.p">A client would start with the one or two roles that hold the most money.</span>
+                  <span class="n-mm__side-go"><span data-i="s.cta.roles">All seven roles</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
+                </a>
+                <a class="n-mm__sidelink" href="solutions/index.html#picking"><span data-i="s.mm.roles.pick">How a client would pick its first roles</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="n-nav__item">
+          <button class="n-nav__btn" type="button" aria-expanded="false" aria-controls="n-mm-industries"><span data-i="s.nav.industries">Industries</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+          <div class="n-mm n-mm--wide" id="n-mm-industries" hidden>
+            <div class="n-wrap n-mm__in">
+              <div class="n-mm__main">
+                <div class="n-mm__cols n-mm__cols--3"><div class="n-mm__col n-mm__col--first"><p class="n-mm__h"><span class="n-status n-status--first"><span data-i="s.status.first">First focus</span></span></p><ul class="n-mm__list"><li><a class="n-mm__link" href="industries/distribution.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-box"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.distribution">Distribution and wholesale</span><span class="n-mm__line" data-i="s.ind.distribution.line">Food, FMCG and household-goods distributors and wholesalers.</span></span></a></li><li><a class="n-mm__link" href="industries/retail-pharmacy.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-store"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.retail-pharmacy">Retail and pharmacy chains</span><span class="n-mm__line" data-i="s.ind.retail-pharmacy.line">Grocery, electronics and home-goods chains; multi-branch pharmacies.</span></span></a></li><li><a class="n-mm__link" href="industries/healthcare.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-clinic"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.healthcare">Private healthcare</span><span class="n-mm__line" data-i="s.ind.healthcare.line">Clinic groups, diagnostic centres and private hospitals.</span></span></a></li></ul></div><div class="n-mm__col n-mm__col--next"><p class="n-mm__h"><span class="n-status n-status--next"><span data-i="s.status.next">Next</span></span></p><ul class="n-mm__list"><li><a class="n-mm__link" href="industries/logistics.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-truck"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.logistics">Logistics and freight</span><span class="n-mm__line" data-i="s.ind.logistics.line">Freight forwarders, trucking firms and customs brokers.</span></span></a></li><li><a class="n-mm__link" href="industries/construction.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-crane"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.construction">Construction and building materials</span><span class="n-mm__line" data-i="s.ind.construction.line">Building-materials suppliers and dealers; developers.</span></span></a></li><li><a class="n-mm__link" href="industries/hospitality.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-cup"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.hospitality">Hospitality and food service</span><span class="n-mm__line" data-i="s.ind.hospitality.line">Hotel groups, restaurant groups and caterers.</span></span></a></li><li><a class="n-mm__link" href="industries/automotive.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-car"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.automotive">Automotive</span><span class="n-mm__line" data-i="s.ind.automotive.line">Brand dealers, service centres and parts distributors.</span></span></a></li><li><a class="n-mm__link" href="industries/education.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-school"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.education">Private education</span><span class="n-mm__line" data-i="s.ind.education.line">Private school groups, universities and course centres.</span></span></a></li></ul></div><div class="n-mm__col n-mm__col--later"><p class="n-mm__h"><span class="n-status n-status--later"><span data-i="s.status.later">Later, with partners</span></span></p><ul class="n-mm__list"><li><a class="n-mm__link" href="industries/telecom.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-signal"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.telecom">Telecommunications and internet</span><span class="n-mm__line" data-i="s.ind.telecom.line">Regional internet providers, dealer networks. Not large operators.</span></span></a></li><li><a class="n-mm__link" href="industries/financial-services.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-coins"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.page.financial-services">Financial services</span><span class="n-mm__line" data-i="s.ind.financial-services.line">Insurers' agencies, microfinance, leasing. Not banks.</span></span></a></li></ul></div></div><div class="n-mm__fn"><span class="n-status n-status--function"><span data-i="s.status.function">By function</span></span><a class="n-mm__fnlink" href="solutions/people-desk.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-role-people"/></svg><span class="n-mm__t"><span class="n-mm__name" data-i="s.ind.hr">HR and staff</span><span class="n-mm__line" data-i="s.ind.hr.line">Staff requests, leave, payroll changes and EMAS contract data, in any industry. A function, not an industry: see People Desk (HR).</span></span></a></div>
+              </div>
+              <div class="n-mm__aside">
+                <a class="n-mm__side" href="industries/index.html">
+                  <span class="n-mm__side-h" data-i="s.mm.ind.all">All industries</span>
+                  <span class="n-mm__side-p" data-i="s.mm.ind.p">Ten industries, sorted by where we plan to start. Each page says what NowAI would do there.</span>
+                  <span class="n-mm__side-go"><span data-i="s.cta.more">Read more</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
+                </a>
+                <a class="n-mm__note" href="industries/index.html#not-served"><span data-i="s.mm.ind.not">Not first targets: large banks, large mobile and fixed-line operators, state utilities, state bodies, micro firms.</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="n-nav__item n-nav__item--small">
+          <button class="n-nav__btn" type="button" aria-expanded="false" aria-controls="n-mm-company"><span data-i="s.nav.company">Company</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+          <div class="n-mm n-mm--small n-mm--end" id="n-mm-company" hidden>
+            <div class="n-mm__small">
+              <ul class="n-mm__plain">
+                <li><a href="about.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-user"/></svg><span data-i="s.page.about">About</span></a></li>
+                <li><a href="careers.html" aria-current="page"><svg class="n-ic" aria-hidden="true"><use href="#ic-users"/></svg><span data-i="s.page.careers">Careers</span></a></li>
+                <li><a href="investors.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-coins"/></svg><span data-i="s.page.investors">Investors</span></a></li>
+                <li><a href="notes.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-note"/></svg><span data-i="s.page.notes">Notes</span></a></li>
+                <li><a href="glossary.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-paper"/></svg><span data-i="s.page.glossary">Glossary</span></a></li>
+                <li><a href="contact.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-chat"/></svg><span data-i="s.page.contact">Contact</span></a></li>
+              </ul>
+              <a class="n-mm__side" href="about.html#mission">
+                <span class="n-mm__side-h" data-i="s.mm.company.h">Mission and plan</span>
+                <span class="n-mm__side-p" data-i="s.mm.company.p">An AI operations team for every growing company in Azerbaijan.</span>
+                <span class="n-mm__side-go"><span data-i="s.cta.more">Read more</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li class="n-nav__item"><a class="n-nav__link" href="story.html"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-clock"/></svg><span data-i="s.nav.story">See a day</span></a></li>
+      </ul>
+    </nav>
+    <div class="n-hdr__tools">
+      <div class="n-lang" role="group" data-ia="s.lang.aria" aria-label="Language">
+        <button class="n-lang__b" type="button" data-lang="en" aria-pressed="true">EN<span class="n-vh" data-i="s.lang.en"> (English)</span></button>
+        <button class="n-lang__b" type="button" data-lang="az" aria-pressed="false">AZ<span class="n-vh" data-i="s.lang.az"> (Azerbaijani, draft)</span></button>
+      </div>
+      <a class="n-btn n-btn--primary n-btn--sm n-hdr__cta" href="sprint.html"><span class="n-hdr__cta-l" data-i="s.cta.sprint">Start with a Discovery Sprint</span><span class="n-hdr__cta-s" data-i="s.cta.sprint.short">Discovery Sprint</span></a>
+      <button class="n-burger" type="button" aria-expanded="false" aria-controls="n-drawer" data-ia="s.nav.open" aria-label="Open menu"><svg class="n-ic" aria-hidden="true"><use href="#ic-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="n-drawer" id="n-drawer" hidden>
+  <div class="n-drawer__scrim" data-close="1"></div>
+  <div class="n-drawer__panel" role="dialog" aria-modal="true" data-ia="s.nav.menu" aria-label="Menu">
+    <div class="n-drawer__top">
+      <a class="n-brand" href="index.html" data-ia="s.brand.home" aria-label="NowAI, home page"><svg class="n-mark" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" class="n-mark__a"/><path class="n-mark__b" d="M7 17V7.4l10 9.2V7"/><circle class="n-mark__c" cx="19.3" cy="4.7" r="2.1"/></svg><span class="n-brand__w">NowAI</span></a>
+      <button class="n-drawer__close" type="button" data-ia="s.nav.close" aria-label="Close menu"><svg class="n-ic" aria-hidden="true"><use href="#ic-close"/></svg></button>
+    </div>
+    <nav class="n-drawer__nav" data-ia="s.nav.menu" aria-label="Menu">
+      <div class="n-acc">
+        <button class="n-acc__btn" type="button" aria-expanded="false" aria-controls="n-dr-platform"><span data-i="s.nav.platform">How it works</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+        <div class="n-acc__panel" id="n-dr-platform" hidden>
+          <ul class="n-linklist">
+            <li><a href="platform.html" data-i="s.page.platform">NowAI Core</a></li>
+            <li><a href="platform.html#gate" data-i="s.nav.gate">The Gate</a></li>
+            <li><a href="platform.html#languages" data-i="s.nav.languages">Languages</a></li>
+            <li><a href="platform.html#connectors" data-i="s.nav.connectors">Planned connectors</a></li>
+            <li><a href="trust.html" data-i="s.page.trust">How control works</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="n-acc">
+        <button class="n-acc__btn" type="button" aria-expanded="false" aria-controls="n-dr-roles"><span data-i="s.nav.roles">Roles</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+        <div class="n-acc__panel" id="n-dr-roles" hidden>
+          <ul class="n-linklist"><li><a href="solutions/index.html" data-i="s.page.solutions">Roles</a></li><li><a href="solutions/sales-desk.html" data-i="s.page.sales-desk">Sales Desk</a></li><li><a href="solutions/customer-care.html" data-i="s.page.customer-care">Customer Care</a></li><li><a href="solutions/collections.html" data-i="s.page.collections">Collections</a></li><li><a href="solutions/payables-check.html" data-i="s.page.payables-check">Payables Check</a></li><li><a href="solutions/books.html" data-i="s.page.books">Books</a></li><li><a href="solutions/people-desk.html" data-i="s.page.people-desk">People Desk (HR)</a></li><li><a href="solutions/owners-brief.html" data-i="s.page.owners-brief">Owner's Brief</a></li></ul>
+          <p class="n-drawer__more"><a href="solutions/index.html#picking" data-i="s.mm.roles.pick">How a client would pick its first roles</a></p>
+        </div>
+      </div>
+      <div class="n-acc">
+        <button class="n-acc__btn" type="button" aria-expanded="false" aria-controls="n-dr-industries"><span data-i="s.nav.industries">Industries</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+        <div class="n-acc__panel" id="n-dr-industries" hidden>
+          <ul class="n-linklist"><li><a href="industries/index.html" data-i="s.page.industries">Industries</a></li></ul><p class="n-linklist__h" data-i="s.status.first">First focus</p><ul class="n-linklist"><li><a href="industries/distribution.html" data-i="s.page.distribution">Distribution and wholesale</a></li><li><a href="industries/retail-pharmacy.html" data-i="s.page.retail-pharmacy">Retail and pharmacy chains</a></li><li><a href="industries/healthcare.html" data-i="s.page.healthcare">Private healthcare</a></li></ul><p class="n-linklist__h" data-i="s.status.next">Next</p><ul class="n-linklist"><li><a href="industries/logistics.html" data-i="s.page.logistics">Logistics and freight</a></li><li><a href="industries/construction.html" data-i="s.page.construction">Construction and building materials</a></li><li><a href="industries/hospitality.html" data-i="s.page.hospitality">Hospitality and food service</a></li><li><a href="industries/automotive.html" data-i="s.page.automotive">Automotive</a></li><li><a href="industries/education.html" data-i="s.page.education">Private education</a></li></ul><p class="n-linklist__h" data-i="s.status.later">Later, with partners</p><ul class="n-linklist"><li><a href="industries/telecom.html" data-i="s.page.telecom">Telecommunications and internet</a></li><li><a href="industries/financial-services.html" data-i="s.page.financial-services">Financial services</a></li></ul><p class="n-linklist__h" data-i="s.foot.h.fn">By function</p><ul class="n-linklist"><li><a href="solutions/people-desk.html" data-i="s.ind.hr">HR and staff</a></li></ul>
+          <p class="n-drawer__more"><a href="industries/index.html#not-served" data-i="s.mm.ind.not">Not first targets: large banks, large mobile and fixed-line operators, state utilities, state bodies, micro firms.</a></p>
+        </div>
+      </div>
+      <div class="n-acc">
+        <button class="n-acc__btn" type="button" aria-expanded="false" aria-controls="n-dr-company"><span data-i="s.nav.company">Company</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-chevron-down"/></svg></button>
+        <div class="n-acc__panel" id="n-dr-company" hidden>
+          <ul class="n-linklist">
+            <li><a href="about.html" data-i="s.page.about">About</a></li>
+            <li><a href="careers.html" data-i="s.page.careers" aria-current="page">Careers</a></li>
+            <li><a href="investors.html" data-i="s.page.investors">Investors</a></li>
+            <li><a href="notes.html" data-i="s.page.notes">Notes</a></li>
+            <li><a href="glossary.html" data-i="s.page.glossary">Glossary</a></li>
+            <li><a href="contact.html" data-i="s.page.contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <a class="n-drawer__story" href="story.html"><svg class="n-ic" aria-hidden="true"><use href="#ic-clock"/></svg><span data-i="s.nav.story">See a day</span></a>
+      <a class="n-btn n-btn--primary n-drawer__cta" href="sprint.html"><span data-i="s.cta.sprint">Start with a Discovery Sprint</span></a>
+    </nav>
+  </div>
+</div>
+<main id="main">
+<section class="n-section n-pg-hero" id="ca-hero">
+  <div class="n-wrap">
+    <nav class="n-bc" data-ia="s.bc.aria" aria-label="Breadcrumb"><a href="index.html" data-i="s.bc.home">Home</a><span data-i="s.nav.company">Company</span><span aria-current="page" data-i="s.page.careers">Careers</span></nav>
+    <div class="n-pg-hero__in">
+      <div>
+        <p class="n-pg-hero__chips"><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+        <h1 class="n-ca-h1" data-i="careers.hero.h">The first team NowAI will hire.</h1>
+        <p class="n-lead" data-i="careers.hero.lead">From the technical lead who will design NowAI Core to the engineers who will set up each client. Jobs open once funding is in place; you can register interest now.</p>
+        <div class="n-note"><p data-i="careers.hero.note">Pay, location and contracts will be set when the first jobs open.</p></div>
+        <div class="n-btns">
+          <a class="n-btn n-btn--primary" href="#interest"><span data-i="careers.hero.cta">How to register interest</span></a>
+          <a class="n-btn n-btn--secondary" href="platform.html"><span data-i="careers.hero.cta2">What the team will build</span></a>
+        </div>
+      </div>
+      <aside class="n-ca-glance" aria-labelledby="ca-glance-h">
+        <p class="n-ca-glance__h" id="ca-glance-h" data-i="careers.glance.h">The team plan at a glance</p>
+        <dl class="n-ca-glance__dl">
+          <div><dt data-i="careers.glance.1.k">Jobs open</dt><dd data-i="careers.glance.1.v">Once funding is in place</dd></div>
+          <div><dt data-i="careers.glance.2.k">Funding sought</dt><dd data-i="careers.glance.2.v">About 850,000 AZN (target)</dd></div>
+          <div><dt data-i="careers.glance.3.k">Core team</dt><dd><span data-i="careers.glance.3.v">5 people in year 1, 8 from year 2 (model assumption)</span> <span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></dd></div>
+          <div><dt data-i="careers.glance.4.k">Pay, location and contracts</dt><dd data-i="careers.glance.4.v">Set when jobs open</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="n-section" id="first-hires">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">01</span><span data-i="careers.first.eb">The first jobs</span></p>
+      <h2 data-i="careers.first.h">The first jobs, in the order the plan expects them</h2>
+      <p class="n-lead" data-i="careers.first.lead">Each card says what the person would own and what they would do first.</p>
+    </header>
+
+    <div class="n-ca-group">
+      <div class="n-ca-group__head"><h3 class="n-ca-group__h" data-i="careers.g1.h">At the start</h3><p class="n-ca-group__p" data-i="careers.g1.p">Five people, the founder included (model assumption).</p></div>
+      <ul class="n-ca-jobs">
+        <li class="n-card n-ca-job n-ca-job--held">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">01</span><span class="n-ca-held"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-user"/></svg><span data-i="careers.held">Held by the founder</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j1.h">Founder and CEO</h4>
+          <p data-i="careers.j1.p">Listed so you can see the whole team.</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j1.owns">Sales, sprints, partners, legal.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j1.first">The 15 owner interviews and the first three sprints (target).</dd></div></dl>
+        </li>
+        <li class="n-card n-ca-job">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">02</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j2.h">Technical lead</h4>
+          <p data-i="careers.j2.p">Would design and build NowAI Core, the layer every role runs on.</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j2.owns">Core architecture, security, hosting, the Gate.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j2.first">The Discovery tooling and the design of the Gate (target).</dd></div></dl>
+        </li>
+        <li class="n-card n-ca-job">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">03</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j3.h">AI and evals engineer</h4>
+          <p data-i="careers.j3.p">Would check that each role is right often enough, in both languages, at a known cost.</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j3.owns">Test sets per role and language, model routing, cost per task.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j3.first">Azerbaijani and Russian test sets for the two roles in replay (target).</dd></div></dl>
+        </li>
+        <li class="n-card n-ca-job">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">04</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j4.h">Integrations engineer</h4>
+          <p data-i="careers.j4.p">Would get data in and out of the files companies already use.</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j4.owns">1C files, bank statements, e-qaimə files, WhatsApp, voice.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j4.first">Readers for a WhatsApp export, an inbox, a 1C export and a bank statement (target).</dd></div></dl>
+        </li>
+        <li class="n-card n-ca-job">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">05</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j5.h">Deployment engineer</h4>
+          <p data-i="careers.j5.p">Would run sprints and set up each client by configuration, not code.</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j5.owns">Sprints, client setup, rules, replay tests.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j5.first">Three Discovery Sprints with design partners (target).</dd></div></dl>
+        </li>
+      </ul>
+    </div>
+
+    <div class="n-ca-group">
+      <div class="n-ca-group__head"><h3 class="n-ca-group__h" data-i="careers.g2.h">Year 2</h3><p class="n-ca-group__p" data-i="careers.g2.p">Three more, for a core team of eight (model assumption).</p></div>
+      <ul class="n-ca-jobs">
+        <li class="n-card n-ca-job">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">06</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j6.h">Domain lead, a chartered accountant</h4>
+          <p data-i="careers.j6.p">Would own the rules behind Books and People Desk.</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j6.owns">Books and People Desk rules, the tax and payroll library.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j6.first">Keeping tax and payroll rules current as the law changes (target).</dd></div></dl>
+        </li>
+        <li class="n-card n-ca-job">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">07</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j7.h">Sales lead</h4>
+          <p data-i="careers.j7.p">Would find companies that fit and schedule their sprints.</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j7.owns">Pipeline, sprint scheduling, references.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j7.first">Moving from free design-partner sprints to paid sprints (target).</dd></div></dl>
+        </li>
+        <li class="n-card n-ca-job">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">08</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j8.h">Product and design</h4>
+          <p data-i="careers.j8.p">Would design what people see and read: the 19:00 brief, the Gate and how each role writes.</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j8.owns">The Owner's Brief, the approval screens at the Gate, conversation design.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j8.first">Approval screens that show the evidence beside each item (target).</dd></div></dl>
+        </li>
+      </ul>
+    </div>
+
+    <div class="n-ca-group">
+      <div class="n-ca-group__head"><h3 class="n-ca-group__h" data-i="careers.g3.h">As clients grow</h3><p class="n-ca-group__p" data-i="careers.g3.p">These grow with clients and sprints, not with the calendar (model assumption).</p></div>
+      <ul class="n-ca-jobs">
+        <li class="n-card n-ca-job n-ca-job--many">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">09</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j9.h">Deployment engineers</h4>
+          <p data-i="careers.j9.p">One for every 8 live clients (model assumption).</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j9.owns">Client setup, rules, replay tests.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j9.first">Hired as clients go live.</dd></div></dl>
+        </li>
+        <li class="n-card n-ca-job n-ca-job--many">
+          <p class="n-ca-job__top"><span class="n-ca-job__n">10</span><span class="n-status n-status--notopen"><span data-i="s.status.notopen">Planned, not open yet</span></span></p>
+          <h4 class="n-ca-job__h" data-i="careers.j10.h">Sprint staff</h4>
+          <p data-i="careers.j10.p">One person-month for each sprint (model).</p>
+          <dl class="n-ca-job__dl"><div><dt data-i="careers.owns">Would own</dt><dd data-i="careers.j10.owns">Discovery Sprints and Money Maps.</dd></div><div><dt data-i="careers.firstwork">First work</dt><dd data-i="careers.j10.first">Hired as sprints sell.</dd></div></dl>
+        </li>
+      </ul>
+    </div>
+
+    <h3 class="n-ca-sub" data-i="careers.size.h">How big the team would get</h3>
+    <div class="n-figs n-figs--sm">
+      <p class="n-fig" data-label="model"><b class="n-fig__v">15</b><span class="n-fig__k" data-i="careers.size.1">people at 30 clients: 8 core, 4 deployment engineers, 3 on sprints</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+      <p class="n-fig" data-label="model"><b class="n-fig__v">30</b><span class="n-fig__k" data-i="careers.size.2">people at 100 clients</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+      <p class="n-fig" data-label="model"><b class="n-fig__v">8</b><span class="n-fig__k" data-i="careers.size.3">live clients for each deployment engineer</span><span class="n-lbl n-lbl--model" data-i="s.lbl.model">model</span></p>
+    </div>
+    <p class="n-small"><span data-i="careers.size.note">If one engineer can serve only 5 clients, the team at month 36 grows from 19 to 23 people (model).</span></p>
+  </div>
+</section>
+
+<section class="n-section n-section--soft" id="how-we-work">
+  <div class="n-wrap">
+    <header class="n-head">
+      <p class="n-eyebrow"><span class="n-eyebrow__t">02</span><span data-i="careers.work.eb">How we would work</span></p>
+      <h2 data-i="careers.work.h">Six rules the plan sets for the team</h2>
+      <p class="n-lead"><span data-i="careers.work.lead">They keep NowAI a software company, not an agency (target).</span> <span class="n-lbl n-lbl--target" data-i="s.lbl.target">target</span></p>
+    </header>
+    <ol class="n-steps n-ca-steps">
+      <li><span class="n-steps__n">01</span><h3 data-i="careers.work.1.h">A fixed menu of roles</h3><p data-i="careers.work.1.p">Seven roles, the same for every client. No custom builds.</p></li>
+      <li><span class="n-steps__n">02</span><h3 data-i="careers.work.2.h">Setup is configuration, not code</h3><p data-i="careers.work.2.p">A new client gets rules and settings, not new code.</p></li>
+      <li><span class="n-steps__n">03</span><h3 data-i="careers.work.3.h">Count clients per deployment engineer</h3><p data-i="careers.work.3.p">From the first client. The model assumes 8. Fewer than 5 is the warning sign.</p></li>
+      <li><span class="n-steps__n">04</span><h3 data-i="careers.work.4.h">Azerbaijani and Russian first</h3><p data-i="careers.work.4.p">Test sets, scripts and screens start in these two languages.</p></li>
+      <li><span class="n-steps__n">05</span><h3 data-i="careers.work.5.h">Replay before live</h3><p data-i="careers.work.5.p">Every new rule is replayed on past weeks before it goes live.</p></li>
+      <li><span class="n-steps__n">06</span><h3 data-i="careers.work.6.h">Label every number</h3><p data-i="careers.work.6.p">Model, target, estimate, synthetic, reported, verified or unknown. No claim without one.</p></li>
+    </ol>
+    <div class="n-note n-ca-open"><p data-i="careers.work.open">When a job opens, this page will list it with its pay, terms and how to apply.</p></div>
+  </div>
+</section>
+
+<section class="n-section" id="interest">
+  <div class="n-wrap">
+    <div class="n-split">
+      <header class="n-head">
+        <p class="n-eyebrow"><span class="n-eyebrow__t">03</span><span data-i="careers.int.eb">Register interest</span></p>
+        <h2 data-i="careers.int.h">Interested? Tell us now.</h2>
+        <p class="n-lead" data-i="careers.int.lead">To register interest, tell the person who shared this site with you. They will pass it to the founder.</p>
+      </header>
+      <div class="n-ca-int">
+        <div class="n-card">
+          <h3 data-i="careers.int.help.h">What helps</h3>
+          <ul class="n-checks">
+            <li data-i="careers.int.help.1">The job you are interested in.</li>
+            <li data-i="careers.int.help.2">One thing you have built or run, in a sentence or two.</li>
+            <li data-i="careers.int.help.3">Which languages you work in.</li>
+          </ul>
+        </div>
+        <div class="n-card n-card--soft">
+          <h3 data-i="careers.int.not.h">Please do not send</h3>
+          <ul class="n-checks n-xs">
+            <li data-i="careers.int.not.1">A CV or personal documents. We will ask for them when a job opens.</li>
+            <li data-i="careers.int.not.2">Anything from your current or past workplace.</li>
+          </ul>
+        </div>
+        <p class="n-small" data-i="careers.int.foot">Every message goes through a person you know. That is on purpose.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="n-section n-section--dark n-ctaband" aria-labelledby="n-ctaband-h">
+  <div class="n-wrap n-ctaband__in">
+    <div class="n-ctaband__main">
+      <p class="n-eyebrow n-eyebrow--on-dark"><span class="n-eyebrow__t">19:00</span><span data-i="s.cta.contact">How to reach us</span></p>
+      <h2 class="n-ctaband__h" id="n-ctaband-h" data-i="s.ctaband2.h">Talk to the founder.</h2>
+      <p class="n-lead" data-i="s.ctaband2.p">Tell the person who shared this site with you. They will pass your message straight to the founder.</p>
+    </div>
+    <div class="n-ctaband__side">
+      <div class="n-btns">
+        <a class="n-btn n-btn--on-dark" href="contact.html"><span data-i="s.cta.contact">How to reach us</span></a>
+        <a class="n-btn n-btn--ghost n-btn--ghost-dark" href="story.html"><span data-i="s.cta.story.ind">See an example day at a distributor</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="n-foot">
+  <div class="n-wrap">
+    <div class="n-foot__grid">
+      <div class="n-foot__brand">
+        <a class="n-brand" href="index.html" data-ia="s.brand.home" aria-label="NowAI, home page"><svg class="n-mark" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" class="n-mark__a"/><path class="n-mark__b" d="M7 17V7.4l10 9.2V7"/><circle class="n-mark__c" cx="19.3" cy="4.7" r="2.1"/></svg><span class="n-brand__w">NowAI</span></a>
+        <p class="n-foot__line" data-i="s.foot.line">The AI operations team for companies in Azerbaijan.</p>
+        <a class="n-btn n-btn--on-dark n-btn--sm" href="sprint.html"><span data-i="s.cta.sprint">Start with a Discovery Sprint</span></a>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.platform">How it works</h2>
+        <ul class="n-linklist">
+          <li><a href="platform.html#core" data-i="s.nav.core">NowAI Core</a></li>
+          <li><a href="platform.html#gate" data-i="s.nav.gate">The Gate</a></li>
+          <li><a href="platform.html#languages" data-i="s.nav.languages">Languages</a></li>
+          <li><a href="platform.html#connectors" data-i="s.nav.connectors">Planned connectors</a></li>
+          <li><a href="trust.html" data-i="s.page.trust">How control works</a></li>
+        </ul>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.roles">Roles</h2>
+        <ul class="n-linklist"><li><a href="solutions/index.html" data-i="s.page.solutions">Roles</a></li><li><a href="solutions/sales-desk.html" data-i="s.page.sales-desk">Sales Desk</a></li><li><a href="solutions/customer-care.html" data-i="s.page.customer-care">Customer Care</a></li><li><a href="solutions/collections.html" data-i="s.page.collections">Collections</a></li><li><a href="solutions/payables-check.html" data-i="s.page.payables-check">Payables Check</a></li><li><a href="solutions/books.html" data-i="s.page.books">Books</a></li><li><a href="solutions/people-desk.html" data-i="s.page.people-desk">People Desk (HR)</a></li><li><a href="solutions/owners-brief.html" data-i="s.page.owners-brief">Owner's Brief</a></li></ul>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.industries">Industries</h2>
+        <ul class="n-linklist"><li><a href="industries/index.html" data-i="s.page.industries">Industries</a></li></ul><p class="n-linklist__h" data-i="s.status.first">First focus</p><ul class="n-linklist"><li><a href="industries/distribution.html" data-i="s.page.distribution">Distribution and wholesale</a></li><li><a href="industries/retail-pharmacy.html" data-i="s.page.retail-pharmacy">Retail and pharmacy chains</a></li><li><a href="industries/healthcare.html" data-i="s.page.healthcare">Private healthcare</a></li></ul><p class="n-linklist__h" data-i="s.status.next">Next</p><ul class="n-linklist"><li><a href="industries/logistics.html" data-i="s.page.logistics">Logistics and freight</a></li><li><a href="industries/construction.html" data-i="s.page.construction">Construction and building materials</a></li><li><a href="industries/hospitality.html" data-i="s.page.hospitality">Hospitality and food service</a></li><li><a href="industries/automotive.html" data-i="s.page.automotive">Automotive</a></li><li><a href="industries/education.html" data-i="s.page.education">Private education</a></li></ul><p class="n-linklist__h" data-i="s.status.later">Later, with partners</p><ul class="n-linklist"><li><a href="industries/telecom.html" data-i="s.page.telecom">Telecommunications and internet</a></li><li><a href="industries/financial-services.html" data-i="s.page.financial-services">Financial services</a></li></ul><p class="n-linklist__h" data-i="s.foot.h.fn">By function</p><ul class="n-linklist"><li><a href="solutions/people-desk.html" data-i="s.ind.hr">HR and staff</a></li></ul>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.company">Company</h2>
+        <ul class="n-linklist">
+          <li><a href="about.html" data-i="s.page.about">About</a></li>
+          <li><a href="careers.html" data-i="s.page.careers" aria-current="page">Careers</a></li>
+          <li><a href="investors.html" data-i="s.page.investors">Investors</a></li>
+          <li><a href="notes.html" data-i="s.page.notes">Notes</a></li>
+          <li><a href="glossary.html" data-i="s.page.glossary">Glossary</a></li>
+          <li><a href="contact.html" data-i="s.page.contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="n-foot__col">
+        <h2 class="n-foot__h" data-i="s.foot.h.start">Start</h2>
+        <ul class="n-linklist">
+          <li><a href="story.html" data-i="s.nav.story">See a day</a></li>
+          <li><a href="sprint.html" data-i="s.cta.sprint.short">Discovery Sprint</a></li>
+          <li><a href="sprint.html#after" data-i="s.nav.after">After the sprint</a></li>
+          <li><a href="sprint.html#pricing" data-i="s.nav.pricing">Pricing</a></li>
+          <li><a href="sprint.html#calculator" data-i="s.nav.calculator">Your company calculator</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="n-foot__base">
+      <p class="n-foot__disc" data-i="s.foot.disclaimer">NowAI is pre-launch: this site describes the service it will offer. Companies, people and amounts in the examples are invented, and every figure carries its label.</p>
+      <p class="n-foot__small" data-i="s.foot.drafts">Azerbaijani and Russian text on this site is a draft for a native speaker to check.</p>
+      <p class="n-foot__small" data-i="s.foot.privacy">This site has no forms, cookies or analytics. Your language choice is saved in this browser only. Fonts load from Google Fonts.</p>
+      <div class="n-foot__row">
+        <a href="notice.html" data-i="s.page.notice">Site notice</a>
+        <span data-i="s.foot.date">November 2026</span>
+        <a class="n-foot__top" href="#top"><span data-i="s.foot.top">Back to top</span><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-arrow-right"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>const I18N = {"careers.first.eb":{"en":"The first jobs","az":"İlk vəzifələr"},"careers.first.h":{"en":"The first jobs, in the order the plan expects them","az":"İlk vəzifələr, planın gözlədiyi ardıcıllıqla"},"careers.first.lead":{"en":"Each card says what the person would own and what they would do first.","az":"Hər kart insanın nəyə cavabdeh olacağını və ilk olaraq nə edəcəyini göstərir."},"careers.firstwork":{"en":"First work","az":"İlk iş"},"careers.g1.h":{"en":"At the start","az":"Başlanğıcda"},"careers.g1.p":{"en":"Five people, the founder included (model assumption).","az":"Təsisçi daxil olmaqla beş nəfər (model fərziyyəsi)."},"careers.g2.h":{"en":"Year 2","az":"2-ci il"},"careers.g2.p":{"en":"Three more, for a core team of eight (model assumption).","az":"Daha üç nəfər, səkkiz nəfərlik əsas komanda üçün (model fərziyyəsi)."},"careers.g3.h":{"en":"As clients grow","az":"Müştərilər artdıqca"},"careers.g3.p":{"en":"These grow with clients and sprints, not with the calendar (model assumption).","az":"Bunlar təqvimlə deyil, müştərilər və sprintlərlə artır (model fərziyyəsi)."},"careers.glance.1.k":{"en":"Jobs open","az":"Vəzifələr açılır"},"careers.glance.1.v":{"en":"Once funding is in place","az":"Maliyyələşmə təmin olunanda"},"careers.glance.2.k":{"en":"Funding sought","az":"Cəlb ediləcək maliyyə"},"careers.glance.2.v":{"en":"About 850,000 AZN (target)","az":"Təxminən 850 000 AZN (hədəf)"},"careers.glance.3.k":{"en":"Core team","az":"Əsas komanda"},"careers.glance.3.v":{"en":"5 people in year 1, 8 from year 2 (model assumption)","az":"1-ci ildə 5 nəfər, 2-ci ildən 8 nəfər (model fərziyyəsi)"},"careers.glance.4.k":{"en":"Pay, location and contracts","az":"Maaş, iş yeri və müqavilələr"},"careers.glance.4.v":{"en":"Set when jobs open","az":"Vəzifələr açılanda müəyyən ediləcək"},"careers.glance.h":{"en":"The team plan at a glance","az":"Komanda planı bir baxışda"},"careers.held":{"en":"Held by the founder","az":"Təsisçi tutur"},"careers.hero.cta":{"en":"How to register interest","az":"Marağınızı necə bildirmək olar"},"careers.hero.cta2":{"en":"What the team will build","az":"Komanda nə quracaq"},"careers.hero.h":{"en":"The first team NowAI will hire.","az":"NowAI-ın işə götürəcəyi ilk komanda."},"careers.hero.lead":{"en":"From the technical lead who will design NowAI Core to the engineers who will set up each client. Jobs open once funding is in place; you can register interest now.","az":"NowAI Core-u layihələndirəcək texniki rəhbərdən hər müştəri üçün sistemi quraşdıracaq mühəndislərə qədər. Vəzifələr maliyyələşmə təmin olunanda açılacaq; marağınızı indi bildirə bilərsiniz."},"careers.hero.note":{"en":"Pay, location and contracts will be set when the first jobs open.","az":"Maaş, iş yeri və müqavilə şərtləri ilk vəzifələr açılanda müəyyən ediləcək."},"careers.int.eb":{"en":"Register interest","az":"Marağınızı bildirin"},"careers.int.foot":{"en":"Every message goes through a person you know. That is on purpose.","az":"Hər mesaj tanıdığınız bir insan vasitəsilə gəlir. Bu, bilərəkdən belədir."},"careers.int.h":{"en":"Interested? Tell us now.","az":"Maraqlanırsınız? İndi bizə deyin."},"careers.int.help.1":{"en":"The job you are interested in.","az":"Maraqlandığınız vəzifə."},"careers.int.help.2":{"en":"One thing you have built or run, in a sentence or two.","az":"Qurduğunuz və ya idarə etdiyiniz bir şey, bir-iki cümlə ilə."},"careers.int.help.3":{"en":"Which languages you work in.","az":"Hansı dillərdə işləyirsiniz."},"careers.int.help.h":{"en":"What helps","az":"Nə kömək edir"},"careers.int.lead":{"en":"To register interest, tell the person who shared this site with you. They will pass it to the founder.","az":"Marağınızı bildirmək üçün bu saytı sizinlə paylaşan şəxsə deyin. O, bunu təsisçiyə çatdıracaq."},"careers.int.not.1":{"en":"A CV or personal documents. We will ask for them when a job opens.","az":"CV və ya şəxsi sənədlər. Vəzifə açılanda onları özümüz istəyəcəyik."},"careers.int.not.2":{"en":"Anything from your current or past workplace.","az":"Hazırkı və ya keçmiş iş yerinizə aid heç nə."},"careers.int.not.h":{"en":"Please do not send","az":"Zəhmət olmasa göndərməyin"},"careers.j1.first":{"en":"The 15 owner interviews and the first three sprints (target).","az":"15 sahibkar müsahibəsi və ilk üç sprint (hədəf)."},"careers.j1.h":{"en":"Founder and CEO","az":"Təsisçi və baş direktor"},"careers.j1.owns":{"en":"Sales, sprints, partners, legal.","az":"Satış, sprintlər, tərəfdaşlar, hüquqi məsələlər."},"careers.j1.p":{"en":"Listed so you can see the whole team.","az":"Bütün komandanı görəsiniz deyə göstərilib."},"careers.j10.first":{"en":"Hired as sprints sell.","az":"Sprintlər satıldıqca götürülür."},"careers.j10.h":{"en":"Sprint staff","az":"Sprint əməkdaşları"},"careers.j10.owns":{"en":"Discovery Sprints and Money Maps.","az":"Kəşf sprintləri və Pul xəritələri."},"careers.j10.p":{"en":"One person-month for each sprint (model).","az":"Hər sprint üçün bir nəfər-ay (model)."},"careers.j2.first":{"en":"The Discovery tooling and the design of the Gate (target).","az":"Kəşf alətləri və Təsdiq növbəsinin layihəsi (hədəf)."},"careers.j2.h":{"en":"Technical lead","az":"Texniki rəhbər"},"careers.j2.owns":{"en":"Core architecture, security, hosting, the Gate.","az":"Nüvənin arxitekturası, təhlükəsizlik, hostinq, Təsdiq növbəsi."},"careers.j2.p":{"en":"Would design and build NowAI Core, the layer every role runs on.","az":"Hər rolun üzərində işlədiyi qat olan NowAI Core-u layihələndirib qurardı."},"careers.j3.first":{"en":"Azerbaijani and Russian test sets for the two roles in replay (target).","az":"Təkrar rejimindəki iki rol üçün Azərbaycan və rus dillərində test dəstləri (hədəf)."},"careers.j3.h":{"en":"AI and evals engineer","az":"Süni intellekt və qiymətləndirmə mühəndisi"},"careers.j3.owns":{"en":"Test sets per role and language, model routing, cost per task.","az":"Hər rol və dil üçün test dəstləri, model seçimi, tapşırıq başına xərc."},"careers.j3.p":{"en":"Would check that each role is right often enough, in both languages, at a known cost.","az":"Hər rolun hər iki dildə, məlum xərclə kifayət qədər tez-tez düzgün işlədiyini yoxlayardı."},"careers.j4.first":{"en":"Readers for a WhatsApp export, an inbox, a 1C export and a bank statement (target).","az":"WhatsApp ixracı, poçt qutusu, 1C ixracı və bank çıxarışı üçün oxuyucular (hədəf)."},"careers.j4.h":{"en":"Integrations engineer","az":"İnteqrasiya mühəndisi"},"careers.j4.owns":{"en":"1C files, bank statements, e-qaimə files, WhatsApp, voice.","az":"1C faylları, bank çıxarışları, e-qaimə faylları, WhatsApp, səs."},"careers.j4.p":{"en":"Would get data in and out of the files companies already use.","az":"Şirkətlərin artıq istifadə etdiyi fayllara məlumatı daxil edib çıxarardı."},"careers.j5.first":{"en":"Three Discovery Sprints with design partners (target).","az":"Dizayn-tərəfdaşlarla üç Kəşf sprinti (hədəf)."},"careers.j5.h":{"en":"Deployment engineer","az":"Tətbiq mühəndisi"},"careers.j5.owns":{"en":"Sprints, client setup, rules, replay tests.","az":"Sprintlər, müştəri üçün quraşdırma, qaydalar, təkrar testləri."},"careers.j5.p":{"en":"Would run sprints and set up each client by configuration, not code.","az":"Sprintləri aparar və hər müştəri üçün sistemi kodla deyil, tənzimləmə ilə quraşdırardı."},"careers.j6.first":{"en":"Keeping tax and payroll rules current as the law changes (target).","az":"Qanun dəyişdikcə vergi və əmək haqqı qaydalarını aktual saxlamaq (hədəf)."},"careers.j6.h":{"en":"Domain lead, a chartered accountant","az":"Sahə rəhbəri, peşəkar mühasib"},"careers.j6.owns":{"en":"Books and People Desk rules, the tax and payroll library.","az":"Uçot və Kadr masası qaydaları, vergi və əmək haqqı kitabxanası."},"careers.j6.p":{"en":"Would own the rules behind Books and People Desk.","az":"Uçot və Kadr masasının arxasındakı qaydalara cavabdeh olardı."},"careers.j7.first":{"en":"Moving from free design-partner sprints to paid sprints (target).","az":"Pulsuz dizayn-tərəfdaş sprintlərindən ödənişli sprintlərə keçid (hədəf)."},"careers.j7.h":{"en":"Sales lead","az":"Satış rəhbəri"},"careers.j7.owns":{"en":"Pipeline, sprint scheduling, references.","az":"Potensial müştərilər, sprint cədvəli, tövsiyələr."},"careers.j7.p":{"en":"Would find companies that fit and schedule their sprints.","az":"Uyğun şirkətləri tapar və onların sprintlərini planlaşdırardı."},"careers.j8.first":{"en":"Approval screens that show the evidence beside each item (target).","az":"Hər maddənin yanında sübutu göstərən təsdiq ekranları (hədəf)."},"careers.j8.h":{"en":"Product and design","az":"Məhsul və dizayn"},"careers.j8.owns":{"en":"The Owner's Brief, the approval screens at the Gate, conversation design.","az":"Sahibkar hesabatı, Təsdiq növbəsinin təsdiq ekranları, söhbət dizaynı."},"careers.j8.p":{"en":"Would design what people see and read: the 19:00 brief, the Gate and how each role writes.","az":"İnsanların gördüyünü və oxuduğunu layihələndirərdi: saat 19:00 hesabatı, Təsdiq növbəsi və hər rolun necə yazdığı."},"careers.j9.first":{"en":"Hired as clients go live.","az":"Müştərilər işə başladıqca götürülür."},"careers.j9.h":{"en":"Deployment engineers","az":"Tətbiq mühəndisləri"},"careers.j9.owns":{"en":"Client setup, rules, replay tests.","az":"Müştəri quraşdırılması, qaydalar, təkrar testləri."},"careers.j9.p":{"en":"One for every 8 live clients (model assumption).","az":"Hər 8 aktiv müştəri üçün bir nəfər (model fərziyyəsi)."},"careers.meta.desc":{"en":"The first team NowAI will hire, what each job would own, and how to register interest.","az":"NowAI-ın işə götürəcəyi ilk komanda, hər vəzifənin nəyə cavabdeh olacağı və marağınızı necə bildirmək olar."},"careers.owns":{"en":"Would own","az":"Cavabdeh olardı"},"careers.size.1":{"en":"people at 30 clients: 8 core, 4 deployment engineers, 3 on sprints","az":"nəfər 30 müştəridə: 8 əsas, 4 tətbiq mühəndisi, 3 sprintdə"},"careers.size.2":{"en":"people at 100 clients","az":"nəfər 100 müştəridə"},"careers.size.3":{"en":"live clients for each deployment engineer","az":"hər tətbiq mühəndisinə düşən aktiv müştəri"},"careers.size.h":{"en":"How big the team would get","az":"Komanda nə qədər böyüyərdi"},"careers.size.note":{"en":"If one engineer can serve only 5 clients, the team at month 36 grows from 19 to 23 people (model).","az":"Bir mühəndis yalnız 5 müştəriyə xidmət edə bilsə, 36-cı ayda komanda 19 nəfərdən 23 nəfərə çatır (model)."},"careers.work.1.h":{"en":"A fixed menu of roles","az":"Rolların sabit menyusu"},"careers.work.1.p":{"en":"Seven roles, the same for every client. No custom builds.","az":"Yeddi rol, hər müştəri üçün eyni. Fərdi qurğular yoxdur."},"careers.work.2.h":{"en":"Setup is configuration, not code","az":"Quraşdırma kod deyil, tənzimləmədir"},"careers.work.2.p":{"en":"A new client gets rules and settings, not new code.","az":"Yeni müştəri yeni kod deyil, qaydalar və tənzimləmələr alır."},"careers.work.3.h":{"en":"Count clients per deployment engineer","az":"Hər tətbiq mühəndisinə düşən müştəriləri saymaq"},"careers.work.3.p":{"en":"From the first client. The model assumes 8. Fewer than 5 is the warning sign.","az":"İlk müştəridən. Model 8 fərz edir. 5-dən az olması xəbərdarlıq siqnalıdır."},"careers.work.4.h":{"en":"Azerbaijani and Russian first","az":"Əvvəlcə Azərbaycan və rus dilləri"},"careers.work.4.p":{"en":"Test sets, scripts and screens start in these two languages.","az":"Test dəstləri, ssenarilər və ekranlar bu iki dildə başlayır."},"careers.work.5.h":{"en":"Replay before live","az":"İstifadədən əvvəl təkrar sınaq"},"careers.work.5.p":{"en":"Every new rule is replayed on past weeks before it goes live.","az":"Hər yeni qayda istifadəyə verilməzdən əvvəl keçmiş həftələr üzərində təkrar sınanır."},"careers.work.6.h":{"en":"Label every number","az":"Hər rəqəmə etiket"},"careers.work.6.p":{"en":"Model, target, estimate, synthetic, reported, verified or unknown. No claim without one.","az":"Model, hədəf, təxmin, sintetik, mənbədə bildirilir, təsdiqlənib və ya məlum deyil. Etiketsiz iddia yoxdur."},"careers.work.eb":{"en":"How we would work","az":"Necə işləyərdik"},"careers.work.h":{"en":"Six rules the plan sets for the team","az":"Planın komanda üçün qoyduğu altı qayda"},"careers.work.lead":{"en":"They keep NowAI a software company, not an agency (target).","az":"Onlar NowAI-ı agentlik deyil, proqram şirkəti kimi saxlayır (hədəf)."},"careers.work.open":{"en":"When a job opens, this page will list it with its pay, terms and how to apply.","az":"Vəzifə açılanda bu səhifə onu maaşı, şərtləri və müraciət qaydası ilə göstərəcək."},"s.bc.aria":{"en":"Breadcrumb","az":"Naviqasiya yolu"},"s.bc.home":{"en":"Home","az":"Ana səhifə"},"s.brand.home":{"en":"NowAI, home page","az":"NowAI, ana səhifə"},"s.bucket.care":{"en":"Keeps customers (not charged)","az":"Müştərini saxlayır (haqq alınmır)"},"s.bucket.cash":{"en":"Cash in sooner","az":"Pul daha tez gəlir"},"s.bucket.fines":{"en":"Fewer fines (not charged)","az":"Daha az cərimə (haqq alınmır)"},"s.bucket.hours":{"en":"Hours (shown, not charged)","az":"Saatlar (göstərilir, haqq alınmır)"},"s.bucket.leak":{"en":"Leaks recovered","az":"Geri qaytarılan sızma"},"s.bucket.renew":{"en":"Not charged: why owners renew","az":"Haqq alınmır: sahibkarların uzatma səbəbi"},"s.bucket.sales":{"en":"Extra sales","az":"Əlavə satış"},"s.cta.contact":{"en":"How to reach us","az":"Bizə necə çatmaq olar"},"s.cta.more":{"en":"Read more","az":"Ətraflı"},"s.cta.roles":{"en":"All seven roles","az":"Bütün yeddi rol"},"s.cta.sprint":{"en":"Start with a Discovery Sprint","az":"Kəşf sprinti ilə başlayın"},"s.cta.sprint.short":{"en":"Discovery Sprint","az":"Kəşf sprinti"},"s.cta.story.ind":{"en":"See an example day at a distributor","az":"Distribyutorda nümunə bir günə baxın"},"s.ctaband2.h":{"en":"Talk to the founder.","az":"Təsisçi ilə danışın."},"s.ctaband2.p":{"en":"Tell the person who shared this site with you. They will pass your message straight to the founder.","az":"Bu saytı sizinlə paylaşan şəxsə deyin. O, mesajınızı birbaşa təsisçiyə çatdıracaq."},"s.foot.date":{"en":"November 2026","az":"Noyabr 2026"},"s.foot.disclaimer":{"en":"NowAI is pre-launch: this site describes the service it will offer. Companies, people and amounts in the examples are invented, and every figure carries its label.","az":"NowAI hələ bazara çıxmayıb: bu sayt onun təqdim edəcəyi xidməti təsvir edir. Nümunələrdəki şirkətlər, insanlar və məbləğlər uydurulub, hər rəqəmin isə öz etiketi var."},"s.foot.drafts":{"en":"Azerbaijani and Russian text on this site is a draft for a native speaker to check.","az":"Bu saytdakı Azərbaycan və rus dilində mətnlər ana dili daşıyıcısının yoxlaması üçün qaralamadır."},"s.foot.h.company":{"en":"Company","az":"Şirkət"},"s.foot.h.fn":{"en":"By function","az":"Funksiya üzrə"},"s.foot.h.industries":{"en":"Industries","az":"Sahələr"},"s.foot.h.platform":{"en":"How it works","az":"Necə işləyir"},"s.foot.h.roles":{"en":"Roles","az":"Rollar"},"s.foot.h.start":{"en":"Start","az":"Başlanğıc"},"s.foot.line":{"en":"The AI operations team for companies in Azerbaijan.","az":"Azərbaycandakı şirkətlər üçün süni intellekt əməliyyat komandası."},"s.foot.privacy":{"en":"This site has no forms, cookies or analytics. Your language choice is saved in this browser only. Fonts load from Google Fonts.","az":"Bu saytda forma, kuki və analitika yoxdur. Dil seçiminiz yalnız bu brauzerdə saxlanılır. Şriftlər Google Fonts-dan yüklənir."},"s.foot.top":{"en":"Back to top","az":"Yuxarı qayıdın"},"s.ind.automotive.line":{"en":"Brand dealers, service centres and parts distributors.","az":"Brend dilerləri, servis mərkəzləri və ehtiyat hissələri distribyutorları."},"s.ind.construction.line":{"en":"Building-materials suppliers and dealers; developers.","az":"Tikinti materialları təchizatçıları və dilerləri; developerlər."},"s.ind.distribution.line":{"en":"Food, FMCG and household-goods distributors and wholesalers.","az":"Ərzaq, FMCG və məişət malları distribyutorları və topdan satıcılar."},"s.ind.education.line":{"en":"Private school groups, universities and course centres.","az":"Özəl məktəb qrupları, universitetlər və kurs mərkəzləri."},"s.ind.financial-services.line":{"en":"Insurers' agencies, microfinance, leasing. Not banks.","az":"Sığorta agentlikləri, mikromaliyyə, lizinq. Banklar deyil."},"s.ind.healthcare.line":{"en":"Clinic groups, diagnostic centres and private hospitals.","az":"Klinika qrupları, diaqnostika mərkəzləri və özəl xəstəxanalar."},"s.ind.hospitality.line":{"en":"Hotel groups, restaurant groups and caterers.","az":"Otel qrupları, restoran qrupları və ketərinq şirkətləri."},"s.ind.hr":{"en":"HR and staff","az":"HR və işçilər"},"s.ind.hr.line":{"en":"Staff requests, leave, payroll changes and EMAS contract data, in any industry. A function, not an industry: see People Desk (HR).","az":"İşçi müraciətləri, məzuniyyət, əmək haqqı dəyişiklikləri və EMAS müqavilə məlumatları, istənilən sahədə. Sahə deyil, funksiyadır: Kadr masasına (HR) baxın."},"s.ind.logistics.line":{"en":"Freight forwarders, trucking firms and customs brokers.","az":"Ekspeditorlar, yük avtomobili firmaları və gömrük brokerləri."},"s.ind.retail-pharmacy.line":{"en":"Grocery, electronics and home-goods chains; multi-branch pharmacies.","az":"Ərzaq, elektronika və ev əşyaları şəbəkələri; çoxfilialli apteklər."},"s.ind.telecom.line":{"en":"Regional internet providers, dealer networks. Not large operators.","az":"Regional internet provayderləri, diler şəbəkələri. Böyük operatorlar deyil."},"s.lang.aria":{"en":"Language","az":"Dil"},"s.lang.az":{"en":" (Azerbaijani, draft)","az":" (azərbaycanca, qaralama)"},"s.lang.en":{"en":" (English)","az":" (ingiliscə)"},"s.lbl.model":{"en":"model","az":"model"},"s.lbl.target":{"en":"target","az":"hədəf"},"s.mm.company.h":{"en":"Mission and plan","az":"Missiya və plan"},"s.mm.company.p":{"en":"An AI operations team for every growing company in Azerbaijan.","az":"Azərbaycanda böyüyən hər şirkət üçün süni intellekt əməliyyat komandası."},"s.mm.ind.all":{"en":"All industries","az":"Bütün sahələr"},"s.mm.ind.not":{"en":"Not first targets: large banks, large mobile and fixed-line operators, state utilities, state bodies, micro firms.","az":"İlk hədəf deyil: böyük banklar, böyük mobil və sabit xətt operatorları, dövlət kommunal xidmətləri, dövlət qurumları, mikro firmalar."},"s.mm.ind.p":{"en":"Ten industries, sorted by where we plan to start. Each page says what NowAI would do there.","az":"On sahə, başlamağı planlaşdırdığımız ardıcıllıqla. Hər səhifə NowAI-ın orada nə edəcəyini deyir."},"s.mm.platform.h":{"en":"One core under every role","az":"Hər rolun altında bir nüvə"},"s.mm.platform.p":{"en":"Channels, reading, company memory, the Gate and measurement. Designed once, shared by every role.","az":"Kanallar, oxuma, şirkət yaddaşı, Təsdiq növbəsi və ölçmə. Bir dəfə layihələndirilir, bütün rollar üçün ortaqdır."},"s.mm.roles.back":{"en":"Back office","az":"Daxili əməliyyatlar"},"s.mm.roles.eb":{"en":"By function","az":"Funksiya üzrə"},"s.mm.roles.front":{"en":"Front office","az":"Müştəri tərəfi"},"s.mm.roles.h":{"en":"Seven roles, one core","az":"Yeddi rol, bir nüvə"},"s.mm.roles.owner":{"en":"For the owner","az":"Sahibkar üçün"},"s.mm.roles.p":{"en":"A client would start with the one or two roles that hold the most money.","az":"Müştəri ən çox pulun cəmləndiyi bir və ya iki rolla başlayardı."},"s.mm.roles.pick":{"en":"How a client would pick its first roles","az":"Müştəri ilk rollarını necə seçərdi"},"s.nav.after":{"en":"After the sprint","az":"Sprintdən sonra"},"s.nav.aria":{"en":"Main","az":"Əsas menyu"},"s.nav.calculator":{"en":"Your company calculator","az":"Şirkətiniz üçün kalkulyator"},"s.nav.close":{"en":"Close menu","az":"Menyunu bağlayın"},"s.nav.company":{"en":"Company","az":"Şirkət"},"s.nav.connectors":{"en":"Planned connectors","az":"Planlaşdırılan qoşulmalar"},"s.nav.core":{"en":"NowAI Core","az":"NowAI Core"},"s.nav.gate":{"en":"The Gate","az":"Təsdiq növbəsi"},"s.nav.industries":{"en":"Industries","az":"Sahələr"},"s.nav.languages":{"en":"Languages","az":"Dillər"},"s.nav.menu":{"en":"Menu","az":"Menyu"},"s.nav.open":{"en":"Open menu","az":"Menyunu açın"},"s.nav.platform":{"en":"How it works","az":"Necə işləyir"},"s.nav.pricing":{"en":"Pricing","az":"Qiymət"},"s.nav.roles":{"en":"Roles","az":"Rollar"},"s.nav.story":{"en":"See a day","az":"Bir günə baxın"},"s.page.about":{"en":"About","az":"Haqqımızda"},"s.page.automotive":{"en":"Automotive","az":"Avtomobil sahəsi"},"s.page.books":{"en":"Books","az":"Uçot"},"s.page.careers":{"en":"Careers","az":"Karyera"},"s.page.collections":{"en":"Collections","az":"Ödəniş nəzarəti"},"s.page.construction":{"en":"Construction and building materials","az":"Tikinti və tikinti materialları"},"s.page.contact":{"en":"Contact","az":"Əlaqə"},"s.page.customer-care":{"en":"Customer Care","az":"Müştəri xidməti"},"s.page.distribution":{"en":"Distribution and wholesale","az":"Distribusiya və topdan satış"},"s.page.education":{"en":"Private education","az":"Özəl təhsil"},"s.page.financial-services":{"en":"Financial services","az":"Maliyyə xidmətləri"},"s.page.glossary":{"en":"Glossary","az":"Lüğət"},"s.page.healthcare":{"en":"Private healthcare","az":"Özəl səhiyyə"},"s.page.home.title":{"en":"NowAI: the AI operations team for companies in Azerbaijan","az":"NowAI: Azərbaycandakı şirkətlər üçün süni intellekt əməliyyat komandası"},"s.page.hospitality":{"en":"Hospitality and food service","az":"Qonaqpərvərlik və iaşə"},"s.page.industries":{"en":"Industries","az":"Sahələr"},"s.page.investors":{"en":"Investors","az":"İnvestorlar"},"s.page.logistics":{"en":"Logistics and freight","az":"Logistika və yükdaşıma"},"s.page.notes":{"en":"Notes","az":"Qeydlər"},"s.page.notice":{"en":"Site notice","az":"Sayt bildirişi"},"s.page.owners-brief":{"en":"Owner's Brief","az":"Sahibkar hesabatı"},"s.page.payables-check":{"en":"Payables Check","az":"Alış yoxlaması"},"s.page.people-desk":{"en":"People Desk (HR)","az":"Kadr masası (HR)"},"s.page.platform":{"en":"NowAI Core","az":"NowAI Core"},"s.page.retail-pharmacy":{"en":"Retail and pharmacy chains","az":"Pərakəndə və aptek şəbəkələri"},"s.page.sales-desk":{"en":"Sales Desk","az":"Satış masası"},"s.page.solutions":{"en":"Roles","az":"Rollar"},"s.page.telecom":{"en":"Telecommunications and internet","az":"Telekommunikasiya və internet"},"s.page.trust":{"en":"How control works","az":"Nəzarət necə işləyir"},"s.role.books.line":{"en":"1C entries and bank reconciliation, approved by the chief accountant.","az":"1C yazılışları və bank uzlaşması, baş mühasibin təsdiqi ilə."},"s.role.collections.line":{"en":"Who owes what, and polite reminders every day.","az":"Kim nə qədər borcludur, və hər gün nəzakətli xatırlatmalar."},"s.role.customer-care.line":{"en":"Questions, deliveries, complaints and small credit notes.","az":"Suallar, çatdırılmalar, şikayətlər və kiçik kredit-notalar."},"s.role.owners-brief.line":{"en":"One message to the owner at 19:00.","az":"Saat 19:00-da sahibkara bir mesaj."},"s.role.payables-check.line":{"en":"Supplier invoices checked against order, delivery, contract and e-qaimə.","az":"Təchizatçı qaimələri sifariş, təhvil, müqavilə və e-qaimə ilə yoxlanılır."},"s.role.people-desk.line":{"en":"Staff requests, leave, payroll changes and EMAS contract data.","az":"İşçi müraciətləri, məzuniyyət, əmək haqqı dəyişiklikləri və EMAS müqavilə məlumatları."},"s.role.sales-desk.line":{"en":"Orders and quotes on every channel, day and night.","az":"Hər kanalda sifarişlər və qiymət təklifləri, gecə-gündüz."},"s.skip":{"en":"Skip to content","az":"Məzmuna keçin"},"s.status.first":{"en":"First focus","az":"Birinci növbədə"},"s.status.function":{"en":"By function","az":"Funksiya üzrə"},"s.status.later":{"en":"Later, with partners","az":"Sonra, tərəfdaşlarla"},"s.status.next":{"en":"Next","az":"Növbəti"},"s.status.notopen":{"en":"Planned, not open yet","az":"Planlaşdırılıb, hələ açıq deyil"},"s.wk.pause":{"en":"Pause","az":"Fasilə"},"s.wk.play":{"en":"Play","az":"Oynat"},"s.wk.replay":{"en":"Play again","az":"Yenidən oynat"}};</script>
+<script src="assets/site.js"></script>
+
+</body>
+</html>

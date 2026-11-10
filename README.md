@@ -1,25 +1,22 @@
 # NowAI
 
-A planned AI back office for Azerbaijani small firms, run by their accountant. Clients send photos of invoices and receipts, the agent prepares the entries, and the accountant approves every one.
-
-**Draft, November 2026.** There is no product, customer or revenue yet. The demo is a scripted prototype, and every company, person and number in it is fictional.
+NowAI will be the AI operations team for companies in Azerbaijan. It has seven roles for orders, invoices, calls and payments, and a person approves what matters.
 
 ## Open it
 
 Start here: https://faiqrasulov.github.io/nowai/
 
-- [Product demo](https://faiqrasulov.github.io/nowai/demo.html)
-- [Blueprint: the backend, one receipt, and the route to $1B](https://faiqrasulov.github.io/nowai/blueprint.html)
-- [Investor deck](https://faiqrasulov.github.io/nowai/deck.html)
+- [How it works](https://faiqrasulov.github.io/nowai/platform.html)
+- [Roles](https://faiqrasulov.github.io/nowai/solutions/)
+- [Industries](https://faiqrasulov.github.io/nowai/industries/)
+- [See a day](https://faiqrasulov.github.io/nowai/story.html)
+- [Discovery Sprint](https://faiqrasulov.github.io/nowai/sprint.html)
+- [About: mission, vision and plan](https://faiqrasulov.github.io/nowai/about.html)
 
-## Files
+The site is in English and Azerbaijani. The company in its story, Aventa Group, and everyone in that story are invented, for illustration. See the [site notice](https://faiqrasulov.github.io/nowai/notice.html).
 
-| File | What it is |
-|---|---|
-| NowAI_Investor_Deck.pdf | The deck as a PDF |
-| NowAI_Six_Pager.pdf | The full argument in prose |
-| NowAI_Investment_Memo.pdf | The evidence, risks and plan |
-| NowAI_Model_Summary.pdf | Results and the path to $1B from the financial model |
-| Latest_1B_Companies.pdf | The newest $1B companies, with figures checked on 6 November 2026 |
-| NowAI_Backend_Design.pdf | The backend in plain words |
-| NowAI_Share_Pack.zip | All of the above in one file |
+## Earlier material
+
+The files below are from an earlier plan (6 November 2026). They are kept so that existing links keep working; the site above replaces them.
+
+`demo.html`, `blueprint.html`, `deck.html`, `NowAI_Investor_Deck.pdf`, `NowAI_Six_Pager.pdf`, `NowAI_Investment_Memo.pdf`, `NowAI_Model_Summary.pdf`, `Latest_1B_Companies.pdf`, `NowAI_Backend_Design.pdf`, `NowAI_Share_Pack.zip`

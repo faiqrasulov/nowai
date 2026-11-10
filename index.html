@@ -232,6 +232,35 @@
    .n-ihub-week, styled in shared/site.css). */
 .n-hm-ind { display: flex; flex-direction: column; gap: 4px; }
 .n-hm-ind > .n-indcard { flex: 1 1 auto; height: auto; }
+
+/* ---------- Phone (added 10 Nov 2026) ----------
+   The ledger fits on about one screen, so every highlight stays in view while the day plays:
+   doors as two columns of tiles, roles as wrapping pills, tighter columns. */
+@media (max-width: 759px) {
+  .n-hm-col { padding: 12px 14px 14px; }
+  .n-hm-col__h { margin-bottom: 8px; }
+  .n-hm-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .n-hm-doors li, .n-hm-doors li:last-child { gap: 8px; padding: 7px 8px; border: 1px solid var(--n-line); border-radius: 8px; }
+  .n-hm-ledger.is-live .n-hm-doors li { padding-left: 8px; }
+  .n-hm-ledger.is-live .n-hm-doors li.is-now { border-color: var(--n-forest-700); }
+  .n-hm-doors .n-ic { width: 16px; height: 16px; }
+  .n-hm-doors__n { font-size: 13px; }
+  .n-hm-doors__x { font-size: 12px; }
+  .n-hm-core__p { margin-bottom: 10px; }
+  .n-hm-core__roles { display: flex; flex-wrap: wrap; gap: 6px; }
+  .n-hm-r { padding: 5px 10px; }
+  .n-hm-col--out { gap: 10px; }
+  /* The time strip and its caption stay on screen while the visitor scrolls through the ledger, as the
+     industry reels' controls do (overflow: clip keeps the rounded corners without breaking sticky). */
+  .n-hm-ledger { overflow: clip; }
+  .n-hm-play { position: sticky; top: var(--n-hdr-h); z-index: 2; box-shadow: 0 1px 0 var(--n-line), 0 6px 14px -10px rgba(7, 32, 26, .25); }
+}
+/* Long card lists become rows you swipe sideways; the next card peeks in so the row reads as more. */
+@media (max-width: 599px) {
+  .n-hm-swipe { display: flex; gap: 12px; overflow-x: auto; margin-left: calc(-1 * var(--n-gutter)); margin-right: calc(-1 * var(--n-gutter)); padding: 4px var(--n-gutter) 14px; scroll-snap-type: x mandatory; scroll-padding-inline: var(--n-gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+  .n-hm-swipe::-webkit-scrollbar { display: none; }
+  .n-hm-swipe > li { flex: 0 0 84%; min-width: 0; scroll-snap-align: start; }
+}
 </style>
 </head>
 <body data-page="home" data-group="home">
@@ -564,7 +593,7 @@
       <h2 data-i="home.doors.h">Six doors in. Money leaks between them.</h2>
       <p class="n-lead" data-i="home.doors.lead">Orders, invoices, calls and payments reach a company through six doors. Nobody sees all six at once, so money slips through the gaps.</p>
     </header>
-    <ul class="n-grid n-grid--3 n-hm-doorgrid">
+    <ul class="n-grid n-grid--3 n-hm-doorgrid n-hm-swipe">
       <li class="n-card n-hm-door"><h3 class="n-hm-door__h"><svg class="n-ic" aria-hidden="true"><use href="#ic-chat"/></svg><span data-i="s.door.whatsapp">WhatsApp</span></h3><dl class="n-hm-door__dl"><div><dt data-i="home.doors.in">What arrives</dt><dd data-i="home.doors.1.in">Voice notes, photos of order lists, promises to pay.</dd></div><div><dt data-i="home.doors.leak">Where it leaks</dt><dd data-i="home.doors.1.leak">An order sent at 22:00 waits until morning, or goes to a rival.</dd></div></dl></li>
       <li class="n-card n-hm-door"><h3 class="n-hm-door__h"><svg class="n-ic" aria-hidden="true"><use href="#ic-phone"/></svg><span data-i="s.door.phone">Phone</span></h3><dl class="n-hm-door__dl"><div><dt data-i="home.doors.in">What arrives</dt><dd data-i="home.doors.2.in">Orders, complaints and “where is my delivery?”</dd></div><div><dt data-i="home.doors.leak">Where it leaks</dt><dd data-i="home.doors.2.leak">Calls missed at busy hours are never logged.</dd></div></dl></li>
       <li class="n-card n-hm-door"><h3 class="n-hm-door__h"><svg class="n-ic" aria-hidden="true"><use href="#ic-mail"/></svg><span data-i="s.door.email">Email</span></h3><dl class="n-hm-door__dl"><div><dt data-i="home.doors.in">What arrives</dt><dd data-i="home.doors.3.in">Supplier invoices, price lists, reconciliation acts.</dd></div><div><dt data-i="home.doors.leak">Where it leaks</dt><dd data-i="home.doors.3.leak">A price that drifts from the contract gets paid anyway.</dd></div></dl></li>
@@ -585,7 +614,7 @@
       </div>
       <p class="n-lead" data-i="home.roles.lead">A client would start with the one or two roles that hold the most money, then add the rest.</p>
     </header>
-    <ul class="n-grid n-grid--4">
+    <ul class="n-grid n-grid--4 n-hm-swipe">
       <li><a class="n-card n-card--link n-rolecard" href="solutions/sales-desk.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-role-sales"/></svg><h3 data-i="s.role.sales-desk">Sales Desk</h3><p data-i="s.role.sales-desk.line">Orders and quotes on every channel, day and night.</p><span class="n-bucket n-bucket--sales" data-i="s.bucket.sales">Extra sales</span></a></li>
       <li><a class="n-card n-card--link n-rolecard" href="solutions/customer-care.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-role-care"/></svg><h3 data-i="s.role.customer-care">Customer Care</h3><p data-i="s.role.customer-care.line">Questions, deliveries, complaints and small credit notes.</p><span class="n-bucket n-bucket--care" data-i="s.bucket.care">Keeps customers (not charged)</span></a></li>
       <li><a class="n-card n-card--link n-rolecard" href="solutions/collections.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-role-collections"/></svg><h3 data-i="s.role.collections">Collections</h3><p data-i="s.role.collections.line">Who owes what, and polite reminders every day.</p><span class="n-bucket n-bucket--cash" data-i="s.bucket.cash">Cash in sooner</span></a></li>
@@ -670,7 +699,7 @@
     <div class="n-hm-tiers">
       <div class="n-hm-tier">
         <div class="n-hm-tier__k"><span class="n-status n-status--first"><span data-i="s.status.first">First focus</span></span><p class="n-small" data-ih="s.status.first.p">Where NowAI will start. The model's three examples are here, and so are the first planned sprints.</p></div>
-        <ul class="n-grid n-grid--3">
+        <ul class="n-grid n-grid--3 n-hm-swipe">
           <li class="n-hm-ind"><a class="n-card n-card--link n-indcard" href="industries/distribution.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-box"/></svg><h3 data-i="s.page.distribution">Distribution and wholesale</h3><p data-i="s.ind.distribution.line">Food, FMCG and household-goods distributors and wholesalers.</p><span class="n-status n-status--first"><span data-i="s.status.first">First focus</span></span></a><a class="n-ihub-week" href="industries/distribution.html#ind-week"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-replay"/></svg><span data-i="s.wk.go.day">Watch its day</span><span class="n-vh">: </span><span class="n-vh" data-i="s.page.distribution">Distribution and wholesale</span></a></li>
           <li class="n-hm-ind"><a class="n-card n-card--link n-indcard" href="industries/retail-pharmacy.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-store"/></svg><h3 data-i="s.page.retail-pharmacy">Retail and pharmacy chains</h3><p data-i="s.ind.retail-pharmacy.line">Grocery, electronics and home-goods chains; multi-branch pharmacies.</p><span class="n-status n-status--first"><span data-i="s.status.first">First focus</span></span></a><a class="n-ihub-week" href="industries/retail-pharmacy.html#ind-week"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-replay"/></svg><span data-i="s.wk.go">Watch its week</span><span class="n-vh">: </span><span class="n-vh" data-i="s.page.retail-pharmacy">Retail and pharmacy chains</span></a></li>
           <li class="n-hm-ind"><a class="n-card n-card--link n-indcard" href="industries/healthcare.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-clinic"/></svg><h3 data-i="s.page.healthcare">Private healthcare</h3><p data-i="s.ind.healthcare.line">Clinic groups, diagnostic centres and private hospitals.</p><span class="n-status n-status--first"><span data-i="s.status.first">First focus</span></span></a><a class="n-ihub-week" href="industries/healthcare.html#ind-week"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-replay"/></svg><span data-i="s.wk.go.day">Watch its day</span><span class="n-vh">: </span><span class="n-vh" data-i="s.page.healthcare">Private healthcare</span></a></li>
@@ -678,7 +707,7 @@
       </div>
       <div class="n-hm-tier">
         <div class="n-hm-tier__k"><span class="n-status n-status--next"><span data-i="s.status.next">Next</span></span><p class="n-small" data-ih="s.status.next.p">After the first clients, on the same seven roles and the same core.</p></div>
-        <ul class="n-grid n-grid--3">
+        <ul class="n-grid n-grid--3 n-hm-swipe">
           <li class="n-hm-ind"><a class="n-card n-card--link n-indcard" href="industries/logistics.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-truck"/></svg><h3 data-i="s.page.logistics">Logistics and freight</h3><p data-i="s.ind.logistics.line">Freight forwarders, trucking firms and customs brokers.</p><span class="n-status n-status--next"><span data-i="s.status.next">Next</span></span></a><a class="n-ihub-week" href="industries/logistics.html#ind-week"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-replay"/></svg><span data-i="s.wk.go">Watch its week</span><span class="n-vh">: </span><span class="n-vh" data-i="s.page.logistics">Logistics and freight</span></a></li>
           <li class="n-hm-ind"><a class="n-card n-card--link n-indcard" href="industries/construction.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-crane"/></svg><h3 data-i="s.page.construction">Construction and building materials</h3><p data-i="s.ind.construction.line">Building-materials suppliers and dealers; developers.</p><span class="n-status n-status--next"><span data-i="s.status.next">Next</span></span></a><a class="n-ihub-week" href="industries/construction.html#ind-week"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-replay"/></svg><span data-i="s.wk.go">Watch its week</span><span class="n-vh">: </span><span class="n-vh" data-i="s.page.construction">Construction and building materials</span></a></li>
           <li class="n-hm-ind"><a class="n-card n-card--link n-indcard" href="industries/hospitality.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-cup"/></svg><h3 data-i="s.page.hospitality">Hospitality and food service</h3><p data-i="s.ind.hospitality.line">Hotel groups, restaurant groups and caterers.</p><span class="n-status n-status--next"><span data-i="s.status.next">Next</span></span></a><a class="n-ihub-week" href="industries/hospitality.html#ind-week"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-replay"/></svg><span data-i="s.wk.go.day">Watch its day</span><span class="n-vh">: </span><span class="n-vh" data-i="s.page.hospitality">Hospitality and food service</span></a></li>
@@ -688,14 +717,14 @@
       </div>
       <div class="n-hm-tier">
         <div class="n-hm-tier__k"><span class="n-status n-status--later"><span data-i="s.status.later">Later, with partners</span></span><p class="n-small" data-ih="s.status.later.p">After the first industries, with a partner that already runs these systems. Not a first target. <a href="about.html#partners">Partners in the plan</a></p></div>
-        <ul class="n-grid n-grid--3">
+        <ul class="n-grid n-grid--3 n-hm-swipe">
           <li class="n-hm-ind"><a class="n-card n-card--link n-indcard" href="industries/telecom.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-signal"/></svg><h3 data-i="s.page.telecom">Telecommunications and internet</h3><p data-i="s.ind.telecom.line">Regional internet providers, dealer networks. Not large operators.</p><span class="n-status n-status--later"><span data-i="s.status.later">Later, with partners</span></span></a><a class="n-ihub-week" href="industries/telecom.html#ind-week"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-replay"/></svg><span data-i="s.wk.go">Watch its week</span><span class="n-vh">: </span><span class="n-vh" data-i="s.page.telecom">Telecommunications and internet</span></a></li>
           <li class="n-hm-ind"><a class="n-card n-card--link n-indcard" href="industries/financial-services.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-coins"/></svg><h3 data-i="s.page.financial-services">Financial services</h3><p data-i="s.ind.financial-services.line">Insurers' agencies, microfinance, leasing. Not banks.</p><span class="n-status n-status--later"><span data-i="s.status.later">Later, with partners</span></span></a><a class="n-ihub-week" href="industries/financial-services.html#ind-week"><svg class="n-ic n-ic--sm" aria-hidden="true"><use href="#ic-replay"/></svg><span data-i="s.wk.go">Watch its week</span><span class="n-vh">: </span><span class="n-vh" data-i="s.page.financial-services">Financial services</span></a></li>
         </ul>
       </div>
       <div class="n-hm-tier n-hm-tier--fn">
         <div class="n-hm-tier__k"><span class="n-status n-status--function"><span data-i="s.status.function">By function</span></span></div>
-        <ul class="n-grid n-grid--3">
+        <ul class="n-grid n-grid--3 n-hm-swipe">
           <li><a class="n-card n-card--link n-indcard" href="solutions/people-desk.html"><svg class="n-ic n-ic--lg" aria-hidden="true"><use href="#ic-role-people"/></svg><h3 data-i="s.ind.hr">HR and staff</h3><p data-i="s.ind.hr.line">Staff requests, leave, payroll changes and EMAS contract data, in any industry. A function, not an industry: see People Desk (HR).</p><span class="n-status n-status--function"><span data-i="s.status.function">By function</span></span></a></li>
         </ul>
       </div>
@@ -925,8 +954,9 @@
     else play(state === "done" || cur < 0 ? 0 : cur);
   });
   stops.forEach((b, j) => b.addEventListener("click", () => { pause(); show(j); if (j === PLAN.length - 1) finish(); }));
-  fig.addEventListener("mouseenter", () => { hover = true; if (state === "playing") { clearTimeout(timer); stops.forEach(b => b.classList.remove("is-running")); } });
-  fig.addEventListener("mouseleave", () => { hover = false; if (state === "playing") tick(); });
+  // Hover pauses for a real mouse only. On a phone a tap fires a hover that never ends, which used to freeze the day.
+  fig.addEventListener("pointerenter", e => { if (e.pointerType !== "mouse") return; hover = true; if (state === "playing") { clearTimeout(timer); stops.forEach(b => b.classList.remove("is-running")); } });
+  fig.addEventListener("pointerleave", e => { if (e.pointerType !== "mouse" || !hover) return; hover = false; if (state === "playing") tick(); });
   document.addEventListener("visibilitychange", () => { if (document.hidden && state === "playing") pause(); });
   if (window.SITE) SITE.onLang(label);
 
@@ -936,7 +966,11 @@
   let started = false;
   const go = () => { if (!started) { started = true; setTimeout(() => play(0), 700); } };
   if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); go(); } }, { threshold: 0.35 });
+    // Starts when 35% of the ledger shows, or when it fills 35% of the screen (a tall phone layout may never reach 35% of itself).
+    const io = new IntersectionObserver(es => {
+      const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+      if (es.some(e => e.isIntersecting && (e.intersectionRatio >= 0.35 || e.intersectionRect.height >= 0.35 * vh))) { io.disconnect(); go(); }
+    }, { threshold: [0, 0.1, 0.2, 0.35] });
     io.observe(fig);
   } else go();
 })();

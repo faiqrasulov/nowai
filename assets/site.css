@@ -60,6 +60,7 @@
   --n-t2: 180ms;
   --n-t3: 240ms;
 }
+@media (max-width: 599px) { :root { --n-sec: 48px; } }  /* phones: less empty space between sections (added 10 Nov 2026) */
 @media (min-width: 760px) { :root { --n-gutter: 24px; --n-sec: 88px; --n-hdr-h: 64px; } }
 @media (min-width: 1080px) { :root { --n-gutter: 32px; --n-sec: 112px; } }
 

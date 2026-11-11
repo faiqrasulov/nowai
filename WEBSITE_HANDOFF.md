@@ -21,6 +21,7 @@ The founder asked for a simpler, straight-to-the-point site with pricing left fo
 
 - Platform page overhauled at the founder's request (too much scrolling, statuses redundant): the layer stack and the "six parts" and "eight steps" sections were replaced by one auto-playing eight-step explorer in the hero (`data-px`), the other five sections sit behind a tab bar (`data-pt`; `#gate`, `#languages`, `#connectors`, `#measurement`, `#not` still work as links), connectors show as a card grid, and all status labels, the Status column and the inline "(planned)/(target)/(unknown)/(design)/(estimate)" words were removed from that page.
 - Home: a "See the roles by industry" picker above the seven role cards highlights the roles that lead in the chosen industry and links to that industry page. The lead roles are read from each industry page's hero.
+- Home: the scrolling activity strip was replaced by "A day with NowAI" (`data-day`), a 24-hour dial whose hand sweeps the day and stops at each of the seven roles' moments; rows and dial nodes are clickable, with a pause button. It reuses the `home.tick.*` lines and is tagged as illustrative.
 - Contact page cut to its hero and the "what to say" block; the "how to reach us" and "investors, press" sections, the self-pointing button and the bottom band were removed.
 
 ## Checks before publishing

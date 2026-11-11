@@ -133,6 +133,20 @@
 .n-pf-conn td{margin-top:8px;font-size:14.5px;line-height:1.5;color:var(--n-ink-2)}
 @media(max-width:1079px){.n-pf-conn tbody{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.n-pf-conn tbody{grid-template-columns:1fr}}
+
+/* No white band: the tab bar and every tab panel stay on the same dark ground as the top of the page. */
+.n-pt{background:#06140f;border-top:1px solid rgba(234,242,238,.12);border-bottom:1px solid rgba(234,242,238,.12)}
+.n-pt__b{background:rgba(255,255,255,.04);border-color:rgba(234,242,238,.22);color:var(--n-on-dark)}
+.n-pt__b:hover{background:rgba(255,255,255,.12);border-color:rgba(234,242,238,.4);color:#fff}
+.n-pt__b[aria-pressed=true]{background:var(--n-mint);border-color:var(--n-mint);color:#06140f}
+.n-pt~.n-section:not(.n-ctaband){background:#06140f;color:var(--n-on-dark);--n-ink:#fff;--n-ink-2:#EAF2EE;--n-mute:#A9C2B8;--n-mute-2:#8FA69D;--n-line:rgba(234,242,238,.14);--n-line-2:rgba(234,242,238,.28);--n-soft:rgba(255,255,255,.06);--n-soft-2:rgba(255,255,255,.1);--n-bg:transparent;--n-forest-700:#3DDC97;--n-forest-800:#3DDC97;--n-green-500:#3DDC97;--n-green-100:rgba(61,220,151,.16);--n-gate-soft:rgba(224,160,48,.14);--n-gate-ink:#F5C56A;--n-next-soft:rgba(45,108,181,.24);--n-next-ink:#B4D0F2;--n-b-loss:#C39BE0;--n-b-leak:#F08A6C;--n-b-cash:#7FB2EC}
+.n-pt~.n-section:not(.n-ctaband) h2,.n-pt~.n-section:not(.n-ctaband) h3{color:#fff}
+.n-pt~.n-section:not(.n-ctaband) .n-lead{color:var(--n-on-dark-2)}
+.n-pt~.n-section .n-pf-conn tr{background:rgba(255,255,255,.05);border-color:rgba(234,242,238,.16)}
+.n-pt~.n-section .n-door{background:none;color:#fff}
+#main{background:#06140f}
+.n-pt~.n-section:not(.n-ctaband) .n-card{background:rgba(255,255,255,.05);border-color:rgba(234,242,238,.16);box-shadow:none}
+.n-pt~.n-section:not(.n-ctaband) .n-pf-langk,.n-pt~.n-section:not(.n-ctaband) .n-pf-langk__s{background:none;color:var(--n-on-dark)}
 </style>
 </head>
 <body data-page="platform" data-group="platform">

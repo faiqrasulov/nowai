@@ -24,6 +24,8 @@ The founder asked for a simpler, straight-to-the-point site with pricing left fo
 - Home: the scrolling activity strip was replaced by "A day with NowAI" (`data-day`), a 24-hour dial whose hand sweeps the day and stops at each of the seven roles' moments; rows and dial nodes are clickable, with a pause button. It reuses the `home.tick.*` lines and is tagged as illustrative.
 - The founder then asked for the day dial to go ("simple, straight to the point"): it was removed, so the home page is hero, roles, the Gate and getting started.
 - Investors, About and Careers now state the reconciled basis from the private follow-up note of 10 November: about 350,000 AZN first and about 942,000 AZN second (provisional), first profit in month 48, about 4.44M AZN over 84 months, margin 67% (53% under stress). Sections still on the 7 November model say so in their lead.
+- Home page rebuilt to the founder's chosen design ("option B", drawn first on a private design canvas): a centred headline "Work arrives. NowAI does it. You approve.", the three-business example laid out as three numbered cards, then the seven roles as a row of names with one line linking to the industries. The Gate and "getting started" sections and the roles-by-industry picker were removed from the home page.
+- At the founder's request every "Talk to the founder" button and link was removed from all 31 pages (header, phone menu, page tops, bottom bands, footer). The contact page still exists and is linked from the footer's Contact link.
 - Contact page cut to its hero and the "what to say" block; the "how to reach us" and "investors, press" sections, the self-pointing button and the bottom band were removed.
 
 ## Checks before publishing

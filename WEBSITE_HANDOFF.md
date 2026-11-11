@@ -19,6 +19,10 @@ The founder asked for a simpler, straight-to-the-point site with pricing left fo
 - Price figures (3,500 AZN, 5,000 AZN, 20%, fee-per-month and value/fee figures) removed from the inner pages or reworded without the number, in English and Azerbaijani. `investors.html` keeps its figures and is linked from the footer only.
 - Footer: Pricing and calculator links removed. The pre-launch, draft-translation and privacy lines are unchanged.
 
+- Platform page overhauled at the founder's request (too much scrolling, statuses redundant): the layer stack and the "six parts" and "eight steps" sections were replaced by one auto-playing eight-step explorer in the hero (`data-px`), the other five sections sit behind a tab bar (`data-pt`; `#gate`, `#languages`, `#connectors`, `#measurement`, `#not` still work as links), connectors show as a card grid, and all status labels, the Status column and the inline "(planned)/(target)/(unknown)/(design)/(estimate)" words were removed from that page.
+- Home: a "See the roles by industry" picker above the seven role cards highlights the roles that lead in the chosen industry and links to that industry page. The lead roles are read from each industry page's hero.
+- Contact page cut to its hero and the "what to say" block; the "how to reach us" and "investors, press" sections, the self-pointing button and the bottom band were removed.
+
 ## Checks before publishing
 
 - All internal links and anchors resolve across the 31 pages.

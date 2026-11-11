@@ -1,3 +1,35 @@
+# Website simplification — 11 November 2026
+
+**Read this first. The live pages are now ahead of the private source.**
+
+The founder asked for a simpler, straight-to-the-point site with pricing left for later, reviewed a local preview, and explicitly asked for it to be published on 11 November 2026. Git is blocked on the founder's work computer, so the 31 generated pages were edited directly and uploaded through the GitHub website.
+
+**Consequence:** `website/source/` in the private `faiqrasulov/nowai-full-pack` repository does not contain these changes. Rebuilding from that source and publishing would undo them. Port the changes below into the source before the next rebuild.
+
+## What changed on the generated pages
+
+- Top menu on all 31 pages: four plain links (Platform, Roles, Industries, About) plus the contact button. Dropdowns, the Company menu and Pricing removed. Phone menu: the same four links, See a day, and the contact button.
+- Home page: four blocks (hero with demo, seven roles, the Gate, getting started). The outcomes, local-systems, pricing and industries blocks were removed from the home page.
+- Home hero demo replaced with a scripted live order: a WhatsApp message arrives, a draft order and three checks appear, the Gate waits, and the visitor chooses Approve or Ask for part payment. A contact button follows the choice. Still labelled as a scripted example. New strings use the `home.live.*` keys in the page's language table.
+- Hero lead and second button reworded (`home.hero.lead`, `home.hero.see`).
+- Pricing: no page links to `sprint.html` any more; the page itself is unchanged and still reachable by address. Main "Discovery Sprint" buttons became "Talk to the founder"; secondary pricing links were removed.
+- Price figures (3,500 AZN, 5,000 AZN, 20%, fee-per-month and value/fee figures) removed from the inner pages or reworded without the number, in English and Azerbaijani. `investors.html` keeps its figures and is linked from the footer only.
+- Footer: Pricing and calculator links removed. The pre-launch, draft-translation and privacy lines are unchanged.
+
+## Checks before publishing
+
+- All internal links and anchors resolve across the 31 pages.
+- Home page and a sample of inner pages checked in a browser at desktop and phone width, in English and Azerbaijani: no empty strings, no sideways scroll, no JavaScript errors. Both demo choices show the right outcome.
+- Not checked: reduced-motion mode, a real phone, and a native-speaker review. The new Azerbaijani strings are drafts.
+
+## Still open
+
+- The contact page still has no public email, WhatsApp number or booking link. Its top button now points to the contact page itself.
+- Port these changes into the private source.
+- The earlier 6 November files (deck, demo, blueprint, PDFs, share ZIP) are still in this repository.
+
+---
+
 # Website refinement — 10 November 2026
 
 ## Current state

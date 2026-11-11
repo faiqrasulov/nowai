@@ -1,3 +1,51 @@
+# Start here — state at the end of 11 November 2026
+
+For whoever continues this work in a new session. Everything under this section is the running log of changes.
+
+## Where things are
+
+- Live site: https://faiqrasulov.github.io/nowai/, served by GitHub Pages from `main` of this repository. The 31 pages, `assets/site.css` and `assets/site.js` here are the current site, checked byte for byte against the tested copy on 11 November.
+- These are generated pages that were then edited directly. `website/source/` in the private `faiqrasulov/nowai-full-pack` repository has none of the 11 November changes. **Do not rebuild from that source and publish: it would undo them.** Keep editing the pages here, or port the changes into the source first.
+- The six-pager and the investor deck text with the reconciled numbers are in the private repository under `reviews/`, dated 2026-11-11, with a short note beside them.
+- Publishing without Git: use "Upload files" on the GitHub website, one commit per folder (root, `industries/`, `solutions/`, `assets/`), then compare every live page with the local file.
+
+## What the founder asked for, in order of weight
+
+- Simple to understand and straight to the point. A new block must say something the page does not already say. Blocks that repeated something, or needed explaining, were removed (a day clock was rejected three times).
+- It should look like an innovative product company, not like accounting software.
+- Show visually how systems connect, how information flows and how the agents work, in one animation with the front end and the back end. That is the flow diagram on the home and platform pages.
+- Pricing is for later: no prices and no pricing links on the pages. `sprint.html` exists but nothing links to it.
+- Wording should not limit the audience to Azerbaijan. Facts stay: languages, law, market sizes, sources.
+- No fixed claim where a customer would expect a setting. The brief is not "one message to the owner at 19:00"; each person in charge chooses when theirs arrives.
+- No "Talk to the founder" buttons for now. The contact page has no email, phone or booking link, and the founder said to leave that.
+- The founder reads the site on an iPhone. Check 375 to 430px wide, in English and Azerbaijani, before publishing.
+- Animation at reading speed (about 1.5 to 2 seconds a step) with a Pause control.
+- Standing request on 11 November: look at the site first, make one bold change, and ship it every time. In practice: test locally, publish, then report. Anything beyond the site pages still needs a yes from the founder.
+
+## Easy to break
+
+- The flow diagram is on two pages, `index.html` and `platform.html`: the same figure, script, style block and strings. Change the home page, then copy all four to the platform page. The platform figure has `id="core"` and a `<span id="flow"></span>` where the home figure has `id="workflow"`.
+- Every string exists twice on a page: the English text in the HTML and both languages in the inline `I18N` table. Change both. A search-and-replace on the text after `data-i="…">` must skip `<script>` blocks, because the diagram's script builds HTML with `data-i` inside JavaScript strings.
+- Azerbaijani numbers use a non-breaking space as the thousands separator.
+- After any change, play the diagram to its end in a browser, on a wide screen and at phone width.
+
+## Rules that still hold
+
+- Seven roles and the regional ambition are fixed.
+- The product is pre-launch: write "will", "would" or "designed to". Scripted examples stay labelled as such.
+- No real companies in story roles.
+- Azerbaijani text is a draft until a native speaker has checked it.
+- Never copy private source tools or founder notes into this repository.
+
+## Open
+
+- Port the 11 November changes into the private source.
+- Native-speaker review of the Azerbaijani; a test on a real iPhone and with reduced motion.
+- The role is still named "Owner's Brief" although the brief now goes to each person in charge. Renaming it is the founder's decision.
+- The 6 November files (deck, demo, blueprint, PDFs, share ZIP) are still in this repository.
+
+---
+
 # Website simplification — 11 November 2026
 
 **Read this first. The live pages are now ahead of the private source.**

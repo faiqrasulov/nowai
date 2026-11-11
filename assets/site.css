@@ -1178,3 +1178,6 @@ body[data-group="industries"] .n-pg-hero .n-who { margin-bottom: 28px; }
 }
 .n-pg-hero .n-gate--wait { background: rgba(224, 160, 48, .16); border-color: rgba(224, 160, 48, .6); color: #F5C56A; }
 .n-pg-hero .n-pf-stack__gate { background: rgba(224, 160, 48, .16); color: #F5C56A; }
+
+/* Page tops: one flat dark ground with a single still glow, no moving colour blobs. */
+.n-pg-hero::before { inset: 0; background: radial-gradient(60% 55% at 50% 0%, rgba(61, 220, 151, .13), transparent 70%); animation: none; }

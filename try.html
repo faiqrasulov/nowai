@@ -2714,6 +2714,28 @@ new MutationObserver(() => { const l = pageLang(); if (l && !picked && l !== LG)
 // A handle for testing the film: where it is, which words are missing, and a way to run its pauses faster.
 window.NOWAI_FILM = { play: film, at: () => ({ ch: CUR, state: root.dataset.state, zone: root.dataset.zone, lit: root.dataset.lit || '', app: root.dataset.app, cap: cap.dataset.i }), missing: () => Array.from(MISS), speed: v => { SPEED = v; } };
 enter(1);
+// Plays on its own once it is on screen (founder, 12 November: "play automatically so i dont need to press the play button").
+// Not for viewers whose device asks for reduced motion: they keep the still first frame and the Play button.
+// Starts once, in place: no scrolling. Pause and the chapter buttons work as before; a click before it starts wins.
+(function autoplay() {
+  if (calm) return;
+  let begun = false;
+  const go = () => {
+    if (begun) return;
+    begun = true;
+    if (!root.dataset.state || root.dataset.state === 'idle') film(CUR);
+  };
+  const soon = () => {
+    if (!document.hidden) { setTimeout(go, 600); return; }
+    document.addEventListener('visibilitychange', function v() { if (!document.hidden) { document.removeEventListener('visibilitychange', v); setTimeout(go, 600); } });
+  };
+  if (!('IntersectionObserver' in window)) { soon(); return; }
+  const io = new IntersectionObserver(es => {
+    const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+    if (es.some(e => e.isIntersecting && (e.intersectionRatio >= 0.35 || e.intersectionRect.height >= 0.35 * vh))) { io.disconnect(); soon(); }
+  }, { threshold: [0, 0.1, 0.2, 0.35] });
+  io.observe(root);
+})();
 })();
 </script>
 

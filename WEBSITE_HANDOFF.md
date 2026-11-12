@@ -27,6 +27,7 @@ For whoever continues this work in a new session. Everything under this section 
 ## Easy to break
 
 - Since 12 November the flow diagram is on the home page only (`index.html`, `data-fl`). The platform page has its own visual, the rule board (`data-rb`, `id="core"`, with a `<span id="flow"></span>` so old links still land). The founder does not want the two pages to show the same animation.
+- The platform page keeps four of its five sections behind tabs (`data-pt-tab`: languages, connectors, measurement, not), hidden until clicked. Open every tab after any style change. On 13 November the founder found the connector cards with text spilling out of them: two rules from when they were a table (`th[scope="row"]` width and `td:last-child` nowrap) had outranked the card styles, and nobody had looked at that tab. Those two rules are removed.
 - Every string exists twice on a page: the English text in the HTML and both languages in the inline `I18N` table. Change both. A search-and-replace on the text after `data-i="…">` must skip `<script>` blocks, because the diagram's script builds HTML with `data-i` inside JavaScript strings.
 - Azerbaijani numbers use a non-breaking space as the thousands separator.
 - After any change, play the diagram to its end in a browser, on a wide screen and at phone width.

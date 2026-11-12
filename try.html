@@ -255,7 +255,16 @@
 .n-dm__story em{padding:2px 8px;border-radius:999px;background:rgba(61,220,151,.16);color:var(--n-mint);font-style:normal;font-size:11.5px;font-weight:600;white-space:nowrap}
 .n-dm__story em.is-wait{background:rgba(224,160,48,.18);color:#F5C56A}
 .n-dm__story em.is-held,.n-dm__story em.is-skip{background:rgba(255,255,255,.08);color:var(--n-on-dark-2)}
-.n-dm__screen.is-new{outline:2px solid var(--n-mint);outline-offset:3px;border-radius:18px}
+.n-dm__storyline{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.n-dm__screen{border-radius:18px;transition:box-shadow .5s ease}
+.n-dm__screen.is-new{box-shadow:0 0 0 2px var(--n-mint)}
+/* pacing: whatever has just appeared eases in; --age carries an entrance on across redraws */
+@keyframes dm-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes dm-row{from{background-color:#BFEBD0}}
+@keyframes dm-fade{from{opacity:0}to{opacity:1}}
+.n-dm .is-in{animation:dm-in .42s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--age,0ms)}
+.n-sy tr.is-in{animation:none}
+.n-sy tr.is-in td{animation:dm-row 1.8s ease-out;animation-delay:var(--age,0ms)}
 .n-dm{scroll-margin-top:72px}
 
 /* wide screens: the phone, NowAI and the company's systems side by side, all inside one screen height */
@@ -279,7 +288,7 @@
 @media(max-width:1199px){
   .n-db__nav{flex-wrap:wrap;overflow:visible}
   .n-dm__screen{display:none}
-  .n-dm[data-view=phone] [data-screen=phone],.n-dm[data-view=nowai] [data-screen=nowai],.n-dm[data-view=sys] [data-screen=sys]{display:block}
+  .n-dm[data-view=phone] [data-screen=phone],.n-dm[data-view=nowai] [data-screen=nowai],.n-dm[data-view=sys] [data-screen=sys]{display:block;animation:dm-fade .4s ease}
 }
 @media(max-width:767px){
   .n-dm{margin-top:18px}
@@ -294,7 +303,7 @@
   .n-ph__body{height:min(52vh,400px)}
   .n-sy table{min-width:520px}
 }
-@media(prefers-reduced-motion:reduce){.n-dm__sw,.n-dm__sw::after{transition:none}}
+@media(prefers-reduced-motion:reduce){.n-dm__sw,.n-dm__sw::after,.n-dm__screen{transition:none}.n-dm .is-in,.n-sy tr.is-in td,.n-dm__screen{animation:none!important}}
 </style>
 </head>
 <body data-page="try" data-group="start">
@@ -730,14 +739,14 @@
       delete S.remd[c]; S.cust[c].owed = r2(S.cust[c].owed - v); S.cust[c].days = 0; S.b[1] = r2(S.b[1] + v); it.res = ['try.pay.res2'];
       hist(c, 'coll', 'try.hi.paid', { v }); reply(c, 'thanks', { v, owed: S.cust[c].owed });
     }
-    render();
+    stage(); render();
   }
   function promise(c) {
     const v = S.remd[c]; delete S.remd[c];
     say(c, true, SAY[S.lang[c]].said);
     const it = { id: ++S.seq, t: S.clock, ch: 'wa', role: 'coll', title: ['try.prom.t', { cust: NAME[c] }], st: 'rule', res: ['try.prom.res'],
       trace: [['read', 'try.prom.read'], ['mem', 'try.prom.mem', { v, days: S.cust[c].days }], ['check', 'try.prom.check']] };
-    S.items.unshift(it); S.open = it.id; done(1, true); hist(c, 'coll', 'try.hi.prom', { v }); reply(c, 'promise', { v }); render();
+    S.items.unshift(it); S.open = it.id; done(1, true); hist(c, 'coll', 'try.hi.prom', { v }); reply(c, 'promise', { v }); stage(); render();
   }
   const briefLines = () => {
     if (!S.items.length) return [['try.br.0']];
@@ -906,13 +915,56 @@
     const P = PRESET[n], c = S.who;
     say(c, true, P.text);
     const out = handle(c, { kind: P.kind, language: P.lang, items: P.items.map(i => ({ p: i[0], name: i[0], q: i[1] })), sum: P.sum });
-    reply(c, out.key, out.p, true); render();
+    reply(c, out.key, out.p, true); stage(); render();
   }
   function decide(card, act) {
     const out = act.go(), it = S.items.find(x => x.id === card.it);
     S.gate = S.gate.filter(g => g !== card);
     if (!S.gate.some(g => g.it === it.id)) { it.st = out[0]; it.res = out[1]; }
-    render();
+    stage(); render();
+  }
+
+  // ---------- pacing: nothing pops in all at once ----------
+  // Whatever a step creates is given a moment to appear, in the order it would really happen:
+  // the shop's message, what arrived from outside, NowAI picking it up, what it wrote to the systems, the reply.
+  const calm = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const tnow = () => performance.now();
+  const chats = () => Object.keys(S.chat).map(c => S.chat[c]);
+  const staged = () => [S.items, S.gate, S.docs, S.bank, S.out, S.eqout, S.mail].concat(chats());
+  let wake = 0;
+  function stage() {
+    const isNew = a => a.filter(x => x.at == null), said = me => chats().reduce((a, c) => a.concat(isNew(c).filter(m => !!m.me === me)), []), gap = calm ? 0 : 800;
+    let t = tnow();
+    const put = (arr, each) => { if (!arr.length) return; arr.forEach(x => { x.at = t; if (each) t += gap; }); if (!each) t += gap; };
+    put(said(true), true);
+    put(isNew(S.mail).filter(m => !m.out).concat(isNew(S.bank)), false);
+    put(isNew(S.items).concat(isNew(S.gate)), false);
+    put(isNew(S.docs).concat(isNew(S.out), isNew(S.eqout), isNew(S.mail)), false);
+    put(said(false), true);
+  }
+  // Is it time for this one yet? Something made outside a staged step (a typed message, a click) shows at once.
+  const vis = x => { if (x.at == null) x.at = tnow(); return x.at <= tnow(); };
+  // Marks a node that has only just appeared. The negative delay lets its entrance carry on across redraws.
+  const enter = (node, x, ms) => { const age = tnow() - x.at; if (!calm && age < (ms || 450)) { node.classList.add('is-in'); node.style.setProperty('--age', -Math.max(0, Math.round(age)) + 'ms'); } return node; };
+  const flush = () => { const t = tnow(); staged().forEach(a => a.forEach(x => { if (x.at > t) x.at = t; })); };   // skip ahead: show what is still waiting
+  function later() {   // draw again when the next waiting thing is due
+    clearTimeout(wake); const t = tnow(); let next = Infinity;
+    staged().forEach(a => a.forEach(x => { if (x.at > t && x.at < next) next = x.at; }));
+    if (next < Infinity) wake = setTimeout(render, next - t + 15);
+  }
+  // Numbers climb to their new value instead of jumping.
+  function climb(node, v) {
+    if (node.goal !== v) {
+      const from = node.val == null ? v : node.val, t0 = tnow(); node.goal = v; clearTimeout(node.tm);
+      (function step() { const p = calm ? 1 : Math.min(1, (tnow() - t0) / 800); node.val = p < 1 ? Math.round(from + (v - from) * p) : v; node.textContent = num(node.val); if (p < 1) node.tm = setTimeout(step, 40); })();
+    } else node.textContent = num(node.val);
+  }
+  // The page glides to the board before the day starts, so the start is not a jump.
+  function glide(then) {
+    const from = window.scrollY, to = Math.max(0, root.getBoundingClientRect().top + from - 72), t0 = tnow();
+    if (calm || Math.abs(to - from) < 8) { window.scrollTo({ top: to, behavior: 'instant' }); then(); return; }
+    (function step() { const p = Math.min(1, (tnow() - t0) / 750), e = p < .5 ? 2 * p * p : 1 - Math.pow(2 - 2 * p, 2) / 2;
+      window.scrollTo({ top: from + (to - from) * e, behavior: 'instant' }); if (p < 1) setTimeout(step, 16); else setTimeout(then, 250); })();
   }
 
   // ---------- drawing: the shop's phone ----------
@@ -932,10 +984,15 @@
     root.dataset.who = c; $('[data-dm-who]').value = c;
     $('[data-ph-name]').textContent = owner ? 'NowAI' : 'Aventa Group'; $('[data-ph-av]').textContent = owner ? 'N' : 'A';
     $('[data-ph-sub]').textContent = tr(owner ? 'try.ph.owner' : 'try.ph.sub');
+    // Only the messages whose moment has come. A new one slides in and the chat scrolls down to it.
+    const list = S.chat[c].filter(vis), key = c + ':' + list.length, keep = body.scrollTop, bottom = keep + body.clientHeight >= body.scrollHeight - 40;
     body.textContent = '';
-    if (!S.chat[c].length) body.appendChild(el('p', 'n-ph__empty', tr(owner ? 'try.ph.empty.owner' : live ? 'try.ph.empty' : 'try.ph.empty0')));
-    S.chat[c].forEach(m => body.appendChild(bubble(m)));
-    body.scrollTop = body.scrollHeight;
+    if (!list.length) body.appendChild(el('p', 'n-ph__empty', tr(owner ? 'try.ph.empty.owner' : live ? 'try.ph.empty' : 'try.ph.empty0')));
+    list.forEach(m => body.appendChild(enter(bubble(m), m)));
+    if (body.dataset.key === key) body.scrollTop = bottom ? body.scrollHeight : keep;
+    else if (calm || body.dataset.who !== c) body.scrollTop = body.scrollHeight;
+    else { body.scrollTop = keep; body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' }); }
+    body.dataset.key = key; body.dataset.who = c;
     chips.textContent = '';
     // What this shop can do next: pay what it was asked for, or say when it will.
     const due = !owner && (S.pre[c] ? S.pre[c].x : S.remd[c]);
@@ -976,10 +1033,10 @@
   }
   function systems() {
     // 1C: the journal of documents NowAI wrote, newest first, and the one that is open.
-    const list = S.docs.slice().reverse(), rows = $('[data-c1-rows]'), more = $('[data-c1-more]'), box = $('[data-c1-doc]'), d = S.docs.find(x => x.no === S.doc);
+    const list = S.docs.filter(vis).reverse(), rows = $('[data-c1-rows]'), more = $('[data-c1-more]'), box = $('[data-c1-doc]'), d = list.find(x => x.no === S.doc) || list[0];
     rows.textContent = ''; $('[data-c1-empty]').hidden = !!list.length; $('[data-c1-table]').hidden = !list.length;
     (S.alldocs ? list : list.slice(0, 8)).forEach(x => {
-      const r = row([x.t, docNo(x), DOCS[x.type], x.cust, { r: sum1c(x.total) }, STATE[x.state]], x.no === S.doc ? 'is-sel' : '');
+      const r = enter(row([x.t, docNo(x), DOCS[x.type], x.cust, { r: sum1c(x.total) }, STATE[x.state]], x === d ? 'is-sel' : ''), x, 1800);
       r.addEventListener('click', () => { S.doc = x.no; systems(); }); rows.appendChild(r);
     });
     more.hidden = list.length <= 8; more.textContent = S.alldocs ? 'Свернуть' : 'Показать ещё ' + (list.length - 8);
@@ -993,28 +1050,28 @@
       box.appendChild(el('p', '', 'Комментарий: создан NowAI' + NOTE[d.type] + '.'));
     }
     // The bank. Money in is read from the statement and matched; money out is only prepared, and a person signs it.
-    const bin = $('[data-bk-in]'), bout = $('[data-bk-out]'); bin.textContent = ''; bout.textContent = '';
-    $('[data-bk-empty]').hidden = !!S.bank.length; $('[data-bk-out0]').hidden = !!S.out.length;
-    if (S.bank.length) bin.appendChild(table([tr('try.bk.c1'), tr('try.bk.c2'), tr('try.bk.c3'), { r: tr('try.bk.c4') }, tr('try.bk.c5')],
-      S.bank.slice().reverse().map(x => row([x.t, x.who, tr(x.k) + (x.ref ? ' · ' + x.ref : ''), { r: '+' + num(x.v) }, tr(x.st)]))));
-    if (S.out.length) bout.appendChild(table([tr('try.bk.c2'), tr('try.bk.c3'), { r: tr('try.bk.c4') }, tr('try.bk.c5')], S.out.map(x => {
+    const bin = $('[data-bk-in]'), bout = $('[data-bk-out]'), money = S.bank.filter(vis), orders = S.out.filter(vis); bin.textContent = ''; bout.textContent = '';
+    $('[data-bk-empty]').hidden = !!money.length; $('[data-bk-out0]').hidden = !!orders.length;
+    if (money.length) bin.appendChild(table([tr('try.bk.c1'), tr('try.bk.c2'), tr('try.bk.c3'), { r: tr('try.bk.c4') }, tr('try.bk.c5')],
+      money.reverse().map(x => enter(row([x.t, x.who, tr(x.k) + (x.ref ? ' · ' + x.ref : ''), { r: '+' + num(x.v) }, tr(x.st)]), x, 1800))));
+    if (orders.length) bout.appendChild(table([tr('try.bk.c2'), tr('try.bk.c3'), { r: tr('try.bk.c4') }, tr('try.bk.c5')], orders.map(x => {
       const st = el('span', '', tr(x.st === 'wait' ? 'try.bk.wait' : x.st === 'signed' ? 'try.bk.signed' : 'try.bk.heldst'));
       if (x.st === 'wait') { const b = el('button', 'n-sy__btn', tr('try.bk.sign')); b.type = 'button'; b.addEventListener('click', () => { x.st = 'signed'; systems(); }); st.appendChild(b); }
-      return row([x.who, tr(x.k), { r: fmt(x.v, 2) }, st], x.st === 'held' ? 'is-flag' : '');
+      return enter(row([x.who, tr(x.k), { r: fmt(x.v, 2) }, st], x.st === 'held' ? 'is-flag' : ''), x, 1800);
     })));
     // e-qaimə: the supplier's invoices with the missing one first, and the drafts for our own deliveries.
-    const ein = $('[data-eq-in]'), eout = $('[data-eq-out]'); ein.textContent = ''; eout.textContent = '';
-    $('[data-eq-empty]').hidden = !!S.eq; $('[data-eq-out0]').hidden = !!S.eqout.length;
+    const ein = $('[data-eq-in]'), eout = $('[data-eq-out]'), drafts = S.eqout.filter(vis); ein.textContent = ''; eout.textContent = '';
+    $('[data-eq-empty]').hidden = !!S.eq; $('[data-eq-out0]').hidden = !!drafts.length;
     if (S.eq) ein.appendChild(table([tr('try.eq.c1'), tr('try.eq.c2'), { r: tr('try.eq.c3') }, tr('try.eq.c4')],
       [row(['BK-0417', NAME.supplier, { r: fmt(S.inv[12].total, 2) }, tr(S.eq === 2 ? 'try.eq.rem' : 'try.eq.miss')], 'is-flag')]
         .concat(S.inv.slice(0, 3).map(v => row([v.no, NAME.supplier, { r: fmt(v.total, 2) }, tr('try.eq.ok')])), [row([{ t: tr('try.eq.more'), span: 4 }], 'is-more')])));
-    if (S.eqout.length) eout.appendChild(table([tr('try.eq.c1'), tr('try.eq.c2b'), { r: tr('try.eq.c3') }, tr('try.eq.c4')],
-      S.eqout.slice().reverse().map(x => row([x.no, x.cust, { r: fmt(x.total, 2) }, tr('try.eq.draft')]))));
+    if (drafts.length) eout.appendChild(table([tr('try.eq.c1'), tr('try.eq.c2b'), { r: tr('try.eq.c3') }, tr('try.eq.c4')],
+      drafts.reverse().map(x => enter(row([x.no, x.cust, { r: fmt(x.total, 2) }, tr('try.eq.draft')]), x, 1800))));
     // The mailbox: the supplier's email with its invoices, each one checked, and what NowAI wrote back.
-    const ml = $('[data-ml-list]'), mv = $('[data-ml-view]'), cur = S.mail.find(m => m.id === S.msg); ml.textContent = ''; mv.textContent = '';
-    $('[data-ml-empty]').hidden = !!S.mail.length;
-    S.mail.slice().reverse().forEach(m => {
-      const b = el('button', 'n-ml__row' + (m === cur ? ' is-sel' : '')); b.type = 'button';
+    const ml = $('[data-ml-list]'), mv = $('[data-ml-view]'), mails = S.mail.filter(vis), cur = mails.find(m => m.id === S.msg) || mails[mails.length - 1]; ml.textContent = ''; mv.textContent = '';
+    $('[data-ml-empty]').hidden = !!mails.length;
+    mails.reverse().forEach(m => {
+      const b = enter(el('button', 'n-ml__row' + (m === cur ? ' is-sel' : '')), m); b.type = 'button';
       b.appendChild(el('b', '', (m.out ? tr('try.ml.to') + ' ' : '') + NAME.supplier)); b.appendChild(el('span', '', tr(m.subj))); b.appendChild(el('time', '', m.t));
       b.addEventListener('click', () => { S.msg = m.id; systems(); }); ml.appendChild(b);
     });
@@ -1033,9 +1090,9 @@
   // ---------- drawing: the NowAI dashboard ----------
   const roleLine = (role, cls) => { const p = el('p', cls); p.innerHTML = svg(RICON[role]) + '<span></span>'; p.lastChild.textContent = tr('s.page.' + ROLE[role]); return p; };
   function work() {
-    const ul = $('[data-dm-work]'); ul.textContent = '';
-    $('[data-dm-work-empty]').hidden = !!S.items.length;
-    (S.all ? S.items : S.items.slice(0, 6)).forEach(it => {
+    const ul = $('[data-dm-work]'), items = S.items.filter(vis); ul.textContent = '';
+    $('[data-dm-work-empty]').hidden = !!items.length;
+    (S.all ? items : items.slice(0, 6)).forEach(it => {
       const open = S.open === it.id, li = el('li', 'n-dm__it is-' + it.st + (open ? ' is-open' : ''));
       const b = el('button', 'n-dm__row'); b.type = 'button'; b.setAttribute('aria-expanded', String(open));
       b.innerHTML = '<time></time>' + svg(ICON[it.ch]) + '<span class="n-dm__ttl"></span><em></em>';
@@ -1049,16 +1106,16 @@
         });
         li.appendChild(d);
       }
-      ul.appendChild(li);
+      ul.appendChild(enter(li, it));
     });
-    const more = $('[data-dm-more]'); more.hidden = S.items.length <= 6;
-    more.textContent = T(S.all ? 'try.work.less' : 'try.work.more', { n: S.items.length - 6 });
+    const more = $('[data-dm-more]'); more.hidden = items.length <= 6;
+    more.textContent = T(S.all ? 'try.work.less' : 'try.work.more', { n: items.length - 6 });
   }
   function gateList() {
-    const box = $('[data-dm-gate]'); box.textContent = '';
-    $('[data-dm-gate-empty]').hidden = !!S.gate.length;
-    S.gate.forEach(g => {
-      const c = el('div', 'n-dm__card'); c.appendChild(roleLine(g.role, 'n-dm__role'));
+    const box = $('[data-dm-gate]'), cards = S.gate.filter(vis); box.textContent = '';
+    $('[data-dm-gate-empty]').hidden = !!cards.length;
+    cards.forEach(g => {
+      const c = enter(el('div', 'n-dm__card'), g); c.appendChild(roleLine(g.role, 'n-dm__role'));
       c.appendChild(el('p', 'n-dm__q', L(g.q))); c.appendChild(el('p', 'n-dm__ev', L(g.ev)));
       const acts = el('div', 'n-dm__acts');
       g.acts.forEach((a, n) => { const b = el('button', 'n-dm__btn' + (n ? '' : ' n-dm__btn--go'), T(a.k, a.p)); b.type = 'button'; b.addEventListener('click', () => decide(g, a)); acts.appendChild(b); });
@@ -1090,10 +1147,11 @@
     $$('[data-dm-ask]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.dmAsk === S.ask)));
   }
   // A screen that has just received something is outlined for a moment, so the eye finds it.
-  let seen = {};
+  let seen = {}, shownTotals = null;
   function flash() {
-    const cnt = { phone: Object.keys(S.chat).reduce((n, c) => n + S.chat[c].length, 0), nowai: S.items.length + S.gate.length,
-      sys: S.docs.length + S.bank.length + S.out.length + S.mail.length + S.eqout.length + S.eq };
+    const shown = a => a.filter(vis).length;
+    const cnt = { phone: chats().reduce((n, a) => n + shown(a), 0), nowai: shown(S.items) + shown(S.gate),
+      sys: shown(S.docs) + shown(S.bank) + shown(S.out) + shown(S.mail) + shown(S.eqout) + S.eq };
     Object.keys(cnt).forEach(k => {
       if (seen[k] != null && cnt[k] > seen[k]) { const n = $('[data-screen="' + k + '"]'); n.classList.add('is-new'); clearTimeout(n.timer); n.timer = setTimeout(() => n.classList.remove('is-new'), 1500); }
       seen[k] = cnt[k];
@@ -1101,8 +1159,8 @@
   }
   function render() {
     // One line that says what just happened, for anyone watching rather than clicking.
-    const story = $('[data-dm-story]'), last = S.items[0]; story.hidden = !last; story.textContent = '';
-    if (last) { story.appendChild(el('b', '', last.t || now())); story.appendChild(el('span', '', L(last.title))); story.appendChild(el('em', 'is-' + last.st, tr('try.s.' + last.st))); }
+    const story = $('[data-dm-story]'), last = S.items.filter(vis)[0], waiting = S.gate.filter(vis).length; story.hidden = !last; story.textContent = '';
+    if (last) { const line = enter(el('span', 'n-dm__storyline'), last); line.appendChild(el('b', '', last.t || now())); line.appendChild(el('span', '', L(last.title))); line.appendChild(el('em', 'is-' + last.st, tr('try.s.' + last.st))); story.appendChild(line); }
     flash();
     $('[data-dm-time]').textContent = S.day2 ? T('try.clock.next', { t: S.clock }) : S.clock || tr('try.clock.idle');
     const go = $('[data-dm-go]');
@@ -1110,15 +1168,18 @@
     go.classList.toggle('n-dm__btn--go', !S.playing);
     $('[data-dm-next]').hidden = S.over;
     $('[data-dm-reset]').hidden = S.over || !S.i;
-    S.b.forEach((v, n) => { $('[data-dm-b="' + n + '"]').textContent = num(v); });
-    $('[data-dm-orders]').textContent = T('try.st.orders', { n: S.orders, v: S.value });
-    $('[data-dm-handled]').textContent = T('try.st.handled', { n: S.handled });
-    $('[data-dm-waiting]').textContent = T('try.st.waiting', { n: S.gate.length });
-    $$('[data-dm-badge]').forEach(b => { b.textContent = S.gate.length || ''; });
+    // The totals move once the step has played out, as its result, not ahead of it.
+    if (!staged().some(a => a.some(x => x.at > tnow()))) shownTotals = { b: S.b.slice(), orders: S.orders, value: S.value, handled: S.handled };
+    shownTotals.b.forEach((v, n) => climb($('[data-dm-b="' + n + '"]'), v));
+    $('[data-dm-orders]').textContent = T('try.st.orders', { n: shownTotals.orders, v: shownTotals.value });
+    $('[data-dm-handled]').textContent = T('try.st.handled', { n: shownTotals.handled });
+    $('[data-dm-waiting]').textContent = T('try.st.waiting', { n: waiting });
+    $$('[data-dm-badge]').forEach(b => { b.textContent = waiting || ''; });
     S.dot[root.dataset.view] = false;
     $$('[data-dm-dot]').forEach(i => { i.hidden = !S.dot[i.dataset.dmDot]; });
     work(); gateList(); rules(); memory(); phone(); systems();
     if (window.NOWAI_DM && NOWAI_DM.onRender) NOWAI_DM.onRender();
+    later();
   }
 
   // ---------- controls ----------
@@ -1130,13 +1191,15 @@
     else { root.dataset.sys = at; root.dataset.view = 'sys'; }
   }
   function tick() {
-    if (!S.i) root.scrollIntoView({ block: 'start', behavior: 'instant' });   // the day begins: bring the whole board onto the screen
-    if (S.i < EV.length) { const ev = EV[S.i++]; arrive(ev); focus(AT[ev.id]); }
+    flush();   // anything from the step before that has not appeared yet appears now
+    if (S.i < EV.length) { const ev = EV[S.i++]; arrive(ev); stage(); focus(AT[ev.id]); }
     if (S.i >= EV.length) { S.over = true; stop(); }
     render();
   }
-  function play() { S.playing = true; clearInterval(timer); timer = setInterval(tick, GAP); tick(); }
-  function restart() { stop(); S = fresh(); seen = {}; root.dataset.sys = 'c1'; root.dataset.view = 'phone'; $$('[data-dm-rule]').forEach(b => { delete b.dataset.seen; }); render(); }
+  // The first step waits for the page to glide to the board; later steps start at once.
+  const begin = go => { if (S.i) go(); else glide(go); };
+  function play() { S.playing = true; render(); begin(() => { if (!S.playing) return; clearInterval(timer); timer = setInterval(tick, GAP); tick(); }); }
+  function restart() { stop(); clearTimeout(wake); S = fresh(); seen = {}; root.dataset.sys = 'c1'; root.dataset.view = 'phone'; $$('[data-dm-rule]').forEach(b => { delete b.dataset.seen; }); render(); }
   // Language: every label inside the demo's own section follows the demo's switch.
   const scope = root.closest('.n-wrap, .lv') || root;
   function setLang(l) {
@@ -1148,7 +1211,7 @@
     render();
   }
   $('[data-dm-go]').addEventListener('click', () => { if (S.over) restart(); else if (S.playing) { stop(); render(); } else play(); });
-  $('[data-dm-next]').addEventListener('click', () => { if (S.playing) { clearInterval(timer); timer = setInterval(tick, GAP); } tick(); });
+  $('[data-dm-next]').addEventListener('click', () => begin(() => { if (S.playing) { clearInterval(timer); timer = setInterval(tick, GAP); } tick(); }));
   $('[data-dm-reset]').addEventListener('click', restart);
   $('[data-dm-more]').addEventListener('click', () => { S.all = !S.all; work(); });
   $('[data-c1-more]').addEventListener('click', () => { S.alldocs = !S.alldocs; systems(); });

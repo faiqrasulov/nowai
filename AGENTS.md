@@ -1,9 +1,9 @@
-# Continuing NowAI website work
+# Working on the NowAI website
 
-Read `WEBSITE_HANDOFF.md` first. It records implemented work, validation and the one missing contact destination.
+These are finished pages, edited directly. Do not rebuild them from an older source.
 
-These are generated site files. The maintained source snapshot and build instructions are in the private `faiqrasulov/nowai-full-pack` repository under `website/`. Edit and rebuild that source; do not let a stale pack ZIP overwrite the new site. Publish only generated site assets here, never private tools or founder-only material.
+The working notes for this site (its current state, what is easy to break, the checks before publishing) are in the private repository `faiqrasulov/nowai-full-pack`, in `website/WEBSITE_HANDOFF.md`. Read them before changing anything. Without access to that repository, ask the owner before editing.
 
-Preserve the seven-role product vision and regional ambition. Launch sequencing remains an evidence question. Keep pre-launch status and illustrative/model labels clear. Do not invent contact details, customer outcomes, security certifications or live integrations.
+`try.html` is built by a script in the private repository. Do not edit it by hand.
 
-Update the handoff and private source/QA record after substantive changes. Publishing status must be reported accurately; a pushed review branch is not a live deployment.
+Only site pages and their assets belong in this repository: every file here is served by the public site.

@@ -1,0 +1,47 @@
+/* The two NowAI films. Home: the 24-second desk film has its own section and plays by itself, silently, while it is
+   on screen. Platform: the 18-second film sits in "From incoming work to decisions" and plays where it is, with sound. */
+
+/* The films' words are in English: Azerbaijani pages say so. */
+html:not(:lang(az)) .n-film-lang { display: none; }
+
+/* Home: words on one side, the vertical film in a phone-shaped frame on the other. */
+.n-film__grid { display: grid; gap: clamp(28px, 4vw, 72px); align-items: center; }
+.n-film__copy { max-width: 540px; margin-bottom: 0; }
+.n-film__copy .n-btns { margin-top: 26px; }
+.n-film__frame { position: relative; width: min(100%, 360px, calc((100svh - 128px) * 9 / 16)); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 26px; overflow: hidden; background: #e9ece6; box-shadow: 0 30px 64px -30px rgba(23, 48, 36, .5), 0 0 0 1px rgba(23, 36, 29, .07); isolation: isolate; cursor: pointer; }
+.n-film__frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.n-film__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(23, 36, 29, .12); pointer-events: none; }
+.n-film__bar i { display: block; height: 100%; background: var(--n-mint); transform: scaleX(0); transform-origin: 0 50%; }
+.n-film__ctl { position: absolute; left: 14px; right: 14px; bottom: 18px; display: flex; gap: 8px; align-items: center; }
+.n-film__btn { height: 42px; padding: 0 18px 0 13px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .94); color: var(--day-ink); font: inherit; font-size: 14px; font-weight: 560; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 8px 20px -10px rgba(15, 28, 24, .6); transition: background .2s var(--n-ease), transform .2s var(--n-ease); }
+.n-film__btn:hover { background: #fff; transform: translateY(-1px); }
+.n-film__btn:focus-visible { outline: 2px solid var(--leaf); outline-offset: 2px; }
+.n-film__btn svg { width: 18px; height: 18px; flex: none; fill: currentColor; }
+.n-film__btn--icon { width: 42px; padding: 0; justify-content: center; }
+.n-film__btn[hidden] { display: none; }
+@media (min-width: 860px) {
+  .n-film__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .n-film__frame { width: min(clamp(300px, 28vw, 360px), calc((100svh - 150px) * 9 / 16)); margin: 0; justify-self: center; }
+}
+
+/* Platform: the 18-second film, wide, between the section's heading and its steps. */
+.n-filmbox { position: relative; width: min(100%, calc((100svh - 230px) * 16 / 9)); aspect-ratio: 16 / 9; margin: 0 0 clamp(28px, 4vw, 48px); border-radius: 14px; overflow: hidden; background: #eef1ec; box-shadow: 0 30px 70px -36px rgba(23, 48, 36, .45), 0 0 0 1px rgba(23, 36, 29, .07); }
+.n-filmbox video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.n-filmbox__play { position: absolute; inset: 0; width: 100%; border: 0; padding: 0; background: linear-gradient(180deg, rgba(15, 28, 24, 0) 45%, rgba(15, 28, 24, .38)); color: #fff; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+.n-filmbox__play[hidden] { display: none; }
+.n-filmbox__icon { width: clamp(58px, 7vw, 78px); aspect-ratio: 1; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 14px 34px -12px rgba(15, 28, 24, .55); transition: transform .25s var(--n-ease); }
+.n-filmbox__icon svg { width: 34%; height: 34%; margin-left: 8%; fill: var(--day-ink); }
+.n-filmbox__play:hover .n-filmbox__icon { transform: scale(1.06); }
+.n-filmbox__play:focus-visible { outline: 3px solid var(--leaf); outline-offset: -3px; }
+.n-filmbox__t { display: inline-flex; align-items: baseline; gap: 10px; padding: 9px 16px; border-radius: 999px; background: rgba(15, 28, 24, .72); font-size: clamp(14px, 1.2vw, 16px); font-weight: 560; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.n-filmbox__m { font-weight: 450; opacity: .8; font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .n-film__btn, .n-filmbox__icon { transition: none; }
+}
+/* On a phone the film is small: a shorter label on one line, so the picture stays visible. */
+@media (max-width: 600px) {
+  .n-filmbox__play { gap: 10px; }
+  .n-filmbox__t { padding: 6px 12px; font-size: 12.5px; white-space: nowrap; }
+  .n-filmbox__m { display: none; }
+}

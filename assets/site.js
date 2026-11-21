@@ -538,5 +538,22 @@ function applyLang() {
 
   document.querySelectorAll("[data-reel]").forEach(initReel);
 
+  function openLinkedDetails() {
+    if (!location.hash) return;
+    let target;
+    try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); }
+    catch { return; }
+    let opened = false;
+    for (let node = target; node; node = node.parentElement) {
+      if (!node.matches(".n-directory-detail:not([open])")) continue;
+      node.open = true;
+      opened = true;
+    }
+    if (opened) target.scrollIntoView({ behavior: "instant" });
+  }
+  window.addEventListener("hashchange", openLinkedDetails);
+  if (document.readyState === "complete") openLinkedDetails();
+  else window.addEventListener("load", openLinkedDetails, { once: true });
+
   window.SITE = { setLang, onLang, fmtAZN, fmtMult };
 })();

@@ -262,6 +262,8 @@ main .n-section:not(.n-pg-hero,.n-st-hero,.n-section--tight) { --n-sec: clamp(44
 .n-foot :is(.n-brand,.n-foot__h,.n-linklist a:hover,.n-linklist a[aria-current="page"]) { color: var(--day-ink); }
 .n-foot__row a { color: var(--leaf); }
 .n-foot__base { border-color: var(--day-rule); }
+/* The footer maps mint to leaf for its links; the logo keeps its mint dot. */
+.n-foot .n-mark { --n-mint: #3DDC97; }
 
 /* The Platform approval example uses the same light panels and amber decision cue. */
 .n-cc {

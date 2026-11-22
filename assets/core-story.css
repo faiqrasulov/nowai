@@ -369,10 +369,13 @@
     transform: translateY(calc(-100% * var(--core-intake-travel, 0)));
     opacity: var(--core-intake-opacity, 1);
   }
-  .core-story__intake-insight {
-    left: calc((100% - min(32%, 300px)) * (1 - var(--core-intake-travel, 0)));
-    right: auto;
-    opacity: var(--core-intake-opacity, 1);
+  .core-story[data-intake-tight] .core-story__intake-list { gap: 3px; }   /* set by core-story.js where the left column is short; rows stay 24 px apart */
+  .core-story[data-intake-tight] .core-story__intake-list button { min-height: 21px; padding-block: 2px; }
+  .core-story__intake { pointer-events: none; }   /* only its buttons take clicks, never the box around them */
+  .core-story__intake button { pointer-events: auto; }
+  .core-story__intake-insight {   /* stays where it is and fades before the next step's headline arrives */
+    opacity: var(--core-card-opacity, 1);
+    visibility: var(--core-card-visibility, visible);
   }
   .core-story__caption { min-height: 4.2em; }
   .core-story[data-chapter="1"] .core-story__insight { top: 14%; }

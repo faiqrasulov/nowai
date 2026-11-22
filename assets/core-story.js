@@ -15,6 +15,10 @@
   ];
   const clamp = (v, min = 0, max = 1) => Math.max(min, Math.min(max, v));
   const lerp = (a, b, amount) => a + (b - a) * amount;
+  // The bottom "Run a company for a day" button fades in once the incoming-work list has moved up out of its way.
+  const quickAt = p => ease(.28,.36,p);
+  // The intro has faded out by the time the first step's headline arrives (at .21), so the two never show together.
+  const introGone = p => ease(.08,.21,p);
   function ease(start, end, value) {
     const t = clamp((value - start) / (end - start));
     return t * t * (3 - 2 * t);
@@ -504,9 +508,22 @@
       canvas.width = Math.round(width * ratio);
       canvas.height = Math.round(height * ratio);
     }
+    // The incoming-work list sits between the intro's last row and the step tabs, never on either. Where the left
+    // column is short its rows tighten, as they do on short screens, and the two gaps share what room is left. Where
+    // there is none, it still starts below the intro: any overflow falls on the tab row, which it leaves as it moves.
+    intake.style.removeProperty('--core-intake-top');
+    story.removeAttribute('data-intake-tight');
     if (!compactLayout.matches && !reduce.matches) {
       const end = Math.min(height * .83, footer.offsetTop - quickStart.offsetHeight - 24);
       scene.style.setProperty('--core-intake-end', end + 'px');
+      const links = intro.querySelector('.core-story__links');
+      const introEnd = intro.offsetTop + links.offsetTop + links.offsetHeight;
+      const tabsTop = footer.offsetTop + footer.querySelector('.core-story__tabs').offsetTop;
+      const base = (parseFloat(getComputedStyle(intake).getPropertyValue('--core-intake-top')) || 41) * height / 100;
+      if (tabsTop - introEnd - intake.offsetHeight < 32) story.setAttribute('data-intake-tight', '');
+      const room = tabsTop - introEnd - intake.offsetHeight;
+      const start = room >= 32 ? clamp(base, introEnd + 16, tabsTop - 16 - intake.offsetHeight) : introEnd + Math.max(0, room) / 2;
+      intake.style.setProperty('--core-intake-top', start + 'px');
     }
     schedule();
   }
@@ -833,9 +850,196 @@
     ];
   }
 
+  // The stack keeps clear of the words around it. Below it are the step tabs, and the button above them once it shows:
+  // the stack always stays GAP px above them, rising as far as a screen's proportions need. Above it are the words at
+  // the top left, which the stack keeps GAP px from and the incoming-work lines LINE_GAP px from, the decision card and
+  // the slice list while they show, and the top of the scene, which it keeps CEILING px from. Where rising would break
+  // one of those, the stack is drawn smaller instead (down to MIN_FIT of its size). The size for every moment of the
+  // story is worked out once per layout and smoothed, so the stack glides between sizes as the page scrolls.
+  const GAP = 40;
+  const LINE_GAP = 14;
+  const CEILING = 12;
+  const MIN_FIT = .72;
+  const PLAN_STEPS = 80;
+  const PLAN_REACH = 5;   // plan steps either side that each size must also suit
+  const tabRow = footer.querySelector('.core-story__tabs');
+  const rings = new Map();
+  let plan = null;
+  let planKey = '';
+  let planTime = -Infinity;
+
+  function outline(w, h, radius = 15, steps = 2) {   // a slab's rounded outline, as points around it
+    const key = w + 'x' + h;
+    if (rings.has(key)) return rings.get(key);
+    const x = w / 2;
+    const y = h / 2;
+    const points = [];
+    for (const [ox, oy, start] of [
+      [x - radius, -y + radius, -Math.PI / 2], [x - radius, y - radius, 0],
+      [-x + radius, y - radius, Math.PI / 2], [-x + radius, -y + radius, Math.PI]
+    ]) {
+      for (let i = 0; i <= steps; i++) {
+        const a = start + i / steps * Math.PI / 2;
+        points.push([ox + radius * Math.cos(a), oy + radius * Math.sin(a)]);
+      }
+    }
+    rings.set(key, points);
+    return points;
+  }
+
+  function span(points, x0, x1) {   // the highest and the lowest point of a convex outline between x0 and x1
+    let high = Infinity;
+    let low = -Infinity;
+    points.forEach(([ax, ay], i) => {
+      const [bx, by] = points[(i + 1) % points.length];
+      const ys = ax >= x0 && ax <= x1 ? [ay] : [];
+      for (const x of [x0, x1]) if ((ax - x) * (bx - x) < 0) ys.push(ay + (by - ay) * (x - ax) / (bx - ax));
+      for (const y of ys) {
+        high = Math.min(high, y);
+        low = Math.max(low, y);
+      }
+    });
+    return { high, low };
+  }
+
+  function crosses(a, b, [x0, y0, x1, y1]) {   // whether the straight line from a to b enters the box
+    let t0 = 0;
+    let t1 = 1;
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    for (const [p, q] of [[-dx, a[0] - x0], [dx, x1 - a[0]], [-dy, a[1] - y0], [dy, y1 - a[1]]]) {
+      if (!p) {
+        if (q < 0) return false;
+        continue;
+      }
+      if (p < 0) t0 = Math.max(t0, q / p);
+      else t1 = Math.min(t1, q / p);
+      if (t0 > t1) return false;
+    }
+    return true;
+  }
+
+  function layersAt(separate) {
+    return dimensions.map(layer => ({ ...layer, z: lerp(layer.closed,layer.open,separate) }));
+  }
+
+  function stackAt(cam, drawing, close, k, buttonWeight) {   // the stack at size k, risen just enough above the words below
+    const { cx, cy, scale, tilt, c, s } = cam;
+    const P = (x, y, z, lift = 0) => [cx + (x * c - y * s) * scale * k, cy - lift + ((x * s + y * c) * tilt - z) * scale * k];
+    const faces = drawing.filter(layer => !(layer.id === 'intake' && close > .55)).map(layer => {
+      const lid = layer.id === 'intake';   // the lid lifts away and fades as the stack closes
+      const z = layer.z + (lid ? close * 100 : 0);
+      const ring = outline(layer.x, layer.y);
+      return { shown:!lid || close < .38, top:ring.map(([x, y]) => P(x, y, z)), under:ring.map(([x, y]) => P(x, y, z - layer.depth)) };
+    });
+    let lift = 0;
+    for (const { under } of faces) {
+      for (const [[x0, top, x1], weight] of [[plan.tabs, 1], [plan.button, buttonWeight]]) {
+        if (weight > 0) lift = Math.max(lift, (span(under, x0, x1).low - top) * weight);
+      }
+    }
+    return { P, faces, lift };
+  }
+
+  function planFit(now) {
+    const key = [width, height, document.documentElement.lang, document.fonts?.status, footer.offsetHeight, quickStart.offsetWidth, intake.style.getPropertyValue('--core-intake-top'), story.hasAttribute('data-intake-tight')].join('|');
+    if (key === planKey || (plan && now - planTime < 180)) return;   // while a window is being resized, plan when it rests
+    planKey = key;
+    planTime = now;
+    const cb = canvas.getBoundingClientRect();
+    const { x:tx, y:ty, scale:sk } = translation;
+    const toScene = (box, pad) => [
+      (box.left - cb.left - tx) / sk - pad, (box.top - cb.top - ty) / sk - pad,
+      (box.right - cb.left - tx) / sk + pad, (box.bottom - cb.top - ty) / sk + pad
+    ];
+    const linesOf = (el, shift = 0) => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      return [...range.getClientRects()].filter(box => box.width > 1)
+        .map(box => ({ left:box.left, right:box.right, top:box.top - shift, bottom:box.bottom - shift }));
+    };
+    // The words at the top left: the intro, and each step's own headline where it stands once shown.
+    const holder = story.querySelector('.core-story__chapter');
+    const introWords = [...intro.querySelectorAll('h1, p')].flatMap(el => linesOf(el))
+      .concat([...intro.querySelectorAll('.core-story__links a')].map(link => link.getBoundingClientRect()));
+    const stepWords = [...holder.children].map(step => {
+      const shift = step.getBoundingClientRect().top - holder.getBoundingClientRect().top;
+      return [...step.children].flatMap(el => linesOf(el, shift));
+    });
+    // The incoming-work list before and after it moves down: it travels in a straight line between the two.
+    const travel = scene.style.getPropertyValue('--core-intake-travel');
+    scene.style.setProperty('--core-intake-travel', 0);
+    const chipsFrom = intakeButtons.map(button => button.getBoundingClientRect());
+    scene.style.setProperty('--core-intake-travel', 1);
+    const chipsTo = intakeButtons.map(button => button.getBoundingClientRect());
+    scene.style.setProperty('--core-intake-travel', travel);
+    plan = { tabs:toScene(tabRow.getBoundingClientRect(), GAP / sk), button:toScene(quickStart.getBoundingClientRect(), GAP / sk), sizes:[] };
+    const cards = [gateCase, rail].map(el => toScene(el.getBoundingClientRect(), GAP / sk));   // the decision card and the slice list
+    const roof = (CEILING - ty) / sk;
+    const needed = [];
+    for (let i = 0; i <= PLAN_STEPS; i++) {
+      const p = i / PLAN_STEPS;
+      const { camera:cam, spread, close, separate } = cameraAt(p, false);
+      const drawing = layersAt(separate);
+      const step = p > .765 ? 3 : p > .49 ? 2 : p > .21 ? 1 : 0;
+      const words = step ? stepWords[step - 1] : introWords;
+      const wordsShown = step ? introGone(p) : 1 - introGone(p);
+      const above = words.map(box => toScene(box, GAP / sk));
+      const t = ease(.10,.36,p);
+      const chips = chipsFrom.map((from, j) => ({ top:lerp(from.top,chipsTo[j].top,t), bottom:lerp(from.bottom,chipsTo[j].bottom,t), right:lerp(from.right,chipsTo[j].right,t) }));
+      const chipsTop = Math.min(...chips.map(chip => chip.top));
+      // The lines climb from the incoming-work list to the stack: only the words above the list can be in their way.
+      const overLines = words.filter(box => box.bottom + LINE_GAP < chipsTop).map(box => toScene(box, LINE_GAP / sk));
+      const starts = chips.map(chip => [(chip.right - cb.left - tx) / sk + 6, ((chip.top + chip.bottom) / 2 - cb.top - ty) / sk]);
+      const portZ = lerp(drawing[0].z, drawing.at(-1).z, spread);
+      const at = k => stackAt(cam, drawing, close, k, quickAt(p));
+      const clearOf = boxes => ({ faces, lift }) => boxes.every(([x0, y0, x1, y1]) => faces.every(({ shown, top, under }) =>
+        !shown || span(top, x0, x1).high - lift >= y1 || span(under, x0, x1).low - lift <= y0));
+      const rules = [
+        [1, ({ faces, lift }) => faces.every(({ shown, top }) => !shown || Math.min(...top.map(([, y]) => y)) - lift >= roof)],
+        [wordsShown, clearOf(above)],
+        [ease(.49,.56,p) * (1 - ease(.70,.765,p)), clearOf([cards[0]])],
+        [ease(.20,.35,p) * (1 - ease(.43,.56,p)), clearOf([cards[1]])],
+        [overLines.length ? wordsShown * (1 - ease(.40,.53,p)) : 0, ({ P, lift }) => starts.every((from, j) => {
+          const port = P(-180, -76 + j * 24, portZ, lift);
+          const path = [from, [from[0] + 18, from[1]], [Math.max(from[0] + 18, port[0] - 31), port[1]], port];
+          return path.slice(1).every((point, n) => !overLines.some(box => crosses(path[n], point, box)));
+        })]
+      ];
+      needed.push(Math.min(...rules.map(([weight, rule]) => {   // the largest size each rule allows, by how visible it is
+        if (weight < .01 || rule(at(1))) return 1;
+        let small = MIN_FIT;
+        let large = 1;
+        if (rule(at(small))) {
+          for (let n = 0; n < 7; n++) {
+            const mid = (small + large) / 2;
+            if (rule(at(mid))) small = mid;
+            else large = mid;
+          }
+        }
+        return 1 - weight * (1 - small);
+      })));
+    }
+    // Never larger than any moment close by needs, then averaged, so the size changes gently with the scroll.
+    const near = (list, i) => list.slice(Math.max(0, i - PLAN_REACH), i + PLAN_REACH + 1);
+    const floor = needed.map((_, i) => Math.min(...near(needed, i)));
+    plan.sizes = floor.map((_, i) => near(floor, i).reduce((sum, size) => sum + size, 0) / near(floor, i).length);
+  }
+
+  function fitStack(drawing, now, close) {
+    if (camera.compact) return;
+    planFit(now);
+    const x = clamp(progress) * PLAN_STEPS;
+    const i = Math.min(PLAN_STEPS - 1, Math.floor(x));
+    const k = lerp(plan.sizes[i], plan.sizes[i + 1], x - i);
+    camera.cy -= stackAt(camera, drawing, close, k, quickAt(progress)).lift;   // exact for this moment: the tabs keep their gap
+    camera.scale *= k;
+  }
+
   function drawSlabs(now, spread, close, dispatch, intakeOpacity, partsOpacity, destinationsOpacity) {
     const separate = spread * (1 - ease(.04,.85,close));
-    const drawing = dimensions.map(layer => ({ ...layer, z: lerp(layer.closed,layer.open,separate) }));
+    const drawing = layersAt(separate);
+    fitStack(drawing, now, close);
     const coreZ = drawing.find(layer => layer.id === 'core').z;
     const baseZ = drawing[0].z;
     const outputFade = ease(.30,1,dispatch);
@@ -902,6 +1106,36 @@
     if (!story.hasAttribute('data-output-ready')) deliveryCard(outputFade);
   }
 
+  function cameraAt(p, compact) {   // how far the stack has opened, closed and sent its result at progress p, and the camera on it
+    const small = width < 770;
+    const spread = ease(.05,.35,p);
+    const close = ease(.41,.66,p);
+    const dispatch = ease(.77,.96,p);
+    const theta = .55 + .13 * spread - .17 * close;
+    const ports = Math.max(1-spread,dispatch);
+    const separate = spread * (1-ease(.04,.85,close));
+    const mediumScale = Math.min(width/615,(height-330)/405);
+    const fittedScale = Math.min(mediumScale,(width-278)/466);
+    const restScale = small ? (compact ? Math.min(width/495,height/328) : lerp(mediumScale,fittedScale,ports)) : 1;
+    const towerScale = compact ? Math.min(width/470,(height-22)/790) : small ? Math.min(.62,(height-120)/790) : .64;
+    const restX = 608 + (small ? (compact ? 0 : 21-27*ports-35*dispatch) : 8*spread-12*close-46*dispatch);
+    const restY = small ? 620-height*(compact ? .39 : .35)-(compact ? 0 : 20*dispatch) : lerp(397,425,spread)+18*close-42*dispatch;
+    const towerY = small ? 620-height*(compact ? .09 : .20) : 513;
+    return {
+      spread, close, dispatch, separate,
+      camera: {
+        small,
+        compact,
+        scale:lerp(restScale*(1+.08*close),towerScale,separate),
+        tilt: .52 + .03*spread + .16*close,
+        c: Math.cos(theta),
+        s: Math.sin(theta),
+        cx:lerp(restX, 590,separate),
+        cy:lerp(restY, towerY,separate)
+      }
+    };
+  }
+
   function display(now) {
     frameId = 0;
     if (!visible || !width || !height) return;
@@ -944,13 +1178,17 @@
     const destinationsOpacity = compact ? 1 - spread : 1 - ease(.09,.20,progress);
     if (progress !== paintedProgress || compact !== paintedCompact) {
       // The text, controls and connector lines follow the same timeline as the stack.
-      scene.style.setProperty('--core-intro-opacity', 1 - ease(.08,.29,progress));
+      scene.style.setProperty('--core-intro-opacity', 1 - introGone(progress));
       scene.style.setProperty('--core-parts-opacity', partsOpacity);
       scene.style.setProperty('--core-intake-opacity', intakeOpacity);
       scene.style.setProperty('--core-intake-travel', ease(.10,.36,progress));
-      scene.style.setProperty('--core-quick-opacity', ease(.21,.32,progress));
+      scene.style.setProperty('--core-quick-opacity', quickAt(progress));
       scene.style.setProperty('--core-gate-opacity', ease(.49,.56,progress) * (1 - ease(.70,.765,progress)));
-      quickStart.inert = compact || step === 0;
+      // The example card belongs to the first step: it fades where it is before the next step's headline arrives.
+      const card = 1 - ease(.12,.20,progress);
+      scene.style.setProperty('--core-card-opacity', card);
+      scene.style.setProperty('--core-card-visibility', card > .01 ? 'visible' : 'hidden');
+      quickStart.inert = compact || quickAt(progress) < .3;
       gateCase.hidden = compact && step !== 2;
       gateCase.inert = step !== 2;
       intro.inert = !compact && step > 0;
@@ -972,26 +1210,7 @@
     translation = { x:(width - 1216*sceneScale)/2, y:height - 620*sceneScale, scale:sceneScale };
     ctx.translate(translation.x,translation.y);
     ctx.scale(translation.scale,translation.scale);
-    const theta = .55 + .13 * spread - .17 * close;
-    const ports = Math.max(1-spread,dispatch);
-    const separate = spread * (1-ease(.04,.85,close));
-    const mediumScale = Math.min(width/615,(height-330)/405);
-    const fittedScale = Math.min(mediumScale,(width-278)/466);
-    const restScale = small ? (compact ? Math.min(width/495,height/328) : lerp(mediumScale,fittedScale,ports)) : 1;
-    const towerScale = compact ? Math.min(width/470,(height-22)/790) : small ? Math.min(.62,(height-120)/790) : .64;
-    const restX = 608 + (small ? (compact ? 0 : 21-27*ports-35*dispatch) : 8*spread-12*close-46*dispatch);
-    const restY = small ? 620-height*(compact ? .39 : .35)-(compact ? 0 : 20*dispatch) : lerp(397,425,spread)+18*close-42*dispatch;
-    const towerY = small ? 620-height*(compact ? .09 : .20) : 513;
-    camera = {
-      small,
-      compact,
-      scale:lerp(restScale*(1+.08*close),towerScale,separate),
-      tilt: .52 + .03*spread + .16*close,
-      c: Math.cos(theta),
-      s: Math.sin(theta),
-      cx:lerp(restX, 590,separate),
-      cy:lerp(restY, towerY,separate)
-    };
+    camera = cameraAt(progress, compact).camera;
     drawSlabs(now, spread, close, dispatch, intakeOpacity, partsOpacity, destinationsOpacity);
     if (!reduce.matches) schedule();
   }
@@ -1020,8 +1239,8 @@
     observer.observe(canvas);
     observer.observe(footer);
   }
-  if (window.SITE?.onLang) SITE.onLang(() => { setScenarioCopy(); describePart(); schedule(); });
-  if (document.fonts?.ready) document.fonts.ready.then(schedule);
+  if (window.SITE?.onLang) SITE.onLang(() => { setScenarioCopy(); describePart(); remeasure(); });   // new words: new room
+  if (document.fonts?.ready) document.fonts.ready.then(remeasure);
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;

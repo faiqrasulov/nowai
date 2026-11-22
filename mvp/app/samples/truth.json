@@ -1,0 +1,62 @@
+{
+ "_about": "The answer key for the example morning: test mode reads each item from it.",
+ "m1": {
+  "lines": [
+   {
+    "text": "Sement M500",
+    "qty": 60,
+    "unit": "kisə"
+   },
+   {
+    "text": "Armatur 12 mm",
+    "qty": 2,
+    "unit": "ton"
+   },
+   {
+    "text": "Kafel yapışqanı",
+    "qty": 40,
+    "unit": "kisə"
+   }
+  ],
+  "note": "Sabah obyektə lazımdır",
+  "signedBy": "Zaur",
+  "unreadable": []
+ },
+ "m2": {
+  "supplier": "Ferrox Metal MMC",
+  "invoiceNo": "FM-2211",
+  "date": "25.11.2026",
+  "lines": [
+   {
+    "description": "Armatur Ø12 mm, A500C",
+    "unit": "ton",
+    "qty": 18,
+    "price": 1310.0,
+    "amount": 23580.0
+   }
+  ],
+  "net": 23580.0,
+  "vat": 4244.4,
+  "total": 27824.4,
+  "unreadable": []
+ },
+ "m3": {
+  "intent": "damage",
+  "item": "qaz blok",
+  "quantity": 2,
+  "unit": "pallet",
+  "wants": "replacement",
+  "language": "az"
+ },
+ "m5": {
+  "intent": "payment-promise",
+  "day": "Friday",
+  "language": "az",
+  "summary": "Səbuhi from the Xırdalan store says Kamran called yesterday and he will pay the debt on Friday."
+ },
+ "m7": {
+  "intent": "leave-request",
+  "day": "Friday",
+  "language": "az"
+ }
+}

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Sign in · NowAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F7F8F4;--leaf:#28664A;--mint:#3DDC97;--ink:#17241D;--copy:#3C5044;--mute:#6B7A71;--rule:#dbe2d7;--bad:#9b2c1f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;min-height:100dvh;display:grid;place-items:center;background:radial-gradient(1100px 800px at 50% 30%,#fbfcf8,#eef1ea 75%);font:15px/1.45 Onest,"Segoe UI",sans-serif;color:var(--ink);padding:24px}
+.card{width:min(400px,100%);background:#fff;border:1px solid var(--rule);border-radius:20px;padding:30px 28px 26px;box-shadow:0 30px 60px -36px rgba(23,48,36,.45)}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);font-weight:700;font-size:18px}
+.n-mark{width:30px;height:30px}.n-mark__a{fill:#28664A}.n-mark__b{fill:#fff}.n-mark__c{fill:#3DDC97}
+.lang{display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:2px;gap:2px}
+.lang button{border:0;background:none;font:600 12px Onest;color:var(--mute);padding:4px 9px;border-radius:999px;cursor:pointer}.lang button.on{background:var(--leaf);color:#fff}
+h1{font-size:23px;letter-spacing:-.02em;margin-bottom:6px}
+p.sub{color:var(--copy);font-size:14px;margin-bottom:20px}
+label{display:block;font-size:13px;font-weight:600;color:var(--copy);margin:12px 0 6px}
+input{width:100%;border:1px solid var(--rule);border-radius:10px;padding:11px 12px;font:15px Onest;color:var(--ink);background:#fbfcf9}
+input:focus{outline:2px solid var(--mint);border-color:var(--leaf);background:#fff}
+button.go{margin-top:20px;width:100%;border:0;border-radius:10px;background:var(--leaf);color:#fff;font:700 15px Onest;padding:12px;cursor:pointer}
+button.go:disabled{opacity:.6}
+.err{min-height:20px;margin-top:12px;color:var(--bad);font-size:13.5px;font-weight:600}
+.shake{animation:shake .32s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.narrow{display:none;margin:14px 0 0;color:#85531C;font-size:13px;font-weight:600}@media (max-width:900px){.narrow{display:block}}
+.back{display:block;text-align:center;margin-top:16px;color:var(--mute);font-size:13px;text-decoration:none}.back:hover{color:var(--leaf)}
+</style><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%230E5A3C'/%3E%3Cpath d='M7 17V7.4l10 9.2V7' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='19.3' cy='4.7' r='2.1' fill='%233DDC97'/%3E%3C/svg%3E"></head><body>
+<form class="card" id="f" autocomplete="on" novalidate>
+  <div class="top"><a class="brand" href="../index.html"><svg class="n-mark" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" class="n-mark__a"/><path class="n-mark__b" d="M7 17V7.4l10 9.2V7"/><circle class="n-mark__c" cx="19.3" cy="4.7" r="2.1"/></svg><span>NowAI</span></a>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-l="en">EN</button><button type="button" data-l="az">AZ</button><button type="button" data-l="ru">RU</button></div></div>
+  <h1 data-t="title">Sign in</h1>
+  <p class="sub" data-t="sub">The NowAI workspace: one example morning, with the roles at work.</p>
+  <label for="u" data-t="user">Username</label><input id="u" autocomplete="username" required>
+  <label for="p" data-t="pass">Password</label><input id="p" type="password" autocomplete="current-password" required>
+  <button class="go" id="go" type="submit" data-t="go">Sign in</button>
+  <div class="err" id="err" role="alert"></div>
+  <p class="narrow" data-t="narrow">The workspace is made for a computer or a tablet held sideways.</p>
+  <a class="back" href="../index.html" data-t="back">Back to the website</a>
+</form>
+<script>
+/* A simple gate in front of the workspace. The site is static, so this keeps casual visitors out; it is not real security.
+   Only a salted SHA-256 fingerprint of the username and password is stored here, never the password itself. */
+(function () {
+  var KEY = "d83e38ff3fce7e04cdffe46de9b24aef3194805010df6bbdbcd993ace5b09583";
+  var T = {
+    en: { title: "Sign in", sub: "The NowAI workspace: one example morning, with the roles at work.", user: "Username", pass: "Password", go: "Sign in", back: "Back to the website", bad: "Wrong username or password.", wait: "Checking…", narrow: "The workspace is made for a computer or a tablet held sideways." },
+    az: { title: "Daxil olun", sub: "NowAI iş sahəsi: nümunə şirkətdə bir səhər, rollar iş başında.", user: "İstifadəçi adı", pass: "Şifrə", go: "Daxil ol", back: "Sayta qayıt", bad: "İstifadəçi adı və ya şifrə yanlışdır.", wait: "Yoxlanılır…", narrow: "İş sahəsi kompüter və ya üfüqi tutulmuş planşet üçün nəzərdə tutulub." },
+    ru: { title: "Вход", sub: "Рабочее пространство NowAI: одно утро для примера, роли за работой.", user: "Имя пользователя", pass: "Пароль", go: "Войти", back: "Вернуться на сайт", bad: "Неверное имя пользователя или пароль.", wait: "Проверка…", narrow: "Рабочее пространство рассчитано на компьютер или планшет в горизонтальном положении." }
+  };
+  var lang = "en";
+  try { var q = new URLSearchParams(location.search).get("lang"); lang = T[q] ? q : (T[localStorage.getItem("nowai-lang")] ? localStorage.getItem("nowai-lang") : "en"); } catch (e) {}
+  function paint() {
+    document.documentElement.lang = lang;
+    [].forEach.call(document.querySelectorAll("[data-t]"), function (el) { el.textContent = T[lang][el.getAttribute("data-t")]; });
+    [].forEach.call(document.querySelectorAll(".lang button"), function (b) { b.classList.toggle("on", b.getAttribute("data-l") === lang); b.setAttribute("aria-pressed", String(b.getAttribute("data-l") === lang)); });
+    document.title = T[lang].title + " · NowAI";
+  }
+  [].forEach.call(document.querySelectorAll(".lang button"), function (b) { b.addEventListener("click", function () { lang = b.getAttribute("data-l"); try { localStorage.setItem("nowai-lang", lang); } catch (e) {} paint(); }); });
+  try { if (sessionStorage.getItem("nowai.mvp") === "1") location.replace("app/index.html?lang=" + lang); } catch (e) {}
+  async function hash(s) { var b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return Array.prototype.map.call(new Uint8Array(b), function (x) { return x.toString(16).padStart(2, "0"); }).join(""); }
+  var f = document.getElementById("f"), err = document.getElementById("err"), go = document.getElementById("go");
+  f.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var u = document.getElementById("u").value.trim(), p = document.getElementById("p").value;
+    go.disabled = true; go.textContent = T[lang].wait; err.textContent = "";
+    var ok = false;
+    try { ok = (await hash("nowai-mvp|" + u + "|" + p)) === KEY; } catch (x) { ok = false; }
+    if (ok) { try { sessionStorage.setItem("nowai.mvp", "1"); localStorage.setItem("nowai-lang", lang); } catch (x) {} location.href = "app/index.html?lang=" + lang; return; }
+    setTimeout(function () { go.disabled = false; go.textContent = T[lang].go; err.textContent = T[lang].bad; f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake"); document.getElementById("p").select(); }, 600);
+  });
+  paint(); document.getElementById("u").focus();
+})();
+</script>
+</body></html>

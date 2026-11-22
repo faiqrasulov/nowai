@@ -1,8 +1,9 @@
 /* The two NowAI films.
    - Home: the 24-second desk film plays by itself, silently and on a loop, while at least half of it is on screen; not
      when the reader asks for reduced motion or to save data. "Play with sound" starts it again from the beginning with sound.
-   - Platform: the 18-second film plays where it is, with sound and the browser's own controls, when its button is pressed.
-   Neither video downloads until it is about to play; small frames get the 720p file. */
+   - Platform and Construction: film 3 (1:35, with a voice) plays where it is, with sound and the browser's own controls,
+     when its button is pressed, or from a line of its transcript. A phone held upright gets the upright copy.
+   No video downloads until it is about to play; small frames get the 720p file. */
 (function () {
   const ICON = {
     play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
@@ -16,10 +17,16 @@
   const calm = window.matchMedia ? matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
   const saveData = !!(navigator.connection && navigator.connection.saveData);
   const start = v => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
-  function load(v, cssWidth) {   // the 1080p file only where it shows (wide frame, sharp screen)
+  const upright = window.matchMedia ? matchMedia("(max-width: 600px) and (orientation: portrait)") : { matches: false };   // the same test as films.css
+  function load(v, cssWidth, at) {   // the 1080p file only where it shows (wide frame, sharp screen); the upright copy on a phone held upright
     if (v.getAttribute("src")) return;
+    const from = at > 0 ? "#t=" + at : "";   // a first jump from the transcript asks for its start time up front (older iPhones start at 0:00 otherwise)
+    if (v.dataset.srcTall) {   // the frame keeps the shape it starts with, even if the phone turns while the film plays
+      const tall = upright.matches; v.closest("[data-film]").classList.add(tall ? "is-tall" : "is-wide");
+      if (tall) { v.src = v.dataset.srcTall + from; return; }
+    }
     const px = cssWidth * (window.devicePixelRatio || 1);
-    v.src = px > (+v.dataset.big || 900) ? v.dataset.srcLg : v.dataset.srcSm;
+    v.src = (px > (+v.dataset.big || 900) ? v.dataset.srcLg : v.dataset.srcSm) + from;
   }
 
   /* Home: the desk film, in its own section. */
@@ -58,12 +65,19 @@
     if (window.SITE && SITE.onLang) SITE.onLang(sync);
   }
 
-  /* Platform: the 18-second film, played where it is. */
+  /* Platform and Construction: film 3, played where it is. Each line of its transcript can start it from that moment. */
   document.querySelectorAll('[data-film="inline"]').forEach(box => {
     const v = box.querySelector("video"), play = box.querySelector("[data-film-play]");
-    play.addEventListener("click", () => {
-      load(v, box.clientWidth); play.hidden = true; v.controls = true; v.muted = false; v.currentTime = 0; start(v); v.focus({ preventScroll: true });
-    });
+    if (!v || !play) return;   // a film box without its parts is skipped; the others still work
+    const go = at => {
+      load(v, box.clientWidth, at); play.hidden = true; v.controls = true; v.muted = false;
+      if (v.readyState >= 1) v.currentTime = at; else v.addEventListener("loadedmetadata", () => { v.currentTime = at; }, { once: true });
+      start(v); v.focus({ preventScroll: true });
+    };
+    play.addEventListener("click", () => go(0));
+    (box.parentElement || document).querySelectorAll("[data-film-at]").forEach(b => b.addEventListener("click", () => {
+      go(+b.dataset.filmAt || 0); box.scrollIntoView({ behavior: calm.matches ? "auto" : "smooth", block: "nearest" });
+    }));
     v.addEventListener("ended", () => { v.controls = false; play.hidden = false; play.focus({ preventScroll: true }); });   // ready to play again
     new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting && !v.paused) v.pause(); })).observe(box);   // scrolled away: it waits
   });

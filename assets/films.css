@@ -1,5 +1,5 @@
-/* The two NowAI films. Home: the 24-second desk film has its own section and plays by itself, silently, while it is
-   on screen. Platform: the 18-second film sits in "From incoming work to decisions" and plays where it is, with sound. */
+/* The NowAI films. Home: the 24-second desk film has its own section and plays by itself, silently, while it is
+   on screen. Platform and Construction: film 3 (1:35, with a voice) plays where it is, with sound. */
 
 /* The films' words are in English: Azerbaijani pages say so. */
 html:not(:lang(az)) .n-film-lang { display: none; }
@@ -24,7 +24,7 @@ html:not(:lang(az)) .n-film-lang { display: none; }
   .n-film__frame { width: min(clamp(300px, 28vw, 360px), calc((100svh - 150px) * 9 / 16)); margin: 0; justify-self: center; }
 }
 
-/* Platform: the 18-second film, wide, between the section's heading and its steps. */
+/* The inline film box (film 3 on Platform and Construction): wide, between a section's heading and what follows. */
 .n-filmbox { position: relative; width: min(100%, calc((100svh - 230px) * 16 / 9)); aspect-ratio: 16 / 9; margin: 0 0 clamp(28px, 4vw, 48px); border-radius: 14px; overflow: hidden; background: #eef1ec; box-shadow: 0 30px 70px -36px rgba(23, 48, 36, .45), 0 0 0 1px rgba(23, 36, 29, .07); }
 .n-filmbox video { display: block; width: 100%; height: 100%; object-fit: cover; }
 .n-filmbox__play { position: absolute; inset: 0; width: 100%; border: 0; padding: 0; background: linear-gradient(180deg, rgba(15, 28, 24, 0) 45%, rgba(15, 28, 24, .38)); color: #fff; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
@@ -36,7 +36,31 @@ html:not(:lang(az)) .n-film-lang { display: none; }
 .n-filmbox__t { display: inline-flex; align-items: baseline; gap: 10px; padding: 9px 16px; border-radius: 999px; background: rgba(15, 28, 24, .72); font-size: clamp(14px, 1.2vw, 16px); font-weight: 560; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .n-filmbox__m { font-weight: 450; opacity: .8; font-variant-numeric: tabular-nums; }
 
+/* Film 3 (Platform, Construction): the film and its transcript. The poster is the frame's background, so a phone held
+   upright downloads only the upright poster; the test matches "upright" in films.js. */
+.n-f3 { width: 100%; margin: 0 0 clamp(28px, 4vw, 48px); }
+.n-f3 .n-filmbox { width: min(100%, max(320px, calc((100svh - 230px) * 16 / 9))); margin: 0; scroll-margin-top: 84px; background: #f4f5f0 url(film/nowai-film3-poster.jpg) center / cover no-repeat; }
+@media (max-width: 600px) and (orientation: portrait) {
+  .n-f3 .n-filmbox:not(.is-wide) { aspect-ratio: 9 / 16; width: min(100%, calc((100svh - 140px) * 9 / 16)); margin-inline: auto; background-image: url(film/nowai-film3-tall-poster.jpg); }
+}
+.n-f3 .n-filmbox.is-tall { aspect-ratio: 9 / 16; width: min(100%, calc((100svh - 140px) * 9 / 16)); margin-inline: auto; background-image: url(film/nowai-film3-tall-poster.jpg); }
+@media (orientation: landscape) { .n-f3 .n-filmbox.is-tall { width: min(100%, calc((100svh - var(--n-hdr-h, 64px) - 16px) * 9 / 16)); scroll-margin-top: calc(var(--n-hdr-h, 64px) + 8px); } }   /* an upright film on a phone turned sideways: as tall as the screen */
+.n-f3__tx { margin-top: 14px; font-size: 15px; line-height: 1.5; }
+.n-f3__tx > summary { display: inline-flex; gap: 10px; align-items: center; padding: 6px 0; color: var(--day-ink, #17241d); font-weight: 560; cursor: pointer; list-style: none; }
+.n-f3__tx > summary::-webkit-details-marker { display: none; }
+.n-f3__tx > summary::before { content: ""; width: 7px; height: 7px; margin: 0 2px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform .2s ease; }
+.n-f3__tx[open] > summary::before { transform: rotate(45deg); }
+.n-f3__tx > summary:focus-visible { outline: 2px solid var(--leaf); outline-offset: 3px; border-radius: 4px; }
+.n-f3__tx ol { list-style: none; margin: 8px 0 0; padding: 0; max-width: 760px; }
+.n-f3__tx li { display: grid; grid-template-columns: 4.2em minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 3px 0; }
+.n-f3__at { padding: 4px 0; border: 0; background: none; color: var(--leaf); font: inherit; font-weight: 600; font-variant-numeric: tabular-nums; text-align: left; cursor: pointer; }
+.n-f3__at:hover { text-decoration: underline; text-underline-offset: 3px; }
+.n-f3__at:focus-visible { outline: 2px solid var(--leaf); outline-offset: 2px; border-radius: 4px; }
+.n-f3__tx li p { margin: 0; }
+.n-f3__note { margin: 10px 0 0; color: var(--day-mute, #5d6b63); font-size: 13.5px; }
+
 @media (prefers-reduced-motion: reduce) {
+  .n-f3__tx > summary::before { transition: none; }
   .n-film__btn, .n-filmbox__icon { transition: none; }
 }
 /* On a phone the film is small: a shorter label on one line, so the picture stays visible. */

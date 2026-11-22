@@ -1181,3 +1181,9 @@ body[data-group="industries"] .n-pg-hero .n-who { margin-bottom: 28px; }
 
 /* Page tops: one flat dark ground with a single still glow, no moving colour blobs. */
 .n-pg-hero::before { inset: 0; background: radial-gradient(60% 55% at 50% 0%, rgba(61, 220, 151, .13), transparent 70%); animation: none; }
+
+/* Sign in: the gate to the NowAI workspace (/mvp/) */
+.n-signin{display:inline-flex;align-items:center;height:34px;padding:0 14px;border:1px solid #28664A;border-radius:999px;color:#28664A;font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap}
+.n-signin:hover{background:#28664A;color:#fff}
+.n-drawer__signin{color:#28664A;font-weight:600}
+@media (max-width:900px){.n-signin{display:none}}

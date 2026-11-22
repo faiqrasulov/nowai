@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<script>try{if(sessionStorage.getItem("nowai.mvp")!=="1")location.replace("../index.html");}catch(e){location.replace("../index.html");}</script>
+<script>window.NOWAI_FORCE_MOCK=true;</script><meta name="viewport" content="width=device-width, initial-scale=1"><title>NowAI · workspace</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%230E5A3C'/%3E%3Cpath d='M7 17V7.4l10 9.2V7' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='19.3' cy='4.7' r='2.1' fill='%233DDC97'/%3E%3C/svg%3E"></head><body style="margin:0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ws.css">
+<!-- NowAI workspace: one example morning at Qaya Tikinti LLC, an invented company. Test mode: an answer key reads; code decides; people approve. -->
+<p class="narrow-note" data-i="narrowNote">The workspace is made for a computer or a tablet held sideways.</p>
+<div class="nw">
+  <header>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 91.539 24" height="22"><path d="M7 0H17A7 7 0 0 1 24 7V17A7 7 0 0 1 17 24H7A7 7 0 0 1 0 17V7A7 7 0 0 1 7 0Z" fill="#28664A"/><path d="M8.1 17V9.906731L16.255234 17.409512A1.1 1.1 0 0 0 18.1 16.6V7A1.1 1.1 0 0 0 15.9 7V14.093269L7.744766 6.590488A1.1 1.1 0 0 0 5.9 7.4V17A1.1 1.1 0 0 0 8.1 17Z" fill="#FFFFFF"/><path d="M17.2 4.7A2.1 2.1 0 1 0 21.4 4.7A2.1 2.1 0 1 0 17.2 4.7Z" fill="#3DDC97"/><path transform="translate(33 18.726)" d="M1.425 0V-13.452H4.199L10.412 -4.351V-13.452H13.129V0H10.431L4.142 -9.006V0H1.425Z M19.893 0.133C18.88 0.133 17.993 -0.073 17.233 -0.484C16.473 -0.896 15.884 -1.485 15.466 -2.251C15.048 -3.018 14.839 -3.927 14.839 -4.978C14.839 -6.055 15.051 -6.982 15.475 -7.761C15.9 -8.54 16.492 -9.139 17.252 -9.557C18.012 -9.975 18.886 -10.184 19.874 -10.184C20.887 -10.184 21.768 -9.969 22.515 -9.538C23.262 -9.107 23.845 -8.506 24.263 -7.733C24.681 -6.96 24.89 -6.036 24.89 -4.959C24.89 -3.908 24.684 -2.999 24.272 -2.232C23.861 -1.466 23.284 -0.88 22.543 -0.475C21.802 -0.07 20.919 0.133 19.893 0.133M19.855 -2.299C20.438 -2.299 20.906 -2.426 21.261 -2.679C21.616 -2.932 21.872 -3.265 22.03 -3.676C22.189 -4.088 22.268 -4.522 22.268 -4.978C22.268 -5.434 22.189 -5.874 22.03 -6.298C21.872 -6.723 21.619 -7.068 21.27 -7.334C20.922 -7.6 20.45 -7.733 19.855 -7.733C19.285 -7.733 18.823 -7.6 18.468 -7.334C18.113 -7.068 17.857 -6.723 17.699 -6.298C17.54 -5.874 17.461 -5.434 17.461 -4.978C17.461 -4.509 17.54 -4.072 17.699 -3.667C17.857 -3.262 18.113 -2.932 18.468 -2.679C18.823 -2.426 19.285 -2.299 19.855 -2.299Z M28.367 0 25.213 -10.013H28.12L29.982 -3.04L31.958 -10.013H34.941L36.917 -3.04L38.741 -10.013H41.61L38.456 0H35.397L33.402 -6.764L31.426 0H28.367Z M41.287 0 46.531 -13.452H49.571L54.758 0H51.832L50.996 -2.299H45.049L44.213 0H41.287M45.923 -4.75H50.141L48.051 -10.564L45.923 -4.75Z M55.822 0V-13.452H58.539V0H55.822Z" fill="#17241D"/></svg>
+
+    <div class="co"><b>Qaya Tikinti LLC</b><span data-i="coSub">Example company · building materials · Baku</span></div>
+    <span class="live" id="aiChip"><i></i>Connecting…</span>
+    <div class="clockbox"><span class="t" id="clockT">07:30</span><span class="d" data-i="thursday">Thursday</span>
+      <button class="ctl" id="play">Start</button><button class="ctl" id="next" data-i="next" data-it="nextTitle">Next</button>
+      <select class="ctl" id="speed" aria-label="Clock speed"><option value="slow" data-i="slow">Slow</option><option value="normal" data-i="normal">Normal</option><option value="fast" data-i="fast">Fast</option></select></div>
+    <label class="as"><span data-i="actingAs">Acting as</span><select class="ctl" id="acting" aria-label="Acting as"></select></label>
+    <div class="lang" id="langSw" role="group" aria-label="Language"><button data-l="en">EN</button><button data-l="az">AZ</button><button data-l="ru">RU</button></div>
+    <button class="btn" id="recordBtn" data-i="record">Record</button><button class="btn pri" id="newDay" data-i="newDay">New day</button><a class="btn" href="../index.html" data-i="signOut" onclick="try{sessionStorage.removeItem('nowai.mvp')}catch(e){}">Sign out</a>
+  </header>
+  <div id="banner" class="banner" hidden></div>
+  <main>
+    <section class="panel">
+      <div class="ph"><h2 data-i="incoming">Incoming</h2><span id="inCount"></span></div>
+      <div class="feed" id="feed"></div>
+      <div class="compose" id="compose">
+        <div class="row"><select class="ctl" id="sender" aria-label="Who sends it" style="flex:1"></select></div>
+        <textarea id="text" data-ip="composePh" placeholder="Type as one of them, in Azerbaijani, English or Russian. No real documents, please."></textarea>
+        <div class="row"><label class="ctl" hidden><span data-i="attach">Attach</span><input type="file" id="file" accept="image/*,application/pdf"></label><span class="file" id="fileName"></span><button class="btn pri" id="send" data-i="sendIn">Send in</button></div>
+      </div>
+    </section>
+    <section class="mid">
+      <div class="tiles" id="tiles"></div>
+      <div class="roles" id="roles"></div>
+      <section class="panel talk"><div class="ph"><h2 data-i="rolesTogether">Roles working together</h2><span data-i="rolesSub">messages written by code from what was read · hover a card to follow its case</span></div><div class="msgs" id="msgs"></div></section>
+    </section>
+    <section class="panel gate">
+      <div class="gh"><h2><span data-i="gate">The Gate</span> <em id="gateCount">0 waiting</em></h2><p data-i="gateSub">Nothing risky moves without a person. Each choice changes what NowAI does next.</p></div>
+      <div class="gq" id="gq"></div>
+    </section>
+  </main>
+  <div class="foot"><span class="honest"><b data-i="footB">Example company and amounts.</b> <span data-i="footT"></span></span><span class="seal" id="sealN"></span><span id="lastStep"></span></div>
+  <div class="start-scrim" id="startScrim"></div>
+  <div class="start" id="start"><h2 data-i="startTitle">One morning at Qaya Tikinti LLC</h2><p data-i="startText">An example building-materials supplier in Baku. Press Start: chats, emails and files arrive on the clock, the roles work on each one together, and the people at the Gate decide. In test mode an answer key stands in for the AI reader. You can also send in your own message.</p><button class="btn pri" id="startGo" data-i="startGo">Start the morning</button></div>
+  <svg class="beams" id="beams" aria-hidden="true"></svg>
+  <div class="scrim" id="scrim" hidden></div><aside class="drawer" id="drawer" hidden></aside>
+</div>
+<script src="samples/truth.js"></script>
+<script src="world.js"></script>
+<script src="engine.js"></script>
+<script src="ai.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+
+</body></html>

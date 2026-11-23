@@ -150,7 +150,6 @@
   let ratio = 1;
   let progress = 0;
   let selected = 0;
-  let tabUsed = false;
   let manual = 0;
   let manualStart = 0;
   let manualFrom = 0;
@@ -218,7 +217,9 @@
       el.toggleAttribute('data-active', active);
       if (active) el.append(output);
     });
-    output.hidden = !ready;
+    // Phones: before "What comes out" an arrival is the lit chip alone; a card there pushed the page under it down.
+    output.hidden = !ready || (compactLayout.matches && selected !== 3);
+    story.toggleAttribute('data-output-shown', !output.hidden);
   }
 
   function scenarioText(field, source = sceneScenario()) {
@@ -312,7 +313,7 @@
 
   function autoRoute() {
     if (interacted || reduce.matches) return;
-    if (selected === 0 && visible && !document.hidden) {
+    if (selected === 0 && ((visible && !document.hidden) || !autoSource)) {   // the first example shows even in a hidden tab
       autoSource = intakeButtons[autoIndex].dataset.coreIntake;
       autoIndex = (autoIndex + 1) % intakeButtons.length;
       updateIntake();
@@ -527,6 +528,29 @@
       const start = room >= 32 ? clamp(base, introEnd + 16, tabsTop - 16 - intake.offsetHeight) : introEnd + Math.max(0, room) / 2;
       intake.style.setProperty('--core-intake-top', start + 'px');
     }
+    // Phones: the example card keeps the height of its tallest example, so the stack and everything under it stay
+    // where they are while the examples change by themselves.
+    if (compactLayout.matches || reduce.matches) {
+      const keep = intakeInsight.style.minHeight, wasHidden = intakeInsight.hidden, traceHidden = orderTrace.hidden;
+      intakeInsight.style.minHeight = '';
+      intakeInsight.hidden = false;
+      let tallest = 0;
+      for (const id of intakeButtons.map(b => b.dataset.coreIntake)) {
+        const { role, destination } = routes[id];
+        intakeFields.entry.textContent = scenarioText('entry', id);
+        intakeFields.check.textContent = scenarioText('check', id);
+        intakeFields.role.textContent = label('s.page.' + role);
+        intakeFields.output.textContent = scenarioText('output', id) + ' → ' + label(destinationNames[destination]);
+        orderTrace.hidden = id !== 'wa';
+        routeDetails.hidden = !orderTrace.hidden;
+        tallest = Math.max(tallest, intakeInsight.offsetHeight);
+      }
+      intakeInsight.hidden = wasHidden;
+      orderTrace.hidden = traceHidden;
+      routeDetails.hidden = !traceHidden;
+      setScenarioCopy();
+      intakeInsight.style.minHeight = tallest ? tallest + 'px' : keep;
+    } else intakeInsight.style.minHeight = '';
     schedule();
   }
 
@@ -1153,12 +1177,7 @@
         ? target
         : lerp(progress, target, 1 - Math.exp(-Math.min(elapsed, 50) / 45));
     } else {
-      if (tabUsed || reduce.matches) progress = reduce.matches ? manual : lerp(manualFrom, manual, ease(0, 670, now - manualStart));
-      else {
-        // Phones: until a step is chosen, the stack opens a little as it scrolls into view (a finger cannot trigger it any other way).
-        const top = canvas.getBoundingClientRect().top;
-        progress = .2 * ease(0, 1, clamp((innerHeight - top) / (innerHeight * .75)));
-      }
+      progress = reduce.matches ? manual : lerp(manualFrom, manual, ease(0, 670, now - manualStart));
     }
     const step = progress > .765 ? 3 : progress > .49 ? 2 : progress > .21 ? 1 : 0;
     if (step !== selected) {
@@ -1228,7 +1247,6 @@
 
   tabs.forEach((tab, i) => tab.addEventListener('click', () => {
     const positions = [0, .355, .69, .98];
-    tabUsed = true;
     manualFrom = progress;
     manual = positions[i];
     manualStart = performance.now();
@@ -1258,4 +1276,6 @@
   }
   setScenarioCopy();
   remeasure();
+  // Phones: the first example shows at once. Arriving two seconds after the page, it pushed everything under it down.
+  if (compactLayout.matches && !reduce.matches) { clearTimeout(autoTimer); autoRoute(); }
 })();

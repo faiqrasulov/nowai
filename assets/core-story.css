@@ -503,7 +503,7 @@
 @media (max-width:767px), (prefers-reduced-motion:reduce) {
   .core-story__intake-list button, .core-story__tabs button, .core-story__parts button, .core-story__links a { min-height: 44px; }
   .core-story__links a { display: inline-flex; align-items: center; }
-  .core-story[data-output-ready] .core-story__portgroup li.is-active { flex-basis: 100%; order: -1; }
+  .core-story[data-output-shown] .core-story__portgroup li.is-active { flex-basis: 100%; order: -1; }
 }
 @media (prefers-reduced-motion:reduce) {
   .core-story[data-intake-invitation] [data-core-intake="wa"] { animation: none; }

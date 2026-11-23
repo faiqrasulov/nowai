@@ -205,6 +205,9 @@
   const mobile = matchMedia('(max-width: 767px)');
   // Phones held upright: scrolling plays the stack's four steps in place (scrubProgress; core-story.css).
   const phoneScrub = matchMedia('(max-width: 767px) and (min-height: 561px) and (prefers-reduced-motion: no-preference)');
+  // Short screens held sideways: the steps scroll past in the left column, the stack plays beside them (sideProgress).
+  const phoneSide = matchMedia('(max-height: 560px) and (orientation: landscape) and (prefers-reduced-motion: no-preference)');
+  const chapterHeads = [...story.querySelectorAll('.core-story__chapter > [data-ch]')].map(d => d.querySelector('.core-story__chapter-h') || d);
   output.hidden = true;
 
   const sceneScenario = () => selected === 2 || (selected === 3 && gateApproved) ? 'credit' : scenarioId;
@@ -220,7 +223,7 @@
       if (active) el.append(output);
     });
     // Phones: before "What comes out" an arrival is the lit chip alone; a card there pushed the page under it down.
-    output.hidden = !ready || (compactLayout.matches && selected !== 3) || phoneScrub.matches;
+    output.hidden = !ready || (compactLayout.matches && selected !== 3) || phoneScrub.matches || phoneSide.matches;
     story.toggleAttribute('data-output-shown', !output.hidden);
   }
 
@@ -244,7 +247,7 @@
   }
 
   function updateIntake() {
-    const next = selected < 2 || phoneScrub.matches ? intakeHover || intakeFocus || intakePinned || autoSource : '';
+    const next = selected < 2 || phoneScrub.matches || phoneSide.matches ? intakeHover || intakeFocus || intakePinned || autoSource : '';
     const changed = next !== routeSource;
     if (next && next !== routeSource) {
       scenarioId = next;
@@ -538,7 +541,7 @@
       intakeInsight.hidden = false;
       let tallest = 0;
       const ids = intakeButtons.map(b => b.dataset.coreIntake);
-      if (phoneScrub.matches) ids.push('credit');   // scrolled to the decision, the card shows the credit note
+      if (phoneScrub.matches || phoneSide.matches) ids.push('credit');   // scrolled to the decision, the card shows the credit note
       for (const id of ids) {
         const { role, destination } = routes[id];
         intakeFields.entry.textContent = scenarioText('entry', id);
@@ -679,7 +682,7 @@
   }
 
   function drawInputs(z, clock, spread, opacity) {
-    if (opacity <= .01) return;
+    if (opacity <= .01 || phoneSide.matches) return;   // sideways: the inputs sit in the other column
     const compact = camera.compact;
     const canvasBox = canvas.getBoundingClientRect();
     for (const [i, button] of intakeButtons.entries()) {
@@ -1139,6 +1142,19 @@
   // Phones held upright: the stack plays its four steps while the page carries it up to the header, and back in reverse.
   function scrubRun() { return Math.max(1, canvas.getBoundingClientRect().top + scrollY - header.offsetHeight); }
   function scrubProgress() { return clamp(scrollY / scrubRun()); }
+  // Short screens held sideways: each step holds while its headline is in the middle of the screen; the stack moves on
+  // as the next one comes up. The marks are the example card and the three step headlines.
+  function sideProgress() {
+    const P = [0, .355, .69, .98], hdr = header.offsetHeight, line = hdr + (innerHeight - hdr) / 2;
+    const mid = el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; };
+    const marks = [mid(intakeInsight), ...chapterHeads.map(mid)];
+    let p = 0;
+    for (let i = 0; i < 3; i++) {
+      if (marks[i + 1] <= line) p = P[i + 1];
+      else if (marks[i] < line) p = P[i] + (P[i + 1] - P[i]) * (line - marks[i]) / Math.max(1, marks[i + 1] - marks[i]);
+    }
+    return p;
+  }
 
   function cameraAt(p, compact) {   // how far the stack has opened, closed and sent its result at progress p, and the camera on it
     const small = width < 770;
@@ -1184,7 +1200,8 @@
       progress = paintedCompact !== false || Math.abs(target - progress) < .001
         ? target
         : lerp(progress, target, 1 - Math.exp(-Math.min(elapsed, 50) / 45));
-    } else if (phoneScrub.matches) progress = scrubProgress();
+    } else if (phoneSide.matches) progress = sideProgress();
+    else if (phoneScrub.matches) progress = scrubProgress();
     else {
       progress = reduce.matches ? manual : lerp(manualFrom, manual, ease(0, 670, now - manualStart));
     }

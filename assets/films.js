@@ -1,6 +1,8 @@
 /* The two NowAI films.
    - Home: the 24-second desk film plays by itself, silently and on a loop, while at least half of it is on screen; not
      when the reader asks for reduced motion or to save data. "Play with sound" starts it again from the beginning with sound.
+     Its poster is the film's own first frame and stays in the frame behind the video (films.css); the video fades in
+     over it once its first frame is drawn, so the film starts without a blank box or a jump.
    - Platform and Construction: film 3 (1:35, with a voice) plays where it is, with sound and the browser's own controls,
      when its button is pressed, or from a line of its transcript. A phone held upright gets the upright copy.
    No video downloads until it is about to play; small frames get the 720p file. */
@@ -42,6 +44,13 @@
       mute.innerHTML = v.muted ? ICON.muted : ICON.sound; label(mute, v.muted ? "film.unmute" : "film.mute");
     };
     const tick = () => { if (v.duration) bar.style.transform = "scaleX(" + (v.currentTime / v.duration) + ")"; if (!v.paused) requestAnimationFrame(tick); };
+    // The poster shows until the video has drawn a frame of its own.
+    const live = () => frame.classList.add("is-live");
+    const whenDrawn = () => {
+      if (frame.classList.contains("is-live")) return;
+      if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(live);
+      else v.addEventListener("timeupdate", function drawn() { if (v.currentTime > 0) { v.removeEventListener("timeupdate", drawn); live(); } });
+    };
     const playWithSound = () => {
       load(v, frame.clientWidth); withSound = true; userPaused = false;
       v.loop = false; v.muted = false; v.currentTime = 0; start(v); show(true); sync();
@@ -51,11 +60,18 @@
       if (inView) { if (!userPaused && (withSound || auto())) { load(v, frame.clientWidth); start(v); } }
       else if (!v.paused) v.pause();
     }), { threshold: [0, 0.5, 1] }).observe(frame);
+    // About one screen before the film shows, its file starts to arrive, so it is ready to play when half of it is in view.
+    const early = new IntersectionObserver(entries => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      early.disconnect();
+      if (auto()) { v.preload = "auto"; load(v, frame.clientWidth); }
+    }, { rootMargin: "100% 0px" });
+    early.observe(frame);
     soundBtn.addEventListener("click", e => { e.stopPropagation(); playWithSound(); });
     toggle.addEventListener("click", e => { e.stopPropagation(); if (v.paused) { userPaused = false; start(v); } else { userPaused = true; v.pause(); } });
     mute.addEventListener("click", e => { e.stopPropagation(); v.muted = !v.muted; sync(); });
     frame.addEventListener("click", () => { if (!withSound) playWithSound(); else toggle.click(); });   // a tap on the film itself
-    v.addEventListener("play", () => { sync(); requestAnimationFrame(tick); });
+    v.addEventListener("play", () => { whenDrawn(); sync(); requestAnimationFrame(tick); });
     v.addEventListener("pause", sync);
     v.addEventListener("ended", () => {   // after a play with sound: back to the silent loop, ready to play again
       withSound = false; v.muted = true; v.loop = true; show(false); sync();

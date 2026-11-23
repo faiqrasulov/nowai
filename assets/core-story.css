@@ -529,66 +529,187 @@
   .core-story__chapter-p { display: none; }   /* short screens: the chapter's name and headline only */
 }
 
-/* Phones held upright: scrolling plays the stack's four steps in place, and back in reverse (scrubProgress in
-   core-story.js). Nothing here changes size with the step, so the page never moves by itself: the stack keeps one
-   height, the incoming work stays, and the slice list, decision card and result card stay with the tap version. */
-@media (max-width:767px) and (min-height:561px) and (prefers-reduced-motion:no-preference) {
-  .core-story[data-chapter] .core-story__canvas { height: clamp(260px, 78vw, 420px); }
-  .core-story[data-chapter="2"] .core-story__intake,
-  .core-story[data-chapter="3"] .core-story__intake { display: block; }
-  .core-story[data-chapter] .core-story__parts,
-  .core-story .core-story__insight,
-  .core-story .core-story__gate-case,
-  .core-story .core-story__result { display: none !important; }
-  .core-story__caption { min-height: 4.2em; }
-}
-
-/* Short screens (any phone held sideways): the stack is never taller than the room under the header. */
+/* Short screens in the tap version (reduced motion): the stack is never taller than the room under the header. */
 @media (max-height:560px) {
   .core-story__canvas { max-height: calc(100svh - var(--n-hdr-h) - 24px); }
 }
 
-/* Short screens held sideways: two columns. The text scrolls in the left one, one step at a time, while the stack stays
-   beside it in the right one and plays the step in the middle of the screen (sideProgress in core-story.js). Nothing
-   covers anything, and nothing changes size with the step. */
-@media (max-height:560px) and (orientation:landscape) and (prefers-reduced-motion:no-preference) {
-  .core-story__frame {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: clamp(16px, 3.4vw, 40px);
-    align-items: start;
-    padding-bottom: 32svh;
-  }
-  .core-story__frame > *,
-  .core-story__chapter > div { grid-column: 1; }
-  .core-story__chapter { display: contents; }
-  .core-story__intro { order: 0; padding-top: 16px; }
-  .core-story__intro h1 { font-size: clamp(24px, 3.4vw, 32px); }
-  .core-story__intake { order: 1; margin-top: 10px; }
-  .core-story[data-chapter="2"] .core-story__intake,
-  .core-story[data-chapter="3"] .core-story__intake { display: block; }
-  .core-story__intake-insight { order: 2; }
-  .core-story .core-story__intake-insight[hidden] { display: block !important; visibility: hidden; }
-  .core-story__chapter > div { padding-top: 30svh; margin-bottom: 12px; }
-  .core-story__chapter > [data-ch="1"] { order: 3; }
-  .core-story__chapter > [data-ch="2"] { order: 4; }
-  .core-story__gate-case { order: 5; }
-  .core-story .core-story__gate-case[hidden] { display: block !important; }
-  .core-story__chapter > [data-ch="3"] { order: 6; }
-  .core-story__systems { order: 7; }
-  .core-story[data-chapter] .core-story__canvas {
-    grid-column: 2;
-    grid-row: 1 / span 40;
-    position: sticky;
-    top: calc(var(--n-hdr-h) + 8px);
-    height: calc(100svh - var(--n-hdr-h) - 16px);
-    min-height: 200px;
-  }
+/* The stage: phones and short screens. The scene is pinned under the header, exactly as tall as the screen with the
+   browser's bars showing, and scrolling plays the story in it, as on a computer (the stage code in core-story.js).
+   One thing at a time: the step's words on top, the stack in the middle of its own room, one small card under it for
+   the work in hand, and four marks that fill as the story plays. Nothing slides under anything and nothing changes
+   size with the step: the words share one place and fade into each other, and the cards keep their tallest height.
+   Reduced motion keeps the tap version above, which scroll does not play. */
+.core-story__now, .core-story__svh { display: none; }
+@media (max-width:767px) and (prefers-reduced-motion:no-preference), (max-height:560px) and (prefers-reduced-motion:no-preference) {
+  .core-story { --core-stage-h: calc(100vh - var(--n-hdr-h)); height: calc(var(--core-stage-h) + max(var(--core-stage-h) * 2.5, 1100px)); }
+  @supports (height: 100svh) { .core-story { --core-stage-h: calc(100svh - var(--n-hdr-h)); } }
+  .core-story__svh { display: block; position: fixed; top: 0; left: 0; width: 0; height: 100svh; visibility: hidden; pointer-events: none; }   /* core-story.js reads the screen's height from it */
+  .core-story__scene { position: sticky; top: var(--n-hdr-h); height: var(--core-stage-h); min-height: 0; grid-template-rows: minmax(0, 1fr); }
+  .core-story__frame { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .core-story .core-story__intake,
+  .core-story .core-story__intake-insight,
   .core-story[data-chapter] .core-story__parts,
   .core-story .core-story__insight,
+  .core-story .core-story__systems,
   .core-story .core-story__result,
-  .core-story .core-story__footer { display: none !important; }
-  .core-story__chapter-eb { margin: 0 0 6px; color: var(--leaf); font-size: 12px; font-weight: 600; letter-spacing: .01em; }
-  .core-story__chapter-h { margin: 0 0 8px; color: var(--day-ink); font-size: clamp(22px, 3vw, 28px); font-weight: 560; line-height: 1.1; letter-spacing: -.035em; text-wrap: balance; }
-  .core-story__chapter-p { max-width: 40ch; margin: 0; color: #455249; font-size: 13.5px; line-height: 1.5; }
+  .core-story .core-story__quick-start,
+  .core-story .core-story__footer .core-story__intake-help,
+  .core-story .core-story__caption { display: none !important; }
+
+  /* The words: the headline, then each step's own, in one place. */
+  .core-story__intro, .core-story__chapter { grid-area: 1 / 1; padding: clamp(14px, 3.2vh, 30px) 0 14px; }
+  .core-story__chapter { display: grid; pointer-events: none; }
+  .core-story__chapter > div { grid-area: 1 / 1; }
+  .core-story__intro, .core-story__chapter > div {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(var(--core-words-y, 0px)) translateY(10px);
+    transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+  }
+  .core-story[data-chapter="0"] .core-story__intro,
+  .core-story[data-chapter="1"] .core-story__chapter > [data-ch="1"],
+  .core-story[data-chapter="2"] .core-story__chapter > [data-ch="2"],
+  .core-story[data-chapter="3"] .core-story__chapter > [data-ch="3"] {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(var(--core-words-y, 0px));
+    transition: opacity .32s ease .1s, transform .32s var(--n-ease) .1s, visibility 0s;
+  }
+  .core-story__intro h1, .core-story__chapter-h {
+    margin: 0 0 10px;
+    color: var(--day-ink);
+    font-size: clamp(27px, 8vw, 36px);
+    font-weight: 560;
+    line-height: 1.06;
+    letter-spacing: -.042em;
+    text-wrap: balance;
+  }
+  .core-story__intro p, .core-story__chapter-p { max-width: 36ch; margin: 0 0 14px; color: #455249; font-size: clamp(15px, 3.9vw, 17px); line-height: 1.45; }
+  .core-story__chapter-p { margin: 0; }
+  .core-story__chapter-eb { margin: 0 0 8px; color: var(--leaf); font-size: 13px; font-weight: 600; letter-spacing: .01em; }
+
+  /* The stack has the room between the words and the marks to itself; the cards lie over the foot of that room and
+     the stack is drawn above them. */
+  .core-story[data-chapter] .core-story__canvas { grid-area: 2 / 1; position: relative; width: 100%; height: 100%; min-height: 0; max-height: none; }
+  .core-story__now, .core-story .core-story__gate-case { grid-area: 2 / 1; align-self: end; position: relative; z-index: 2; margin: 0 0 8px; }
+  .core-story__now {
+    display: grid;
+    align-content: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border: 1px solid #d3dfd4;
+    border-radius: 10px;
+    background: #fefffc;
+    opacity: var(--core-now-opacity, 1);
+  }
+  .core-story__now p { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 9px; align-items: start; margin: 0; }
+  .core-story__now canvas { display: block; width: 16px; height: 16px; margin-top: 1px; }
+  .core-story__now-in { color: #203c2d; font-size: 13.5px; font-weight: 640; line-height: 1.3; letter-spacing: -.01em; }
+  .core-story__now-out { color: #4d6b58; font-size: 12.5px; line-height: 1.3; }
+  .core-story__now-out > * { grid-row: 1; transition: opacity .3s ease; }
+  .core-story__now-out span { grid-column: 2; }
+  .core-story__now-out canvas { grid-column: 1; }
+  .core-story__now-out canvas, .core-story__now-out [data-now="output"] { opacity: 0; }
+  .core-story__now-out [data-now="output"] { color: #1f5d3c; font-weight: 640; }
+  .core-story__now-out::before {   /* the role is at work */
+    content: "";
+    grid-area: 1 / 1;
+    place-self: center;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #6fa884;
+    animation: core-working 1.1s ease-in-out infinite alternate;
+    transition: opacity .3s ease;
+  }
+  .core-story__now[data-delivered] .core-story__now-out canvas,
+  .core-story__now[data-delivered] .core-story__now-out [data-now="output"] { opacity: 1; }
+  .core-story__now[data-delivered] .core-story__now-out [data-now="role"],
+  .core-story__now[data-delivered] .core-story__now-out::before { opacity: 0; }
+  .core-story .core-story__gate-case { padding: 12px 14px; opacity: var(--core-gate-opacity, 0); }
+  .core-story__gate-case h2 { margin: 4px 0 2px; font-size: 16px; }
+  .core-story__gate-case > p:not(.core-story__gate-source) { display: none; }
+  .core-story__gate-actions { margin-top: 4px; }
+
+  /* The four steps: slim marks that fill as the story plays. A tap on one scrolls to its step. */
+  .core-story__footer { grid-area: 3 / 1; width: 100%; padding: 0 0 6px; }
+  .core-story__tabs { gap: 5px; }
+  .core-story .core-story__footer .core-story__tabs button {
+    position: relative;
+    min-height: 30px;
+    padding: 0;
+    border: 0;
+    font-size: 0;
+  }
+  .core-story__tabs button::before, .core-story__tabs button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 3px;
+    margin-top: -1.5px;
+    border-radius: 2px;
+    background: #d9e2d9;
+  }
+  .core-story__tabs button::after { background: var(--leaf); transform: scaleX(var(--core-step-fill, 0)); transform-origin: 0 50%; }
+}
+@keyframes core-working { from { transform: scale(.55); } to { transform: scale(1); } }
+
+/* Held upright on a tall phone, the decision card has room for its reason, and for what happens once approved. */
+@media (max-width:767px) and (min-height:780px) and (orientation:portrait) and (prefers-reduced-motion:no-preference) {
+  .core-story__gate-case:not([data-approved]) > p[data-i="core.route.credit.check"],
+  .core-story__gate-case > .core-story__gate-result:not([hidden]) { display: block; }
+}
+/* Held upright on a short phone: tighter words, so the stack keeps its room. */
+@media (max-width:767px) and (max-height:620px) and (orientation:portrait) and (prefers-reduced-motion:no-preference) {
+  .core-story__intro, .core-story__chapter { padding: 12px 0 10px; }
+  .core-story__intro h1, .core-story__chapter-h { margin-bottom: 8px; font-size: clamp(25px, 7.4vw, 30px); }
+  .core-story__intro p, .core-story__chapter-p { font-size: 14px; line-height: 1.4; }
+  .core-story__intro p { margin-bottom: 10px; }
+  .core-story__now p { grid-area: 1 / 1; align-self: center; transition: opacity .3s ease; }   /* one line at a time: the work, then its result */
+  .core-story__now-out::before, .core-story__now-out [data-now="role"] { display: none; }
+  .core-story__now[data-delivered] .core-story__now-in, .core-story__now:not([data-delivered]) .core-story__now-out { opacity: 0; }
+}
+@media (max-width:389px) and (prefers-reduced-motion:no-preference) {
+  .core-story .core-story__gate-actions a:not([class]) { display: none; }   /* no room beside the button */
+}
+@media (max-width:359px) and (prefers-reduced-motion:no-preference) {
+  .core-story .core-story__links { gap: 8px 9px; font-size: 12.5px; }   /* the button and the link stay on one line */
+  .core-story .core-story__links .n-btn--primary { padding-inline: 9px; font-size: 13px; }
+}
+
+/* Held sideways (any short, wide screen): the words on the left, the stack on the right with its card under it; the
+   decision card stands with its step's words. Both columns are centred on the same line. */
+@media (max-height:560px) and (orientation:landscape) and (prefers-reduced-motion:no-preference) {
+  .core-story__frame { grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); grid-template-rows: minmax(0, 1fr) auto; column-gap: clamp(16px, 3.4vw, 40px); }
+  .core-story__intro, .core-story__chapter > div { align-self: center; padding: 6px 0; }
+  .core-story__chapter { padding: 0; }
+  .core-story__intro h1, .core-story__chapter-h { margin-bottom: 8px; font-size: clamp(22px, 3.4vw, 31px); }
+  .core-story__intro p, .core-story__chapter-p { font-size: 13.5px; }
+  .core-story__intro p { margin-bottom: 10px; }
+  .core-story__chapter-eb { margin-bottom: 6px; font-size: 12px; }
+  .core-story[data-chapter] .core-story__canvas, .core-story__now { grid-area: 1 / 2; }
+  .core-story__chapter > [data-ch="2"] { --core-words-y: calc((var(--core-gate-h, 0px) + 12px) / -2); }
+  .core-story .core-story__gate-case { grid-area: 1 / 1; align-self: center; margin: 0; transform: translateY(calc((var(--core-ch2-h, 0px) + 12px) / 2)); }
+  .core-story__footer { grid-area: 2 / 1 / 3 / 3; padding-bottom: 2px; }
+  .core-story .core-story__footer .core-story__tabs button { min-height: 24px; }
+}
+@media (max-height:400px) and (orientation:landscape) and (prefers-reduced-motion:no-preference) {
+  .core-story__chapter > [data-ch="2"] .core-story__chapter-p { display: none; }   /* the decision card says it */
+  .core-story__intro p, .core-story__chapter-p { font-size: 12.5px; line-height: 1.4; }
+  .core-story__links .n-btn--primary { min-height: 40px; }
+  .core-story .core-story__gate-case { padding: 9px 12px; }
+  .core-story__gate-actions a, .core-story__gate-actions .n-btn { min-height: 40px; }
+  .core-story__now p { grid-area: 1 / 1; align-self: center; transition: opacity .3s ease; }   /* one line at a time: the work, then its result */
+  .core-story__now-out::before, .core-story__now-out [data-now="role"] { display: none; }
+  .core-story__now[data-delivered] .core-story__now-in, .core-story__now:not([data-delivered]) .core-story__now-out { opacity: 0; }
+}
+@media (max-height:340px) and (orientation:landscape) and (prefers-reduced-motion:no-preference) {
+  .core-story .core-story__gate-case .core-story__gate-source { display: none; }   /* the smallest screens: the question and its button */
+  .core-story__gate-case h2 { margin-top: 0; font-size: 15px; }
+}
+@media (max-height:560px) and (max-width:700px) and (orientation:landscape) and (prefers-reduced-motion:no-preference) {
+  .core-story .core-story__gate-actions a:not([class]) { display: none; }
 }

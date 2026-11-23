@@ -9,7 +9,11 @@ html:not(:lang(az)) .n-film-lang { display: none; }
 .n-film__copy { max-width: 540px; margin-bottom: 0; }
 .n-film__copy .n-btns { margin-top: 26px; }
 .n-film__frame { position: relative; width: min(100%, 360px, calc((100svh - 128px) * 9 / 16)); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 26px; overflow: hidden; background: #e9ece6; box-shadow: 0 30px 64px -30px rgba(23, 48, 36, .5), 0 0 0 1px rgba(23, 36, 29, .07); isolation: isolate; cursor: pointer; }
-.n-film__frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* The poster is the film's first frame. It is the frame's own background, so the box is never empty while the file
+   arrives, and the video fades in over the same picture once its first frame is drawn (is-live, set by films.js). */
+.n-film__frame { background: #e9ece6 url(film/nowai-desk-24s-start.jpg) center / cover no-repeat; }
+.n-film__frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .3s ease; }
+.n-film__frame.is-live video { opacity: 1; }
 .n-film__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(23, 36, 29, .12); pointer-events: none; }
 .n-film__bar i { display: block; height: 100%; background: var(--n-mint); transform: scaleX(0); transform-origin: 0 50%; }
 .n-film__ctl { position: absolute; left: 14px; right: 14px; bottom: 18px; display: flex; gap: 8px; align-items: center; }
@@ -61,7 +65,7 @@ html:not(:lang(az)) .n-film-lang { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .n-f3__tx > summary::before { transition: none; }
-  .n-film__btn, .n-filmbox__icon { transition: none; }
+  .n-film__btn, .n-filmbox__icon, .n-film__frame video { transition: none; }
 }
 /* On a phone the film is small: a shorter label on one line, so the picture stays visible. */
 @media (max-width: 600px) {

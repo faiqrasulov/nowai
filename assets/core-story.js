@@ -203,11 +203,15 @@
   let gateApproved = false;
   let openGateOnCompact = false;
   const mobile = matchMedia('(max-width: 767px)');
-  // Phones held upright: scrolling plays the stack's four steps in place (scrubProgress; core-story.css).
-  const phoneScrub = matchMedia('(max-width: 767px) and (min-height: 561px) and (prefers-reduced-motion: no-preference)');
-  // Short screens held sideways: the steps scroll past in the left column, the stack plays beside them (sideProgress).
-  const phoneSide = matchMedia('(max-height: 560px) and (orientation: landscape) and (prefers-reduced-motion: no-preference)');
-  const chapterHeads = [...story.querySelectorAll('.core-story__chapter > [data-ch]')].map(d => d.querySelector('.core-story__chapter-h') || d);
+  // Phones and short screens: the scene is one pinned stage as tall as the screen, and scrolling plays the story in it
+  // (the "stage" blocks at the end of core-story.css). Reduced motion keeps the tap version, which scroll does not play.
+  const stageQuery = matchMedia('(max-width: 767px) and (prefers-reduced-motion: no-preference), (max-height: 560px) and (prefers-reduced-motion: no-preference)');
+  const staged = () => stageQuery.matches;
+  const nowCard = story.querySelector('[data-core-now]');
+  const nowFields = Object.fromEntries(Array.from(nowCard.querySelectorAll('[data-now]'), el => [el.dataset.now, el]));
+  const nowIcons = Object.fromEntries(Array.from(nowCard.querySelectorAll('[data-now-icon]'), el => [el.dataset.nowIcon, el]));
+  const sourceMarks = { invoice:'eq', credit:'wa' };
+  let nowShown = '';
   output.hidden = true;
 
   const sceneScenario = () => selected === 2 || (selected === 3 && gateApproved) ? 'credit' : scenarioId;
@@ -222,8 +226,9 @@
       el.toggleAttribute('data-active', active);
       if (active) el.append(output);
     });
+    nowCard.toggleAttribute('data-delivered', ready);   // the stage's own card: the role at work, then what it prepared
     // Phones: before "What comes out" an arrival is the lit chip alone; a card there pushed the page under it down.
-    output.hidden = !ready || (compactLayout.matches && selected !== 3) || phoneScrub.matches || phoneSide.matches;
+    output.hidden = !ready || (compactLayout.matches && selected !== 3);
     story.toggleAttribute('data-output-shown', !output.hidden);
   }
 
@@ -241,13 +246,29 @@
     output.querySelector('[data-output="meta"]').textContent = scenarioText('meta');
     outputIcon.width = outputIcon.height = 36;
     mark(outputIcon.getContext('2d'), destination, 0, 0, 36);
+    fillNow(sceneScenario());
+    if (nowShown !== sceneScenario()) {   // a new piece of work arrives gently, not as a cut
+      if (nowShown && staged() && nowCard.animate) nowCard.querySelectorAll('p').forEach(row => row.animate([{ opacity:0, transform:'translateY(5px)' }, { transform:'none' }], { duration:380, easing:'ease-out' }));
+      nowShown = sceneScenario();
+    }
     caption.dataset.i = selected === 2 && !gateApproved ? 'core.gate.caption'
       : selected >= 2 ? 'core.route.' + sceneScenario() + '.meta' : 'core.caption' + selected;
     caption.textContent = label(caption.dataset.i);
   }
 
+  function fillNow(id) {
+    const { role, destination } = routes[id];
+    nowFields.entry.textContent = scenarioText('entry', id);
+    nowFields.role.textContent = label('core.assigned') + ' · ' + label('s.page.' + role);
+    nowFields.output.textContent = scenarioText('output', id) + ' → ' + label(destinationNames[destination]);
+    for (const [key, name] of [['in', sourceMarks[id] || id], ['out', destination]]) {
+      nowIcons[key].width = nowIcons[key].height = 36;
+      mark(nowIcons[key].getContext('2d'), name, 0, 0, 36);
+    }
+  }
+
   function updateIntake() {
-    const next = selected < 2 || phoneScrub.matches || phoneSide.matches ? intakeHover || intakeFocus || intakePinned || autoSource : '';
+    const next = selected < 2 ? intakeHover || intakeFocus || intakePinned || autoSource : '';
     const changed = next !== routeSource;
     if (next && next !== routeSource) {
       scenarioId = next;
@@ -308,7 +329,7 @@
   }
 
   function cancelAutomatic() {
-    if (interacted) return;
+    if (interacted || staged()) return;   // the stage has no inputs to choose: its examples keep changing
     interacted = true;
     clearTimeout(autoTimer);
     autoSource = '';
@@ -323,7 +344,7 @@
       autoIndex = (autoIndex + 1) % intakeButtons.length;
       updateIntake();
     }
-    autoTimer = setTimeout(autoRoute, 4000);
+    autoTimer = setTimeout(autoRoute, staged() ? 5200 : 4000);   // the stage shows the result in words: time to read it
   }
 
   story.addEventListener('pointermove', event => { if (event.pointerType === 'mouse') cancelAutomatic(); }, { once: true });
@@ -506,7 +527,30 @@
 
 
 
+  // The stage is as tall as the screen with the browser's bars showing. It is set once for a width: when a phone's
+  // toolbar slides away the screen grows a little and the stage stays as it is. Turning the phone sets it again and
+  // keeps the reader at the same moment of the story.
+  const svhProbe = story.appendChild(Object.assign(document.createElement('i'), { className:'core-story__svh' }));
+  let stageWidth = 0, stageHeight = 0, stageDirty = true, snap = true, storyAt = 0;
+  function lockStage() {
+    if (!staged()) {
+      if (stageWidth) { story.style.removeProperty('--core-stage-h'); stageWidth = stageHeight = 0; snap = true; }
+      return;
+    }
+    const w = innerWidth;
+    const h = Math.round(Math.min(svhProbe.offsetHeight || Infinity, innerHeight) - header.offsetHeight);
+    if (w === stageWidth && h >= stageHeight && h - stageHeight <= 140) return;
+    const turned = stageWidth && w !== stageWidth && storyAt > 0 && storyAt < 1;
+    stageWidth = w;
+    stageHeight = h;
+    story.style.setProperty('--core-stage-h', h + 'px');
+    snap = true;
+    if (turned) scrollTo({ top: scrollY + story.getBoundingClientRect().top - header.offsetHeight + storyAt * (story.offsetHeight - scene.offsetHeight), behavior:'instant' });
+  }
+
   function remeasure() {
+    lockStage();
+    stageDirty = true;
     const box = canvas.getBoundingClientRect();
     const nextRatio = Math.min(devicePixelRatio || 1, 2);
     if (width !== box.width || height !== box.height || ratio !== nextRatio) {
@@ -535,13 +579,34 @@
     }
     // Phones: the example card keeps the height of its tallest example, so the stack and everything under it stay
     // where they are while the examples change by themselves.
-    if (compactLayout.matches || reduce.matches) {
+    nowCard.style.minHeight = gateCase.style.minHeight = '';
+    if (staged()) {
+      // The stage's cards keep the height of their tallest words, so nothing under the stack changes size.
+      let tallest = 0;
+      for (const id of Object.keys(routes)) { fillNow(id); tallest = Math.max(tallest, nowCard.offsetHeight); }
+      fillNow(sceneScenario());
+      if (tallest) nowCard.style.minHeight = tallest + 'px';
+      const wasHidden = gateCase.hidden, resultHidden = gateResult.hidden, approved = 'approved' in gateCase.dataset;
+      gateCase.hidden = false;
+      tallest = 0;
+      for (const done of [false, true]) {
+        gateResult.hidden = !done;
+        if (done) gateCase.dataset.approved = ''; else delete gateCase.dataset.approved;
+        tallest = Math.max(tallest, gateCase.offsetHeight);
+      }
+      gateResult.hidden = resultHidden;
+      if (approved) gateCase.dataset.approved = ''; else delete gateCase.dataset.approved;
+      gateCase.style.minHeight = tallest + 'px';
+      gateCase.hidden = wasHidden;
+      story.style.setProperty('--core-gate-h', tallest + 'px');   // sideways, the decision card and its step's words are centred as one
+      story.style.setProperty('--core-ch2-h', story.querySelector('.core-story__chapter > [data-ch="2"]').offsetHeight + 'px');
+      intakeInsight.style.minHeight = '';
+    } else if (compactLayout.matches || reduce.matches) {
       const keep = intakeInsight.style.minHeight, wasHidden = intakeInsight.hidden, traceHidden = orderTrace.hidden;
       intakeInsight.style.minHeight = '';
       intakeInsight.hidden = false;
       let tallest = 0;
       const ids = intakeButtons.map(b => b.dataset.coreIntake);
-      if (phoneScrub.matches || phoneSide.matches) ids.push('credit');   // scrolled to the decision, the card shows the credit note
       for (const id of ids) {
         const { role, destination } = routes[id];
         intakeFields.entry.textContent = scenarioText('entry', id);
@@ -682,7 +747,8 @@
   }
 
   function drawInputs(z, clock, spread, opacity) {
-    if (opacity <= .01 || phoneSide.matches) return;   // sideways: the inputs sit in the other column
+    if (opacity <= .01) return;
+    if (camera.stage) { stageInput(z, clock, opacity); return; }
     const compact = camera.compact;
     const canvasBox = canvas.getBoundingClientRect();
     for (const [i, button] of intakeButtons.entries()) {
@@ -724,6 +790,7 @@
   function drawConnections(z, opacity, clock, delivery) {
     if (opacity <= .01) return;
     const route = routeSource ? (reduce.matches ? 1 : ease(1950,routeDuration(),clock-routeStart)) : 0;
+    if (camera.stage) { stageOutput((delivery ? opacity : route) * stageCard(progress), clock, delivery ? -1 : route); return; }
     if (camera.compact) {
       if (route) {
         const port = project(160, 50, z);
@@ -952,8 +1019,10 @@
     return true;
   }
 
+  let openBy = 1;   // the stage opens the stack a little less far, so the open stack can be drawn larger
+
   function layersAt(separate) {
-    return dimensions.map(layer => ({ ...layer, z: lerp(layer.closed,layer.open,separate) }));
+    return dimensions.map(layer => ({ ...layer, z: lerp(layer.closed,layer.open,separate * openBy) }));
   }
 
   function stackAt(cam, drawing, close, k, buttonWeight) {   // the stack at size k, risen just enough above the words below
@@ -1137,24 +1206,166 @@
       ctx.restore();
     }
     if (!story.hasAttribute('data-output-ready')) deliveryCard(outputFade);
+    if (camera.stage) stageNotes(drawing, coreZ);
   }
 
-  // Phones held upright: the stack plays its four steps while the page carries it up to the header, and back in reverse.
-  function scrubRun() { return Math.max(1, canvas.getBoundingClientRect().top + scrollY - header.offsetHeight); }
-  function scrubProgress() { return clamp(scrollY / scrubRun()); }
-  // Short screens held sideways: each step holds while its headline is in the middle of the screen; the stack moves on
-  // as the next one comes up. The marks are the example card and the three step headlines.
-  function sideProgress() {
-    const P = [0, .355, .69, .98], hdr = header.offsetHeight, line = hdr + (innerHeight - hdr) / 2;
-    const mid = el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; };
-    const marks = [mid(intakeInsight), ...chapterHeads.map(mid)];
-    let p = 0;
-    for (let i = 0; i < 3; i++) {
-      if (marks[i + 1] <= line) p = P[i + 1];
-      else if (marks[i] < line) p = P[i] + (P[i + 1] - P[i]) * (line - marks[i]) / Math.max(1, marks[i + 1] - marks[i]);
-    }
-    return p;
+  // The stage (phones and short screens; the "stage" blocks at the end of core-story.css). The scene is pinned under the
+  // header, as tall as the screen, and the scroll plays the story in it, back in reverse on the way up. Each step holds
+  // for a stretch of the scroll, then plays on to the next, so stopping anywhere mostly shows a finished picture.
+  const STAGE_RUN = [0, .27, .37, .63, .73, .95, 1];     // how far through the pinned scroll ...
+  const STAGE_AT = [0, .355, .355, .69, .69, .98, 1];    // ... and where the story is by then
+  const STAGE_STOPS = [0, .32, .68, 1];                  // where a tap on a step scrolls to
+  const STEP_FROM = [0, .21, .49, .765, 1];              // where each step begins: its mark fills as its step plays
+  const STAGE_PACE = .7;      // at most this much of the story a second: a hard flick still plays every step, about half a second each
+  const STAGE_OPEN = .7;      // the open stack's layers stand this much closer than on a computer
+  const STAGE_SIDE = 20;      // room beside the stack for the incoming-work line
+  const STAGE_MAX = 1;
+  const NAME_FONT = '600 11px Onest, sans-serif';
+  const stageCard = p => Math.max(1 - ease(.10,.19,p), ease(.80,.90,p));   // the work card: the first step, and the result
+  const stageGate = p => ease(.54,.61,p) * (1 - ease(.70,.765,p));         // the decision card
+  // The room a card needs under the stack: made before the card fades in and given back after it has gone.
+  const stageFoot = (p, cards) => Math.max(cards[0] * Math.max(1 - ease(.19,.27,p), ease(.72,.80,p)), cards[1] * ease(.45,.55,p) * (1 - ease(.765,.81,p)));
+  const stageNames = p => ease(.22,.34,p) * (1 - ease(.42,.50,p));         // the layers' names beside the open stack
+  let stage = null;
+
+  function stageProgress(at) {
+    let i = 0;
+    while (i < STAGE_RUN.length - 2 && at > STAGE_RUN[i + 1]) i++;
+    return lerp(STAGE_AT[i], STAGE_AT[i + 1], clamp((at - STAGE_RUN[i]) / (STAGE_RUN[i + 1] - STAGE_RUN[i])));
   }
+
+  // Where the scroll comes to rest between two steps, the story plays on to the nearer one by itself (the page does not
+  // move), so the stage never rests on a half-made picture. When the scroll goes on, the story waits for it or eases back
+  // to it: it never jumps and never runs backwards against the finger.
+  const STAGE_RESTS = [0, .355, .69, .98];
+  let rest = null, restAt = -1, restSince = 0, touching = false;
+  for (const [type, down] of [['touchstart', true], ['touchend', false], ['touchcancel', false]]) window.addEventListener(type, () => { touching = down; }, { passive: true });
+  function stageRest(at, now) {
+    if (Math.abs(at - restAt) > .002) { restAt = at; restSince = now; }   // still moving
+    if (storyAt <= 0 || storyAt >= 1) rest = null;
+    else if (!touching && now - restSince > 160 && (!rest || rest.from !== at)) {
+      rest = { from:at, to:STAGE_RESTS.reduce((best, stop) => Math.abs(stop - at) < Math.abs(best - at) ? stop : best) };
+    }
+    if (!rest) return at;
+    const gone = at - rest.from, lead = rest.to - rest.from;
+    if (gone * lead > 0) {   // scrolling on towards the step the story is already at: it waits there
+      if (Math.abs(gone) < Math.abs(lead)) return rest.to;
+      rest = null;
+      return at;
+    }
+    const left = Math.max(0, 1 - Math.abs(gone) / .12);   // scrolling away from it: the story eases back to the scroll
+    if (!left) rest = null;
+    return at + lead * left;
+  }
+
+  // The stack's size and place for every moment of the story, worked out once per layout: as large as the room allows
+  // above the card that shows under it, and beside the layers' names while they show. Smoothed like the computer's
+  // plan, so the stack glides between sizes and never touches a card, the words above it or the screen's edge.
+  function planStage() {
+    stageDirty = false;
+    openBy = STAGE_OPEN;
+    const cb = canvas.getBoundingClientRect();
+    const under = el => {   // how much of the canvas's foot a card covers (none where the card sits in the other column)
+      const wasHidden = el.hidden;
+      el.hidden = false;
+      const box = el.getBoundingClientRect();
+      el.hidden = wasHidden;
+      return box.width && box.left < cb.right - 1 && box.right > cb.left + 1 ? Math.max(0, cb.bottom - box.top) : 0;
+    };
+    const cards = [under(nowCard), under(gateCase)];
+    ctx.font = NAME_FONT;
+    const names = Math.max(...dimensions.map(layer => ctx.measureText(label('core.part.' + layer.id + '.title')).width)) + 26;
+    const fits = [];
+    const rooms = [];
+    for (let i = 0; i <= PLAN_STEPS; i++) {
+      const p = i / PLAN_STEPS;
+      const { camera:cam, close, separate } = cameraAt(p, true);
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (const layer of layersAt(separate)) {
+        const lid = layer.id === 'intake';
+        if (lid && close >= .55) continue;   // by then the lid has all but faded
+        const z = layer.z + (lid ? close * 100 : 0);
+        for (const [x, y] of outline(layer.x, layer.y)) {
+          const X = x * cam.c - y * cam.s;
+          const Y = (x * cam.s + y * cam.c) * cam.tilt - z;
+          x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y + layer.depth);
+        }
+      }
+      const foot = stageFoot(p, cards);
+      const room = [STAGE_SIDE, 8, width - STAGE_SIDE - names * stageNames(p), height - foot - lerp(8, 22, Math.min(1, foot / 40))];
+      fits.push(Math.max(.1, Math.min(STAGE_MAX, (room[2] - room[0]) / (x1 - x0), (room[3] - room[1]) / (y1 - y0))));
+      rooms.push([(room[0] + room[2]) / 2, (room[1] + room[3]) / 2, (x0 + x1) / 2, (y0 + y1) / 2]);
+    }
+    const near = (list, i) => list.slice(Math.max(0, i - PLAN_REACH), i + PLAN_REACH + 1);
+    const mean = list => list.reduce((sum, value) => sum + value, 0) / list.length;
+    const floor = fits.map((_, i) => Math.min(...near(fits, i)));
+    const sizes = floor.map((_, i) => mean(near(floor, i)));
+    const cx = rooms.map(([x, , mx], i) => x - sizes[i] * mx);
+    const cy = rooms.map(([, y, , my], i) => y - sizes[i] * my);
+    stage = { cards, names, sizes, cx:cx.map((_, i) => mean(near(cx, i))), cy:cy.map((_, i) => mean(near(cy, i))) };
+  }
+
+  function stageCamera(p) {
+    if (stageDirty || !stage) planStage();
+    const x = clamp(p) * PLAN_STEPS;
+    const i = Math.min(PLAN_STEPS - 1, Math.floor(x));
+    const at = list => lerp(list[i], list[i + 1], x - i);
+    return { ...cameraAt(p, true).camera, stage:true, scale:at(stage.sizes), cx:at(stage.cx), cy:at(stage.cy) };
+  }
+
+  // The stage's lines. Work comes up from its card into the stack's side, and the result drops back into the card.
+  function stageInput(z, clock, opacity) {
+    if (!routeSource || !stage.cards[0]) return;
+    const i = Math.max(0, intakeButtons.findIndex(button => button.dataset.coreIntake === routeSource));
+    const port = project(-180, -76 + i * 24, z);
+    const points = [[13, height - stage.cards[0]], [13, port[1] + 12], [25, port[1]], port];
+    ctx.save();
+    ctx.globalAlpha = opacity;
+    line(points, '#50936d', 1.5);
+    dot(...points[0], 2.6, '#267a50');
+    if (reduce.matches) dot(...port, 3, '#1e8050');
+    else pulseAlong(points, clamp(((Math.max(0, clock - routeStart) + 8) % 1650) / 1000), 3.6, '#1e8050');
+    ctx.restore();
+  }
+
+  function stageOutput(opacity, clock, route) {
+    if (opacity <= .01 || !stage.cards[0]) return;
+    const from = project(140, 123, -2);
+    const points = [from, [from[0], height - stage.cards[0]]];
+    ctx.save();
+    ctx.globalAlpha = opacity;
+    line(points, '#448962', 1.45);
+    dot(...points[1], 2.6, '#306748');
+    if (!reduce.matches) pulseAlong(points, route < 0 ? clock / 1500 % 1 : route, 3, '#306748');
+    ctx.restore();
+  }
+
+  function stageNotes(drawing, coreZ) {
+    const names = stageNames(progress);
+    if (names > .01) {   // the open stack, layer by layer
+      const x = width - stage.names + 20;
+      ctx.save();
+      ctx.globalAlpha = names;
+      for (const layer of drawing) {
+        const anchor = project(layer.x / 2, -layer.y / 2 + 13, layer.z);
+        line([anchor, [x - 6, anchor[1]]], '#95ab9c', .8);
+        dot(...anchor, 1.7, '#688876');
+        textAt(label('core.part.' + layer.id + '.title'), x, anchor[1], 11, '#263a2f', 600);
+      }
+      ctx.restore();
+    }
+    const gate = stageGate(progress);
+    if (gate > .01 && stage.cards[1]) {   // the held work, down to the decision under the stack
+      const anchor = project(117, 49, coreZ);
+      const color = gateApproved ? '#448962' : '#ac7d41';
+      ctx.save();
+      ctx.globalAlpha = gate;
+      line([anchor, [anchor[0], height - stage.cards[1]]], color, 1.2);
+      dot(...anchor, 2.2, color);
+      ctx.restore();
+    }
+  }
+
 
   function cameraAt(p, compact) {   // how far the stack has opened, closed and sent its result at progress p, and the camera on it
     const small = width < 770;
@@ -1200,9 +1411,19 @@
       progress = paintedCompact !== false || Math.abs(target - progress) < .001
         ? target
         : lerp(progress, target, 1 - Math.exp(-Math.min(elapsed, 50) / 45));
-    } else if (phoneSide.matches) progress = sideProgress();
-    else if (phoneScrub.matches) progress = scrubProgress();
-    else {
+    } else if (staged()) {
+      storyAt = clamp((header.offsetHeight - story.getBoundingClientRect().top) / Math.max(1, story.offsetHeight - scene.offsetHeight));
+      if (snap) rest = null;
+      const target = stageRest(stageProgress(storyAt), now);
+      // A flick never cuts: the story follows the finger closely and is never played faster than STAGE_PACE.
+      if (snap || paintedCompact !== true || Math.abs(target - progress) < .0005) progress = target;
+      else {
+        const dt = Math.min(elapsed, 50);
+        const move = (target - progress) * (1 - Math.exp(-dt / 70));
+        progress += clamp(move, -STAGE_PACE * dt / 1000, STAGE_PACE * dt / 1000);
+      }
+      snap = false;
+    } else {
       progress = reduce.matches ? manual : lerp(manualFrom, manual, ease(0, 670, now - manualStart));
     }
     const step = progress > .765 ? 3 : progress > .49 ? 2 : progress > .21 ? 1 : 0;
@@ -1225,8 +1446,9 @@
     const spread = ease(.05,.35,progress);
     const close = ease(.41,.66,progress);
     const dispatch = ease(.77,.96,progress);
-    const partsOpacity = compact ? Number(step === 1) : ease(.20,.35,progress) * (1 - ease(.43,.56,progress));
-    const intakeOpacity = compact ? Number(step < 2) : 1 - ease(.40,.53,progress);
+    const onStage = compact && staged();
+    const partsOpacity = onStage ? 0 : compact ? Number(step === 1) : ease(.20,.35,progress) * (1 - ease(.43,.56,progress));
+    const intakeOpacity = onStage ? stageCard(progress) * Number(step === 0) : compact ? Number(step < 2) : 1 - ease(.40,.53,progress);
     const destinationsOpacity = compact ? 1 - spread : 1 - ease(.09,.20,progress);
     if (progress !== paintedProgress || compact !== paintedCompact) {
       // The text, controls and connector lines follow the same timeline as the stack.
@@ -1240,10 +1462,15 @@
       const card = 1 - ease(.12,.20,progress);
       scene.style.setProperty('--core-card-opacity', card);
       scene.style.setProperty('--core-card-visibility', card > .01 ? 'visible' : 'hidden');
+      if (onStage) {
+        scene.style.setProperty('--core-now-opacity', stageCard(progress));
+        scene.style.setProperty('--core-gate-opacity', stageGate(progress));
+        tabs.forEach((tab, i) => tab.style.setProperty('--core-step-fill', clamp((progress - STEP_FROM[i]) / (STEP_FROM[i + 1] - STEP_FROM[i]))));
+      }
       quickStart.inert = compact || quickAt(progress) < .3;
       gateCase.hidden = compact && step !== 2;
       gateCase.inert = step !== 2;
-      intro.inert = !compact && step > 0;
+      intro.inert = (!compact || onStage) && step > 0;
       rail.inert = step !== 1;
       intake.inert = step > 1;
       paintedProgress = progress;
@@ -1259,10 +1486,11 @@
     ctx.clearRect(0, 0, width, height);
     const small = width < 770;
     const sceneScale = small ? 1 : Math.min(width / 1216, height / 620);
-    translation = { x:(width - 1216*sceneScale)/2, y:height - 620*sceneScale, scale:sceneScale };
+    translation = onStage ? { x:0, y:0, scale:1 } : { x:(width - 1216*sceneScale)/2, y:height - 620*sceneScale, scale:sceneScale };
     ctx.translate(translation.x,translation.y);
     ctx.scale(translation.scale,translation.scale);
-    camera = cameraAt(progress, compact).camera;
+    openBy = onStage ? STAGE_OPEN : 1;
+    camera = onStage ? stageCamera(progress) : cameraAt(progress, compact).camera;
     drawSlabs(now, spread, close, dispatch, intakeOpacity, partsOpacity, destinationsOpacity);
     if (!reduce.matches) schedule();
   }
@@ -1273,7 +1501,11 @@
 
   tabs.forEach((tab, i) => tab.addEventListener('click', () => {
     const positions = [0, .355, .69, .98];
-    if (phoneScrub.matches) { scrollTo({ top: positions[i] * scrubRun(), behavior: 'smooth' }); return; }   // a step is a place on the page
+    if (staged()) {   // a step is a place on the page
+      const start = scrollY + story.getBoundingClientRect().top - header.offsetHeight;
+      scrollTo({ top: start + STAGE_STOPS[i] * (story.offsetHeight - scene.offsetHeight), behavior: 'smooth' });
+      return;
+    }
     manualFrom = progress;
     manual = positions[i];
     manualStart = performance.now();
@@ -1286,6 +1518,17 @@
   }));
 
   window.addEventListener('resize', remeasure, { passive: true });
+  stageQuery.addEventListener('change', () => {
+    if (staged() && interacted) {   // a window made small after a choice with the mouse: the stage's examples change by themselves again
+      interacted = false;
+      intakeHover = intakeFocus = intakePinned = '';
+      clearTimeout(autoTimer);
+      autoRoute();
+    }
+    setScenarioCopy();
+    updateIntake();
+    remeasure();
+  });
   reduce.addEventListener('change', () => { cancelAutomatic(); if (routeSource) { clearTimeout(routeTimer); showDestination(true); } remeasure(); });
   if ('ResizeObserver' in window) {
     const observer = new ResizeObserver(remeasure);
@@ -1297,7 +1540,7 @@
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;
-      if (visible) schedule();
+      if (visible) { snap = true; schedule(); }   // back on screen: the stage shows this place in the story at once
     }, { rootMargin: '120px' });
     observer.observe(story);
   }

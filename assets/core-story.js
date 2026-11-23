@@ -203,9 +203,8 @@
   let gateApproved = false;
   let openGateOnCompact = false;
   const mobile = matchMedia('(max-width: 767px)');
-  // Phones held upright: the stack stays on screen while the four steps scroll past below it (core-story.css).
-  const phoneStory = matchMedia('(max-width: 767px) and (min-height: 561px) and (prefers-reduced-motion: no-preference)');
-  const chapterHeads = [...story.querySelectorAll('.core-story__chapter > [data-ch]')];
+  // Phones held upright: scrolling plays the stack's four steps in place (scrubProgress; core-story.css).
+  const phoneScrub = matchMedia('(max-width: 767px) and (min-height: 561px) and (prefers-reduced-motion: no-preference)');
   output.hidden = true;
 
   const sceneScenario = () => selected === 2 || (selected === 3 && gateApproved) ? 'credit' : scenarioId;
@@ -221,7 +220,7 @@
       if (active) el.append(output);
     });
     // Phones: before "What comes out" an arrival is the lit chip alone; a card there pushed the page under it down.
-    output.hidden = !ready || (compactLayout.matches && selected !== 3);
+    output.hidden = !ready || (compactLayout.matches && selected !== 3) || phoneScrub.matches;
     story.toggleAttribute('data-output-shown', !output.hidden);
   }
 
@@ -245,7 +244,7 @@
   }
 
   function updateIntake() {
-    const next = selected < 2 ? intakeHover || intakeFocus || intakePinned || autoSource : '';
+    const next = selected < 2 || phoneScrub.matches ? intakeHover || intakeFocus || intakePinned || autoSource : '';
     const changed = next !== routeSource;
     if (next && next !== routeSource) {
       scenarioId = next;
@@ -538,7 +537,9 @@
       intakeInsight.style.minHeight = '';
       intakeInsight.hidden = false;
       let tallest = 0;
-      for (const id of intakeButtons.map(b => b.dataset.coreIntake)) {
+      const ids = intakeButtons.map(b => b.dataset.coreIntake);
+      if (phoneScrub.matches) ids.push('credit');   // scrolled to the decision, the card shows the credit note
+      for (const id of ids) {
         const { role, destination } = routes[id];
         intakeFields.entry.textContent = scenarioText('entry', id);
         intakeFields.check.textContent = scenarioText('check', id);
@@ -678,7 +679,7 @@
   }
 
   function drawInputs(z, clock, spread, opacity) {
-    if (opacity <= .01 || phoneStory.matches) return;   // phones held upright: the inputs sit under the stack, not above it
+    if (opacity <= .01) return;
     const compact = camera.compact;
     const canvasBox = canvas.getBoundingClientRect();
     for (const [i, button] of intakeButtons.entries()) {
@@ -1135,23 +1136,9 @@
     if (!story.hasAttribute('data-output-ready')) deliveryCard(outputFade);
   }
 
-  // Phones held upright: each step holds while its own text passes the reading line under the stack; the gap before
-  // the next step's headline moves the stack on. The reader's scroll drives it, so nothing moves while they read.
-  function phoneProgress() {
-    const P = [0, .355, .69, .98];
-    const top = canvas.getBoundingClientRect().bottom;
-    const line = top + (innerHeight - top) * .45;
-    const ends = [intakeInsight.getBoundingClientRect().bottom,
-      Math.max(rail.getBoundingClientRect().bottom, insight.getBoundingClientRect().bottom),
-      gateCase.getBoundingClientRect().bottom];
-    let p = 0;
-    chapterHeads.forEach((head, i) => {
-      const start = head.getBoundingClientRect().top;
-      if (start <= line) p = P[i + 1];
-      else if (ends[i] < line) p = P[i] + (P[i + 1] - P[i]) * (line - ends[i]) / Math.max(1, start - ends[i]);
-    });
-    return p;
-  }
+  // Phones held upright: the stack plays its four steps while the page carries it up to the header, and back in reverse.
+  function scrubRun() { return Math.max(1, canvas.getBoundingClientRect().top + scrollY - header.offsetHeight); }
+  function scrubProgress() { return clamp(scrollY / scrubRun()); }
 
   function cameraAt(p, compact) {   // how far the stack has opened, closed and sent its result at progress p, and the camera on it
     const small = width < 770;
@@ -1197,7 +1184,7 @@
       progress = paintedCompact !== false || Math.abs(target - progress) < .001
         ? target
         : lerp(progress, target, 1 - Math.exp(-Math.min(elapsed, 50) / 45));
-    } else if (phoneStory.matches) progress = phoneProgress();
+    } else if (phoneScrub.matches) progress = scrubProgress();
     else {
       progress = reduce.matches ? manual : lerp(manualFrom, manual, ease(0, 670, now - manualStart));
     }
@@ -1269,6 +1256,7 @@
 
   tabs.forEach((tab, i) => tab.addEventListener('click', () => {
     const positions = [0, .355, .69, .98];
+    if (phoneScrub.matches) { scrollTo({ top: positions[i] * scrubRun(), behavior: 'smooth' }); return; }   // a step is a place on the page
     manualFrom = progress;
     manual = positions[i];
     manualStart = performance.now();

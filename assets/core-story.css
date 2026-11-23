@@ -529,48 +529,16 @@
   .core-story__chapter-p { display: none; }   /* short screens: the chapter's name and headline only */
 }
 
-/* Phones held upright: the stack stays on screen under the header while the four steps scroll past below it, and
-   where the steps are says how far the stack has come (phoneProgress in core-story.js). Nothing here changes size
-   with the step, so the page never moves by itself. */
+/* Phones held upright: scrolling plays the stack's four steps in place, and back in reverse (scrubProgress in
+   core-story.js). Nothing here changes size with the step, so the page never moves by itself: the stack keeps one
+   height, the incoming work stays, and the slice list, decision card and result card stay with the tap version. */
 @media (max-width:767px) and (min-height:561px) and (prefers-reduced-motion:no-preference) {
-  .core-story__frame { padding-bottom: 16svh; }
-  .core-story__canvas,
-  .core-story:not([data-chapter="1"]) .core-story__canvas {
-    order: 1;
-    position: sticky;
-    top: var(--n-hdr-h);
-    z-index: 6;   /* above the cards that scroll under it (flex items keep their own z-index) */
-    height: min(44svh, 380px);
-    background: var(--paper);
-  }
-  .core-story__intake { order: 2; }
+  .core-story[data-chapter] .core-story__canvas { height: clamp(260px, 78vw, 420px); }
   .core-story[data-chapter="2"] .core-story__intake,
   .core-story[data-chapter="3"] .core-story__intake { display: block; }
-  .core-story__intake-insight { order: 3; scroll-margin-top: calc(var(--n-hdr-h) + min(44svh, 380px) + 12px); }
-  /* hidden cards keep their room, so nothing under them moves (site.css hides [hidden] with !important) */
-  .core-story .core-story__intake-insight[hidden],
-  .core-story .core-story__insight[hidden] { display: block !important; visibility: hidden; }
-  .core-story__chapter { display: contents; }
-  .core-story__chapter > div { margin: 24svh 0 14px; }
-  .core-story__chapter > [data-ch="1"] { order: 4; }
-  .core-story__parts,
-  .core-story[data-chapter="1"] .core-story__parts {
-    order: 5;
-    position: static;
-    display: grid;
-    width: 100%;
-    grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 3px 5px;
-    margin: 0 0 12px;
-  }
-  .core-story__insight { order: 6; }
-  .core-story__chapter > [data-ch="2"] { order: 7; }
-  .core-story__gate-case { order: 8; scroll-margin-top: calc(var(--n-hdr-h) + min(44svh, 380px) + 10px); }
-  .core-story .core-story__gate-case[hidden] { display: block !important; }
-  .core-story__chapter > [data-ch="3"] { order: 9; }
-  .core-story__systems { order: 10; }
-  .core-story__footer { display: none; }   /* the steps are on the page itself; their tabs would only repeat them */
-  .core-story__chapter-eb { margin: 0 0 8px; color: var(--leaf); font-size: 13px; font-weight: 600; letter-spacing: .01em; }
-  .core-story__chapter-h { margin: 0 0 10px; color: var(--day-ink); font-size: clamp(24px, 6.4vw, 30px); font-weight: 560; line-height: 1.08; letter-spacing: -.04em; text-wrap: balance; }
-  .core-story__chapter-p { max-width: 36ch; margin: 0; color: #455249; font-size: 14px; line-height: 1.5; }
+  .core-story[data-chapter] .core-story__parts,
+  .core-story .core-story__insight,
+  .core-story .core-story__gate-case,
+  .core-story .core-story__result { display: none !important; }
+  .core-story__caption { min-height: 4.2em; }
 }

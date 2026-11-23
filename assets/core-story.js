@@ -150,6 +150,7 @@
   let ratio = 1;
   let progress = 0;
   let selected = 0;
+  let tabUsed = false;
   let manual = 0;
   let manualStart = 0;
   let manualFrom = 0;
@@ -320,7 +321,8 @@
   }
 
   story.addEventListener('pointermove', event => { if (event.pointerType === 'mouse') cancelAutomatic(); }, { once: true });
-  window.addEventListener('pointerdown', cancelAutomatic, { once: true });
+  // A finger that starts a scroll is not a choice: touch only stops the demo through a tap on a button (click).
+  window.addEventListener('pointerdown', event => { if (event.pointerType === 'mouse') cancelAutomatic(); });
   window.addEventListener('keydown', cancelAutomatic, { once: true });
   if (!reduce.matches) {
     story.setAttribute('data-intake-invitation', '');
@@ -1151,7 +1153,12 @@
         ? target
         : lerp(progress, target, 1 - Math.exp(-Math.min(elapsed, 50) / 45));
     } else {
-      progress = reduce.matches ? manual : lerp(manualFrom, manual, ease(0, 670, now - manualStart));
+      if (tabUsed || reduce.matches) progress = reduce.matches ? manual : lerp(manualFrom, manual, ease(0, 670, now - manualStart));
+      else {
+        // Phones: until a step is chosen, the stack opens a little as it scrolls into view (a finger cannot trigger it any other way).
+        const top = canvas.getBoundingClientRect().top;
+        progress = .2 * ease(0, 1, clamp((innerHeight - top) / (innerHeight * .75)));
+      }
     }
     const step = progress > .765 ? 3 : progress > .49 ? 2 : progress > .21 ? 1 : 0;
     if (step !== selected) {
@@ -1221,6 +1228,7 @@
 
   tabs.forEach((tab, i) => tab.addEventListener('click', () => {
     const positions = [0, .355, .69, .98];
+    tabUsed = true;
     manualFrom = progress;
     manual = positions[i];
     manualStart = performance.now();

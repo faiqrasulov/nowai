@@ -7,6 +7,8 @@
   const sum = (list, f) => r2(list.reduce((s, x) => s + f(x), 0));
   const fmt = (x, d = 2) => Number(x).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
   const azn = x => fmt(x) + ' AZN';
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const longDate = iso => +iso.slice(8, 10) + ' ' + MONTHS[+iso.slice(5, 7) - 1] + ' ' + iso.slice(0, 4);   // 2026-11-26 -> 26 November 2026
   const clone = x => JSON.parse(JSON.stringify(x));
   const toMin = hhmm => { const [h, m] = String(hhmm).split(':').map(Number); return h * 60 + m; };
   const toHHMM = min => String(Math.floor(min / 60)).padStart(2, '0') + ':' + String(Math.round(min % 60)).padStart(2, '0');
@@ -29,7 +31,7 @@
       released: [],       // morning events already released
       listeners: []
     };
-    log(st, 'NowAI', 'day.start', 'The day starts: ' + W.company.weekday + ', ' + W.company.day + '.');
+    log(st, 'NowAI', 'day.start', 'The day starts: ' + W.company.weekday + ' ' + longDate(W.company.day) + '.');
     return st;
   }
 
@@ -43,7 +45,7 @@
   function emit(st, what) { for (const f of st.listeners) try { f(what) } catch (e) { /* a screen error must not stop the day */ } }
   function log(st, by, action, text, data) { const e = { n: st.record.length + 1, at: now(st), by, action, text, data: data || null }; st.record.push(e); emit(st, { type: 'record', entry: e }); return e; }
   function say(st, from, to, text, ref) { const m = { id: id(st, 'msg'), at: now(st), from, to, text, ref: ref || null }; st.messages.push(m); emit(st, { type: 'message', msg: m }); log(st, from, 'message', from + ' → ' + to + ': ' + text, { ref }); return m; }
-  function draft(st, kind, to, lang, text, ref, extra) { const d = { id: id(st, 'd'), at: now(st), kind, to, lang, text, ref, status: 'not sent', ...(extra || {}) }; st.drafts.push(d); log(st, 'NowAI', 'draft', 'Drafted ' + kind + ' for ' + to + ' (not sent).', { ref, draft: d.id }); emit(st, { type: 'draft', draft: d }); return d; }
+  function draft(st, kind, to, lang, text, ref, extra) { const d = { id: id(st, 'd'), at: now(st), kind, to, lang, text, ref, status: 'not sent', ...(extra || {}) }; st.drafts.push(d); log(st, 'NowAI', 'draft', 'Drafted ' + kind + (kind.endsWith(' for ' + to) ? '' : ' for ' + to) + ' (not sent).', { ref, draft: d.id }); emit(st, { type: 'draft', draft: d }); return d; }
   function ask(st, who, role, title, evidence, choices, ref, extra) {
     const g = { id: id(st, 'g'), at: now(st), who, role, title, evidence, choices, ref, status: 'waiting', ...(extra || {}) };
     st.gate.push(g); log(st, roleName(st, role), 'gate.ask', 'At the Gate for ' + person(st, who).name + ': ' + title, { gate: g.id, ref }); emit(st, { type: 'gate', gate: g }); return g;
@@ -72,7 +74,7 @@
       textEn: ev.textEn || '', file: ev.file || null, photo: ev.photo || null, subject: ev.subject || '', seconds: ev.seconds || null,
       status: ev.read ? 'reading' : 'done', role: null, caseId: null, reading: null, live: !!ev.live };
     st.items.push(it);
-    log(st, 'Intake', 'arrived', 'Arrived by ' + it.channel + ' from ' + fromName(st, it.from) + (it.file ? ' (with a file)' : '') + '.', { item: it.id });
+    log(st, 'Intake', 'arrived', 'Arrived by ' + (it.channel === 'whatsapp' ? 'WhatsApp' : it.channel) + ' from ' + fromName(st, it.from) + (it.file ? ' (with a file)' : '') + '.', { item: it.id });
     emit(st, { type: 'item', item: it });
     return it;
   }
@@ -94,7 +96,7 @@
     const it = st.items.find(i => i.id === itemId); if (!it) throw new Error('no item ' + itemId);
     it.reading = reading; it.readMs = meta.ms || null; it.readBy = meta.by || 'AI';
     if (!reading || reading.error) { toPerson(st, it, 'The reader could not read this' + (reading && reading.error ? ' (' + reading.error + ')' : '') + '.'); it.status = 'failed'; emit(st, { type: 'item', item: it }); return it; }
-    log(st, 'Intake', 'read', 'Read by ' + it.readBy + (meta.ms ? ' in ' + (meta.ms / 1000).toFixed(1) + ' s' : '') + '.', { item: it.id });
+    log(st, 'Intake', 'read', 'Read by ' + it.readBy + (meta.ms && !/answer key/.test(it.readBy) ? ' in ' + (meta.ms / 1000).toFixed(1) + ' s' : '') + '.', { item: it.id });
     const kind = it.read === 'classify' ? (reading.kind || 'other') : it.read;
     if (kind === 'photo-list' || kind === 'order') salesOrder(st, it, reading);
     else if (kind === 'supplier-invoice') supplierInvoice(st, it, reading);
@@ -141,7 +143,7 @@
     cs.short = lines.filter(l => st.stock[l.code] !== undefined && st.stock[l.code] < l.qty)
       .map(l => ({ code: l.code, name: l.name, unit: l.unit, have: st.stock[l.code], need: l.qty, later: r2(l.qty - st.stock[l.code]), when: W.stock.incoming.items[l.code] ? W.stock.incoming.day : null }));
     st.cases[cs.id] = cs; it.caseId = cs.id;
-    log(st, 'Sales Desk', 'priced', 'Priced ' + lines.length + ' lines at today\'s list: ' + azn(cs.net) + ', ' + azn(cs.total) + ' with ƏDV.', { case: cs.id, lines });
+    log(st, 'Sales Desk', 'priced', 'Priced ' + lines.length + (lines.length === 1 ? ' line' : ' lines') + ' at today\'s list: ' + azn(cs.net) + ', ' + azn(cs.total) + ' with ƏDV.', { case: cs.id, lines });
     for (const s of cs.short) log(st, 'Sales Desk', 'stock', s.name + ': ' + s.have + ' ' + s.unit + ' in stock, ' + s.later + ' ' + s.unit + (s.when ? ' on ' + s.when + '\'s truck.' : ' to order.'), { case: cs.id });
     if (unknown.length) { toPerson(st, it, 'Some lines were not on the price list: ' + unknown.join(', ') + '.'); return; }
     if (!c) { cs.status = 'ready'; return; }
@@ -206,8 +208,8 @@
     if (r.net != null && r2(r.net) !== net) cs.findings.push({ type: 'total', text: 'Lines add up to ' + fmt(net) + ', invoice says ' + fmt(r.net) });
     if (r.vat != null && r2(r.vat) !== vat) cs.findings.push({ type: 'vat', text: 'ƏDV 18% of ' + fmt(net) + ' is ' + fmt(vat) + ', invoice says ' + fmt(r.vat) });
     cs.net = net; cs.vat = vat; cs.total = r2(net + vat);
-    log(st, 'Payables Check', 'checked', 'Checked ' + (r.invoiceNo || 'the invoice') + ' against the agreed prices: ' + (cs.findings.length ? cs.findings.length + ' difference(s).' : 'it matches.'), { case: cs.id, findings: cs.findings });
-    const price = cs.findings.find(f => f.type === 'price');
+    const price = cs.findings.find(f => f.type === 'price'), nf = cs.findings.length;   // the amount above the agreed price is in the line, so the held total can be traced in the Record
+    log(st, 'Payables Check', 'checked', 'Checked ' + (r.invoiceNo || 'the invoice') + ' against the agreed prices: ' + (nf ? nf + (nf === 1 ? ' difference' : ' differences') + (price ? ', ' + azn(price.diff) + ' above' : '') + '.' : 'it matches.'), { case: cs.id, findings: cs.findings });
     if (!cs.findings.length) { cs.status = 'ok'; say(st, 'Payables Check', 'Books', (r.invoiceNo || 'The invoice') + ' matches the agreed prices. Prepare it for 1C.', cs.id); return; }
     const held = price ? price.diff : 0;
     if (held) st.holds.push({ case: cs.id, supplier: sup.name, amount: held, status: 'held' });
@@ -350,7 +352,7 @@
     const g = st.gate.find(x => x.id === gateId); if (!g || g.status !== 'waiting') return null;
     const choice = g.choices.find(c => c.id === choiceId); if (!choice) throw new Error('no choice ' + choiceId);
     g.status = 'decided'; g.choice = choiceId; g.decidedAt = now(st); g.by = actingAs || g.who;
-    log(st, person(st, g.by) ? person(st, g.by).name + ' (role-play)' : g.by, 'gate.decide', person(st, g.who).name + ' chose “' + choice.label + '”: ' + g.title + '.', { gate: g.id, choice: choiceId });
+    log(st, person(st, g.by) ? person(st, g.by).name + ' (role-play)' : g.by, 'gate.decide', person(st, g.who).name + ' chose “' + choice.label + '”: ' + g.title + (/[.?!]$/.test(g.title) ? '' : '.'), { gate: g.id, choice: choiceId });
     const cs = st.cases[g.ref], it = st.items.find(i => i.id === g.ref);
     if (cs && cs.type === 'order') {
       const c = customer(st, cs.customer);

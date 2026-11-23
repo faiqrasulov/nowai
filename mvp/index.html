@@ -22,7 +22,6 @@ button.go{margin-top:20px;width:100%;border:0;border-radius:10px;background:var(
 button.go:disabled{opacity:.6}
 .err{min-height:20px;margin-top:12px;color:var(--bad);font-size:13.5px;font-weight:600}
 .shake{animation:shake .32s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.narrow{display:none;margin:14px 0 0;color:#85531C;font-size:13px;font-weight:600}@media (max-width:900px){.narrow{display:block}}
 .back{display:block;text-align:center;margin-top:16px;color:var(--mute);font-size:13px;text-decoration:none}.back:hover{color:var(--leaf)}
 </style><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%230E5A3C'/%3E%3Cpath d='M7 17V7.4l10 9.2V7' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='19.3' cy='4.7' r='2.1' fill='%233DDC97'/%3E%3C/svg%3E"></head><body>
 <form class="card" id="f" autocomplete="on" novalidate>
@@ -34,8 +33,7 @@ button.go:disabled{opacity:.6}
   <label for="p" data-t="pass">Password</label><input id="p" type="password" autocomplete="current-password" required>
   <button class="go" id="go" type="submit" data-t="go">Sign in</button>
   <div class="err" id="err" role="alert"></div>
-  <p class="narrow" data-t="narrow">The workspace is made for a computer or a tablet held sideways.</p>
-  <a class="back" href="../index.html" data-t="back">Back to the website</a>
+    <a class="back" href="../index.html" data-t="back">Back to the website</a>
 </form>
 <script>
 /* A simple gate in front of the workspace. The site is static, so this keeps casual visitors out; it is not real security.

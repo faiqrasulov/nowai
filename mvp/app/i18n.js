@@ -1,5 +1,6 @@
-/* The NowAI workspace in English, Azerbaijani and Russian: the screen's words, data words, and every sentence the
-   engine writes, matched in English and rewritten. */
+/* The NowAI workspace in English, Azerbaijani and Russian: data words (roles, jobs, places, items, days, units, names) and
+   every sentence the engine writes, matched in English and rewritten. The Record stays in English, so a seal never
+   depends on the language on screen. The screen's own words are in ui_text.js. */
 (function (root) {
   'use strict';
   const LANGS = ['en', 'az', 'ru'];
@@ -10,7 +11,7 @@
 
   // ---------------------------------------------------------------- the example's words
   const ROLE = { 'Sales Desk': ['Satış', 'Отдел продаж'], 'Collections': ['Ödənişlərin izlənməsi', 'Контроль оплат'], 'Payables Check': ['Qaimə yoxlaması', 'Проверка счетов'],
-    'Customer Care': ['Müştəri xidməti', 'Клиентский сервис'], 'Books': ['Mühasibat', 'Бухгалтерия'], 'People Desk': ['Kadr xidməti', 'Кадры'],
+    'Customer Care': ['Müştəri xidməti', 'Клиентский сервис'], 'Books': ['Mühasibat', 'Бухгалтерия'], 'People Desk': ['Kadrlar', 'Кадры'],
     "Owner's Brief": ['Rəhbər üçün icmal', 'Сводка владельцу'], 'Intake': ['Qəbul', 'Входящие'] };
   const DOES = { sales: ['Hər kanaldan təklif və sifarişlər, bugünkü qiymətlərlə', 'Предложения и заказы из любого канала, по сегодняшним ценам'],
     collections: ['Diler krediti, gecikmiş borclar, ödəniş vədləri', 'Кредит дилеров, просрочки, обещания оплаты'],
@@ -59,11 +60,15 @@
   }
   const DAYS = { Monday: ['bazar ertəsi', 'понедельник', 'понедельник'], Tuesday: ['çərşənbə axşamı', 'вторник', 'вторник'], Wednesday: ['çərşənbə', 'среда', 'среду'],
     Thursday: ['cümə axşamı', 'четверг', 'четверг'], Friday: ['cümə', 'пятница', 'пятницу'], Saturday: ['şənbə', 'суббота', 'субботу'], Sunday: ['bazar', 'воскресенье', 'воскресенье'] };
+  const MON = { January: ['yanvar', 'января'], February: ['fevral', 'февраля'], March: ['mart', 'марта'], April: ['aprel', 'апреля'], May: ['may', 'мая'], June: ['iyun', 'июня'],
+    July: ['iyul', 'июля'], August: ['avqust', 'августа'], September: ['sentyabr', 'сентября'], October: ['oktyabr', 'октября'], November: ['noyabr', 'ноября'], December: ['dekabr', 'декабря'] };
   const UNITS = { t: ['ton', 'т'], tonne: ['ton', 'т'], bag: ['kisə', 'меш.'], pc: ['ədəd', 'шт.'], piece: ['ədəd', 'шт.'], pallet: ['palet', 'поддон'] };
   const CH = { whatsapp: ['WhatsApp', 'WhatsApp'], email: ['e-poçt', 'эл. почта'], voice: ['səsli mesaj', 'голосовое'], file: ['fayl', 'файл'], staff: ['işçi çatı', 'чат сотрудников'], system: ['sistem', 'система'] };
   const kit = lang => ({
     day: d => (DAYS[d] ? (lang === 'az' ? DAYS[d][0] : DAYS[d][1]) : d),
     dacc: d => (DAYS[d] ? (lang === 'az' ? DAYS[d][0] : DAYS[d][2]) : d),
+    vdacc: d => (lang === 'ru' ? (d === 'Tuesday' ? 'во ' : 'в ') : '') + (DAYS[d] ? (lang === 'az' ? DAYS[d][0] : DAYS[d][2]) : d),   // Russian: "во вторник", "в среду"
+    mon: x => (MON[x] ? MON[x][ix(lang)] : x),
     u: x => (UNITS[x] ? UNITS[x][ix(lang)] : x),
     ch: x => (CH[x] ? CH[x][ix(lang)] : x),
     t: x => tr(lang, x),
@@ -113,27 +118,28 @@
   // ---------------------------------------------------------------- the engine's sentences with values: [English pattern, az, ru]
   const A = '([\\d,]+(?:\\.\\d+)?)';   // an amount as the engine writes it
   const PAT = [
-    [/^The day starts: (\w+), ([\d-]+)\.$/, (m, k) => `Gün başlayır: ${k.day(m[1])}, ${m[2]}.`, (m, k) => `День начинается: ${k.day(m[1])}, ${m[2]}.`],
+    [/^(\S+) chose “(.+?)”: (.+?)\.?$/, (m, k) => `${m[1]} seçdi: «${k.t(m[2])}» — ${k.t(m[3])}${/[?!.]$/.test(m[3]) ? '' : '.'}`, (m, k) => `${m[1]}: выбрано «${k.t(m[2])}» — ${k.t(m[3])}${/[?!.]$/.test(m[3]) ? '' : '.'}`],
+    [/^The day starts: (\w+) (\d+) (\w+) (\d{4})\.$/, (m, k) => `Gün başlayır: ${k.day(m[1])}, ${m[2]} ${k.mon(m[3])} ${m[4]}.`, (m, k) => `День начинается: ${k.day(m[1])}, ${m[2]} ${k.mon(m[3])} ${m[4]}.`],
     [/^Arrived by (\w+) from (.+?)( \(with a file\))?\.$/, (m, k) => `Daxil oldu (${k.ch(m[1])}): ${m[2]}${m[3] ? ' (fayl ilə)' : ''}.`, (m, k) => `Поступило (${k.ch(m[1])}): ${m[2]}${m[3] ? ' (с файлом)' : ''}.`],
-    [/^Read by (.+?)(?: in ([\d.]+) s)?\.$/, (m) => `Oxudu: ${m[1] === 'AI' ? 'AI' : m[1]}${m[2] ? ', ' + m[2] + ' san' : ''}.`, (m) => `Прочитал: ${m[1] === 'AI' ? 'ИИ' : m[1]}${m[2] ? ', ' + m[2] + ' с' : ''}.`],
+    [/^Read by (.+?)(?: in ([\d.]+) s)?\.$/, (m) => `Oxudu: ${m[1] === 'AI' ? 'AI' : /answer key/.test(m[1]) ? 'cavab açarı (test rejimi)' : m[1]}${m[2] ? ', ' + m[2] + ' san' : ''}.`, (m) => `Прочитал: ${m[1] === 'AI' ? 'ИИ' : /answer key/.test(m[1]) ? 'ключ ответов (тестовый режим)' : m[1]}${m[2] ? ', ' + m[2] + ' с' : ''}.`],
     [/^At the Gate for (\S+): (.+)$/, (m, k) => `Təsdiq (${m[1]}): ${k.t(m[2])}`, (m, k) => `Согласование (${m[1]}): ${k.t(m[2])}`],
-    [new RegExp('^Priced (\\d+) lines at today\'s list: ' + A + ' AZN, ' + A + ' AZN with ƏDV\\.$'), m => `${m[1]} sətir bugünkü qiymətlərlə hesablandı: ${m[2]} AZN, ƏDV ilə ${m[3]} AZN.`, m => `Рассчитано по сегодняшнему прайсу (строк: ${m[1]}): ${m[2]} AZN, с НДС ${m[3]} AZN.`],
+    [new RegExp('^Priced (\\d+) lines? at today\'s list: ' + A + ' AZN, ' + A + ' AZN with ƏDV\\.$'), m => `${m[1]} sətir bugünkü qiymətlərlə hesablandı: ${m[2]} AZN, ƏDV ilə ${m[3]} AZN.`, m => `Рассчитано по сегодняшнему прайсу (строк: ${m[1]}): ${m[2]} AZN, с НДС ${m[3]} AZN.`],
     [/^(.+?): ([\d.]+) (\S+) in stock, ([\d.]+) (\S+) (?:on (\w+)'s truck|to order)\.$/, (m, k) => `${m[1]}: anbarda ${m[2]} ${k.u(m[3])}, ${m[4]} ${k.u(m[5])} ${m[6] ? k.day(m[6]) + ' günü maşınla gələcək' : 'sifarişlə'}.`, (m, k) => `${m[1]}: на складе ${m[2]} ${k.u(m[3])}, ${m[4]} ${k.u(m[5])} ${m[6] ? 'придут в ' + k.dacc(m[6]) : 'под заказ'}.`],
     [/^Order for (.+?) confirmed \((.+)\)\.$/, (m, k) => `${m[1]} üçün sifariş təsdiqləndi (${k.t(m[2])}).`, (m, k) => `Заказ для ${m[1]} подтверждён (${k.t(m[2])}).`],
     [/^approved over the limit by (\S+)$/, m => `limitdən artıq təsdiqlədi: ${m[1]}`, m => `сверх лимита утвердил(а): ${m[1]}`],
     [/^chosen by (\S+)$/, m => `seçdi: ${m[1]}`, m => `выбор: ${m[1]}`],
-    [/^Checked (.+?) against the agreed prices: (?:(\d+) difference\(s\)|it matches)\.$/, m => `${m[1]} razılaşdırılmış qiymətlərlə yoxlandı: ${m[2] ? m[2] + ' fərq' : 'uyğundur'}.`, m => `${m[1]} сверен с согласованными ценами: ${m[2] ? 'расхождений: ' + m[2] : 'всё совпадает'}.`],
+    [/^Checked (.+?) against the agreed prices: (?:(\d+) differences?(?:, ([\d,.]+) AZN above)?|it matches)\.$/, m => `${m[1]} razılaşdırılmış qiymətlərlə yoxlandı: ${m[2] ? m[2] + ' fərq' + (m[3] ? ', ' + m[3] + ' AZN artıq' : '') : 'uyğundur'}.`, m => `${m[1]} сверен с согласованными ценами: ${m[2] ? 'расхождений: ' + m[2] + (m[3] ? ', на ' + m[3] + ' AZN выше' : '') : 'всё совпадает'}.`],
     [new RegExp('^Broken (.+?): (\\d+) × ' + A + ' = ' + A + ' AZN(, above the ' + A + ' AZN rule)?\\.$'), m => `Sınıq ${m[1]}: ${m[2]} × ${m[3]} = ${m[4]} AZN${m[5] ? ', ' + m[6] + ' AZN qaydasından yuxarı' : ''}.`, m => `Повреждено: ${m[1]}, ${m[2]} × ${m[3]} = ${m[4]} AZN${m[5] ? ', выше правила ' + m[6] + ' AZN' : ''}.`],
-    [new RegExp('^(.+?): (\\S+), ' + A + ' AZN, (\\d+) days overdue\\. He promised to pay on (\\w+) \\(([\\d:]+)\\), so no reminder today\\.$'), (m, k) => `${m[1]}: ${m[2]}, ${m[3]} AZN, ${m[4]} gün gecikib. ${k.day(m[5])} günü ödəməyi vəd edib (${m[6]}), ona görə bu gün xatırlatma yoxdur.`, (m, k) => `${m[1]}: ${m[2]}, ${m[3]} AZN, просрочка ${m[4]} дн. Обещал заплатить в ${k.dacc(m[5])} (${m[6]}), поэтому сегодня без напоминания.`],
+    [new RegExp('^(.+?): (\\S+), ' + A + ' AZN, (\\d+) days overdue\\. He promised to pay on (\\w+) \\(([\\d:]+)\\), so no reminder today\\.$'), (m, k) => `${m[1]}: ${m[2]}, ${m[3]} AZN, ${m[4]} gün gecikib. ${k.day(m[5])} günü ödəməyi vəd edib (${m[6]}), ona görə bu gün xatırlatma yoxdur.`, (m, k) => `${m[1]}: ${m[2]}, ${m[3]} AZN, просрочка ${m[4]} дн. Обещал заплатить ${k.vdacc(m[5])} (${m[6]}), поэтому сегодня без напоминания.`],
     [new RegExp('^(.+?): (\\S+), ' + A + ' AZN, (\\d+) days overdue\\. Reminder drafted from the approved template\\.$'), m => `${m[1]}: ${m[2]}, ${m[3]} AZN, ${m[4]} gün gecikib. Təsdiqlənmiş şablonla xatırlatma hazırlandı.`, m => `${m[1]}: ${m[2]}, ${m[3]} AZN, просрочка ${m[4]} дн. Напоминание подготовлено по утверждённому шаблону.`],
-    [new RegExp('^(.+?) promised ' + A + ' AZN on (\\w+)\\. Match it when it lands\\.$'), (m, k) => `${m[1]} ${k.day(m[3])} günü ${m[2]} AZN ödəməyi vəd etdi. Daxil olanda uyğunlaşdırın.`, (m, k) => `${m[1]} обещал заплатить ${m[2]} AZN в ${k.dacc(m[3])}. Сопоставьте, когда поступит.`],
-    [new RegExp('^(.+?) promised ' + A + ' AZN on (\\w+)\\.$'), (m, k) => `${m[1]} ${k.day(m[3])} günü ${m[2]} AZN ödəməyi vəd etdi.`, (m, k) => `${m[1]} обещал заплатить ${m[2]} AZN в ${k.dacc(m[3])}.`],
+    [new RegExp('^(.+?) promised ' + A + ' AZN on (\\w+)\\. Match it when it lands\\.$'), (m, k) => `${m[1]} ${k.day(m[3])} günü ${m[2]} AZN ödəməyi vəd etdi. Daxil olanda uyğunlaşdırın.`, (m, k) => `${m[1]} обещал заплатить ${m[2]} AZN ${k.vdacc(m[3])}. Сопоставьте, когда поступит.`],
+    [new RegExp('^(.+?) promised ' + A + ' AZN on (\\w+)\\.$'), (m, k) => `${m[1]} ${k.day(m[3])} günü ${m[2]} AZN ödəməyi vəd etdi.`, (m, k) => `${m[1]} обещал заплатить ${m[2]} AZN ${k.vdacc(m[3])}.`],
     [/^Reminder to (.+?) withdrawn: he had already promised to pay \(([\d:]+)\)\.$/, m => `${m[1]} üçün xatırlatma geri götürüldü: o artıq ödəməyi vəd etmişdi (${m[2]}).`, m => `Напоминание для ${m[1]} отозвано: он уже обещал заплатить (${m[2]}).`],
-    [/^(.+?) asks for (\w+) off; he drives the (.+?) route(\.?)$/, (m, k) => `${m[1]} ${k.day(m[2])} günü icazə istəyir; o, ${m[3]} marşrutunu sürür${m[4]}`, (m, k) => `${m[1]} просит отгул в ${k.dacc(m[2])}; он водит рейс «${m[3]}»${m[4]}`],
+    [/^(\S+) asks for (\w+) off; he drives the (.+?) route(\.?)$/, (m, k) => `${m[1]} ${k.day(m[2])} günü icazə istəyir; o, ${m[3]} marşrutunu sürür${m[4]}`, (m, k) => `${m[1]} просит отгул ${k.vdacc(m[2])}; он водит рейс «${m[3]}»${m[4]}`],
     [new RegExp('^Bank file: (\\d+) payments, ' + A + ' AZN\\. (\\d+) matched to invoices, (\\d+) without a reference\\.$'), m => `Bank faylı: ${m[1]} ödəniş, ${m[2]} AZN. ${m[3]} qaiməyə uyğunlaşdırıldı, ${m[4]} istinadsızdır.`, m => `Банковский файл: платежей ${m[1]}, ${m[2]} AZN. Сопоставлено со счетами: ${m[3]}, без назначения: ${m[4]}.`],
-    [/^(\S+) chose “(.+?)”: (.+)\.$/, (m, k) => `${m[1]} seçdi: «${k.t(m[2])}» — ${k.t(m[3])}.`, (m, k) => `${m[1]}: выбрано «${k.t(m[2])}» — ${k.t(m[3])}.`],
     [/^(.+?) route reassigned to (\S+)\.$/, m => `${m[1]} marşrutu ${m[2]} sürücüsünə verildi.`, m => `Рейс «${m[1]}» передан водителю ${m[2]}.`],
     [/^Replacement (confirmed for Friday morning|moved to Saturday) by (\S+)\.$/, m => m[1].startsWith('confirmed') ? `Əvəzetmə cümə səhəri üçün təsdiqləndi (${m[2]}).` : `Əvəzetmə şənbəyə keçirildi (${m[2]}).`, m => m[1].startsWith('confirmed') ? `Замена подтверждена на утро пятницы (${m[2]}).` : `Замена перенесена на субботу (${m[2]}).`],
+    [/^Drafted (.+ for 1C) \(not sent\)\.$/, (m, k) => `Hazırlandı: ${k.t(m[1])} (göndərilməyib).`, (m, k) => `Подготовлено: ${k.t(m[1])} (не отправлено).`],
     [/^Drafted (.+) for (.+?) \(not sent\)\.$/, (m, k) => `Hazırlandı: ${k.t(m[1])} — ${m[2]} üçün (göndərilməyib).`, (m, k) => `Подготовлено: ${k.t(m[1])} — для ${m[2]} (не отправлено).`],
     [/^(Sales Desk|Collections|Payables Check|Customer Care|Books|People Desk|NowAI) → (.+?): (.+)$/, (m, k) => `${m[1]} → ${m[2]}: ${k.t(m[3])}`, (m, k) => `${m[1]} → ${m[2]}: ${k.t(m[3])}`],
     // messages between roles
@@ -192,7 +198,7 @@
     [new RegExp('^Hello\\. A reminder that ' + A + ' AZN on (\\S+) is (\\d+) days overdue\\. Could you tell us when you will pay\\?$'), m => m[0], m => `Здравствуйте. Напоминаем, что ${m[1]} AZN по ${m[2]} просрочены на ${m[3]} дн. Подскажите, когда сможете оплатить?`],
     [/^Your Friday off is approved; (\S+) drives the Sumqayıt route\.$/, m => m[0], m => `Ваш отгул в пятницу утверждён; рейс в Сумгаит поведёт ${m[1]}.`],
     // the Owner's Brief
-    [new RegExp('^(.+?): ' + A + ' AZN on (\\w+)$'), (m, k) => `${m[1]}: ${k.day(m[3])} günü ${m[2]} AZN`, (m, k) => `${m[1]}: ${m[2]} AZN в ${k.dacc(m[3])}`]
+    [new RegExp('^(.+?): ' + A + ' AZN on (\\w+)$'), (m, k) => `${m[1]}: ${k.day(m[3])} günü ${m[2]} AZN`, (m, k) => `${m[1]}: ${m[2]} AZN ${k.vdacc(m[3])}`]
   ];
 
   const misses = new Set();
@@ -209,118 +215,7 @@
   }
 
   // ---------------------------------------------------------------- the screen's own words: key -> [en, az, ru]; a function takes p
-  const UI = {
-    coSub: ['Example company · building materials · Baku', 'Nümunə şirkət · tikinti materialları · Bakı', 'Пример компании · стройматериалы · Баку'],
-    thursday: ['Thursday', 'Cümə axşamı', 'Четверг'],
-    start: ['Start', 'Başla', 'Старт'], resume: ['Resume', 'Davam et', 'Продолжить'], pause: ['Pause', 'Fasilə', 'Пауза'], next: ['Next', 'Növbəti', 'Далее'],
-    nextTitle: ['Jump to the next arrival', 'Növbəti daxilolmaya keç', 'К следующему поступлению'],
-    slow: ['Slow', 'Yavaş', 'Медленно'], normal: ['Normal', 'Normal', 'Обычно'], fast: ['Fast', 'Sürətli', 'Быстро'],
-    actingAs: ['Acting as', 'Kimin adından', 'Действую как'], everyone: ['Everyone (role-play)', 'Hamı (rol oyunu)', 'Все (ролевая игра)'],
-    record: ['Record', 'Jurnal', 'Журнал'], newDay: ['New day', 'Yeni gün', 'Новый день'],
-    incoming: ['Incoming', 'Daxil olanlar', 'Входящие'], soFar: [p => p.n + ' so far', p => 'indiyədək ' + p.n, p => 'пока ' + p.n], nothingYet: ['nothing yet', 'hələ heç nə', 'пока ничего'],
-    rolesTogether: ['Roles working together', 'Rollar birlikdə işləyir', 'Роли работают вместе'],
-    rolesSub: ['messages written by code from what was read · hover a card to follow its case', 'mesajları oxunandan kod yazır · işi izləmək üçün kartın üzərinə gəlin', 'сообщения пишет код по прочитанному · наведите на карточку, чтобы проследить дело'],
-    gate: ['The Gate', 'Təsdiq', 'Согласование'],
-    gateSub: ['Nothing risky moves without a person. Each choice changes what NowAI does next.', 'Riskli heç nə insansız irəliləmir. Hər seçim NowAI-nin növbəti addımını dəyişir.', 'Ничего рискованного без человека. Каждый выбор меняет следующий шаг NowAI.'],
-    waiting: [p => p.n + ' waiting', p => p.n + ' gözləyir', p => 'ждут: ' + p.n],
-    composePh: ['Type as one of them, in Azerbaijani, English or Russian. No real documents, please.', 'Onlardan birinin adından azərbaycan, ingilis və ya rus dilində yazın. Əsl sənəd yox.', 'Пишите от их имени на азербайджанском, английском или русском. Без реальных документов.'],
-    attach: ['Attach', 'Əlavə et', 'Прикрепить'], sendIn: ['Send in', 'Göndər', 'Отправить'],
-    footB: ['Example company and amounts.', 'Nümunə şirkət və məbləğlər.', 'Пример компании и сумм.'],
-    footT: ['Not connected to email, WhatsApp, 1C, the e-qaimə portal or a bank: everything arrives on this page. In test mode an answer key reads what arrives; code checks, routes, writes the roles’ messages and does every sum. Nothing is sent, paid or posted; approving is role-play.',
-      'E-poçt, WhatsApp, 1C, e-qaimə portalı və ya banka qoşulmayıb: hər şey bu səhifəyə gəlir. Test rejimində daxil olanı cavab açarı oxuyur; kod yoxlayır, yönləndirir, rolların mesajlarını yazır və bütün hesabları aparır. Heç nə göndərilmir, ödənilmir, keçirilmir; təsdiq rol oyunudur.',
-      'Не подключено к почте, WhatsApp, 1С, порталу e-qaimə или банку: всё поступает на эту страницу. В тестовом режиме поступившее читает ключ ответов; код проверяет, маршрутизирует, пишет сообщения ролей и считает все суммы. Ничего не отправляется, не оплачивается и не проводится; согласование — ролевая игра.'],
-    langNote: ['', '', ''],
-    narrowNote: ['The workspace is made for a computer or a tablet held sideways.', 'İş sahəsi kompüter və ya üfüqi tutulmuş planşet üçün nəzərdə tutulub.', 'Рабочее пространство рассчитано на компьютер или планшет в горизонтальном положении.'],
-    startTitle: ['One morning at Qaya Tikinti LLC', 'Qaya Tikinti MMC-də bir səhər', 'Одно утро в Qaya Tikinti'],
-    startText: ['An example building-materials supplier in Baku. Press Start: chats, emails and files arrive on the clock, the roles work on each one together, and the people at the Gate decide. In test mode an answer key stands in for the AI reader. You can also send in your own message.',
-      'Bakıda nümunə tikinti materialları təchizatçısı. Başla düyməsini basın: mesajlar, məktublar və fayllar saatla gəlir, rollar hər biri üzərində birlikdə işləyir, qərarı isə Təsdiqdəki insanlar verir. Test rejimində süni intellekt əvəzinə cavab açarı oxuyur. Öz mesajınızı da göndərə bilərsiniz.',
-      'Пример поставщика стройматериалов в Баку. Нажмите «Старт»: сообщения, письма и файлы приходят по часам, роли работают над каждым вместе, а решают люди на согласовании. В тестовом режиме вместо ИИ читает ключ ответов. Можно отправить и своё сообщение.'],
-    startGo: ['Start the morning', 'Səhəri başlat', 'Начать утро'],
-    liveAI: ['Live AI reading', 'Canlı AI oxuması', 'ИИ читает вживую'], nowN: [p => p.n + ' now', p => 'indi ' + p.n, p => 'сейчас ' + p.n],
-    testMode: ['Test mode', 'Test rejimi', 'Тестовый режим'], connecting: ['Connecting…', 'Qoşulur…', 'Подключение…'], aiOff: ['AI not available', 'AI əlçatan deyil', 'ИИ недоступен'],
-    bannerMock: ['Test mode: an answer key stands in for the AI reader, so nothing here is read live.', 'Test rejimi: burada süni intellekt əvəzinə cavab açarı işləyir, heç nə canlı oxunmur.', 'Тестовый режим: вместо ИИ работает ключ ответов, здесь ничего не читается вживую.'],
-    bannerOff: ['The AI reader is not available here.', 'Süni intellekt oxuyucusu burada əlçatan deyil.', 'Здесь ИИ недоступен.'],
-    tArrived: ['Arrived today', 'Bu gün daxil olub', 'Пришло сегодня'], tArrivedSub: ['chats, emails, files', 'mesajlar, məktublar, fayllar', 'чаты, письма, файлы'],
-    tDone: ['Done by NowAI', 'NowAI bitirib', 'Сделано NowAI'], ofN: [p => 'of ' + p.n, p => 'cəmi ' + p.n, p => 'из ' + p.n],
-    withPerson: [p => p.n + ' with a person', p => p.n + ' insanda', p => 'у человека: ' + p.n], checkedDrafted: ['checked and drafted', 'yoxlanıb və hazırlanıb', 'проверено и подготовлено'],
-    tGate: ['At the Gate', 'Təsdiqdə', 'На согласовании'],
-    forPeople: [p => 'for ' + p.n + ' ' + (p.n === 1 ? 'person' : 'people'), p => p.n + ' nəfər üçün', p => 'для ' + p.n + ' ' + ruPl(p.n, 'человека', 'человек', 'человек')],
-    nothingWaiting: ['nothing waiting', 'gözləyən yoxdur', 'ничего не ждёт'], tHeld: ['Held', 'Saxlanılıb', 'Удержано'], aboveAgreed: ['above agreed prices', 'razılaşdırılmış qiymətdən artıq', 'сверх согласованных цен'],
-    tCredit: ['Dealer credit', 'Diler krediti', 'Кредит дилеров'], nOver: [p => p.n + ' over', p => String(p.n), p => String(p.n)], ofDealers: [p => 'of ' + p.n + ' dealers', p => 'limiti aşıb · ' + p.n + ' dilerdən', p => 'сверх лимита · из ' + p.n + ' дилеров'],
-    bGate: ['Gate', 'Təsdiq', 'Ждёт'], bReading: ['Reading', 'Oxunur', 'Читает'], forAysel: ['For Aysel · live', 'Aysel üçün · canlı', 'Для Айсель · вживую'],
-    figHeld: [p => p.x + ' AZN held', p => p.x + ' AZN', p => p.x + ' AZN'], figChecked: [p => p.n + ' checked', p => p.n + ' yoxlanıb', p => 'проверено: ' + p.n],
-    figOverdue: [p => p.n + ' overdue', p => p.n + ' gecikmiş', p => 'просрочено: ' + p.n], figOf: [p => p.a + ' of ' + p.b, p => p.a + ' / ' + p.b, p => p.a + ' из ' + p.b],
-    figReq: [p => p.n + ' request' + (p.n === 1 ? '' : 's'), p => p.n + ' müraciət', p => p.n + ' ' + ruPl(p.n, 'запрос', 'запроса', 'запросов')],
-    tagReading: ['Reading…', 'Oxunur…', 'Читается…'], tagArrived: ['Arrived', 'Daxil olub', 'Поступило'], tagFailed: ['Could not read: to a person', 'Oxunmadı: insana', 'Не прочитано: человеку'],
-    tagGate: [p => 'At the Gate · ' + p.name, p => 'Təsdiqdə · ' + p.name, p => 'На согласовании · ' + p.name], tagOrder: [p => 'Order ' + p.x + ' AZN', p => 'Sifariş ' + p.x + ' AZN', p => 'Заказ ' + p.x + ' AZN'],
-    tagWaits: [p => 'Waits for ' + p.x + ' AZN', p => p.x + ' AZN gözləyir', p => 'Ждёт ' + p.x + ' AZN'], tagHeld: [p => p.x + ' held', p => p.x + ' saxlanılıb', p => 'удержано ' + p.x],
-    tagAccepted: ['Accepted', 'Qəbul edilib', 'Принято'], tagChecked: ['Checked', 'Yoxlanıb', 'Проверено'], tagCredit: [p => 'Credit ' + p.x, p => 'Kredit ' + p.x, p => 'Кредит ' + p.x],
-    tagBooks: [p => 'Books · ' + p.a + ' of ' + p.b + ' matched', p => 'Mühasibat · uyğun: ' + p.a + ' / ' + p.b, p => 'Бухгалтерия · сопоставлено ' + p.a + ' из ' + p.b],
-    tagPromise: ['Promise recorded', 'Vəd qeydə alınıb', 'Обещание записано'], tagAI: ['Read by AI', 'AI oxuyub', 'Прочитал ИИ'], tagKey: ['Answer key (test)', 'Cavab açarı (test)', 'Ключ ответов (тест)'],
-    tagBy: [p => 'Read by ' + p.x, p => 'Oxuyan: ' + p.x, p => 'Прочитал: ' + p.x],
-    st_priced: ['priced', 'qiymət qoyulub', 'рассчитано'], st_gate: ['at the Gate', 'təsdiqdə', 'на согласовании'], st_declined: ['declined', 'imtina', 'отклонено'],
-    st_replacing: ['replacement chosen', 'əvəzetmə seçilib', 'выбрана замена'], 'st_replacement booked': ['replacement booked', 'əvəzetmə planlaşdırılıb', 'замена назначена'],
-    st_credited: ['credited', 'kredit verilib', 'кредит оформлен'], st_asked: ['more photos asked', 'əlavə şəkil istənilib', 'запрошены фото'], st_approved: ['approved', 'təsdiqlənib', 'утверждено'],
-    st_checked: ['checked', 'yoxlanıb', 'проверено'], st_ok: ['done', 'hazır', 'готово'], st_confirmed: ['confirmed', 'təsdiqlənib', 'подтверждено'],
-    voiceNote: ['Voice note', 'Səsli mesaj', 'Голосовое'], aFile: ['A file', 'Fayl', 'Файл'], openEvidence: ['Open the evidence', 'Sübutu aç', 'Открыть материалы'],
-    photoAlt: ['The photo that arrived', 'Gələn şəkil', 'Полученное фото'],
-    emptyIncoming: ['Messages, emails and files arrive here as the morning runs.', 'Səhər boyu mesajlar, məktublar və fayllar bura gəlir.', 'По ходу утра сюда приходят сообщения, письма и файлы.'],
-    emptyTalk: ['When a role needs another, their messages show here.', 'Bir rola digəri lazım olanda mesajları burada görünür.', 'Когда роли нужна другая, их сообщения появляются здесь.'],
-    emptyGate: ['Nothing waits for a person yet.', 'Hələ heç nə insan gözləmir.', 'Пока ничего не ждёт человека.'],
-    emptyGateFor: [p => 'Nothing waits for ' + p.name + '.', p => p.name + ' üçün heç nə gözləmir.', p => 'Для ' + p.name + ' ничего не ждёт.'],
-    noLonger: ['No longer needed.', 'Artıq lazım deyil.', 'Больше не нужно.'],
-    sealed: [p => '● Record: ' + p.n + (p.n === 1 ? ' step' : ' steps') + ' sealed', p => '● Jurnal: ' + p.n + ' addım möhürlənib', p => '● Журнал: запечатано шагов — ' + p.n],
-    last: ['last', 'son', 'последнее'],
-    close: ['Close', 'Bağla', 'Закрыть'], evidence: ['Evidence', 'Sübut', 'Материалы'], whatArrived: ['What arrived', 'Nə gəldi', 'Что пришло'],
-    whatRead: ['What was read', 'Nə oxundu', 'Что прочитано'], codeChecked: ['What code checked (the AI does no sums)', 'Kod nəyi yoxladı (AI hesablamır)', 'Что проверил код (ИИ не считает)'],
-    neverSent: ['Prepared, never sent', 'Hazırlanıb, göndərilməyib', 'Подготовлено, не отправлено'], recordSec: ['Record', 'Jurnal', 'Журнал'],
-    sentByYou: ['sent in by you', 'siz göndərdiniz', 'отправлено вами'], translation: ['In English: ', '', 'По-русски: '],
-    openPdf: ['Open the PDF', 'PDF-i aç', 'Открыть PDF'], pdfAlt: ['Page 1 of the PDF that arrived', 'Gələn PDF-in 1-ci səhifəsi', 'Страница 1 полученного PDF'],
-    voicePhotoAlt: ['The photo sent with the voice note', 'Səsli mesajla göndərilən şəkil', 'Фото, отправленное с голосовым'],
-    payer: ['Payer', 'Ödəyici', 'Плательщик'], reference: ['Reference', 'İstinad', 'Назначение'], none: ['— none —', '— yoxdur —', '— нет —'],
-    readAgain: ['Read again', 'Yenidən oxu', 'Прочитать снова'], readAgainNote: ['Its card at the Gate is withdrawn while it is read again.', 'Yenidən oxunarkən Təsdiqdəki kartı geri götürülür.', 'Пока идёт повторное чтение, карточка на согласовании снимается.'],
-    noChecks: ['No checks yet.', 'Hələ yoxlama yoxdur.', 'Проверок пока нет.'], nothingRec: ['Nothing yet.', 'Hələ heç nə.', 'Пока ничего.'], noDrafts: ['No drafts.', 'Qaralama yoxdur.', 'Черновиков нет.'],
-    byRule: [' · by rule', ' · qaydaya görə', ' · по правилу'], to: [p => 'to ' + p.x, p => p.x + ' üçün', p => 'для ' + p.x],
-    'ds_not sent': ['not sent', 'göndərilməyib', 'не отправлено'], ds_withdrawn: ['withdrawn', 'geri götürülüb', 'отозвано'],
-    azNote: ['', '', ''],
-    readingNow: ['Reading now…', 'İndi oxunur…', 'Читается…'], nothingToRead: ['Nothing to read.', 'Oxunacaq heç nə yoxdur.', 'Читать нечего.'],
-    readerFailed: [p => 'The reader could not read this: ' + p.e + '. It went to a person.', p => 'Oxuyucu bunu oxuya bilmədi: ' + p.e + '. İnsana göndərildi.', p => 'Не удалось прочитать: ' + p.e + '. Передано человеку.'],
-    asWritten: ['As written', 'Yazıldığı kimi', 'Как написано'], qty: ['Qty', 'Miqdar', 'Кол-во'], unit: ['Unit', 'Vahid', 'Ед.'], price: ['Price', 'Qiymət', 'Цена'], amount: ['Amount', 'Məbləğ', 'Сумма'],
-    notReadable: [p => 'Not readable, so not guessed: ' + p.x, p => 'Oxunmadı, ona görə təxmin edilmədi: ' + p.x, p => 'Не читается, поэтому не угадывали: ' + p.x],
-    rawReturned: ['The reading, exactly', 'Oxunuşun dəqiq mətni', 'Прочитанное, дословно'],
-    k_intent: ['intent', 'məqsəd', 'намерение'], k_item: ['item', 'mal', 'товар'], k_quantity: ['quantity', 'miqdar', 'количество'], k_unit: ['unit', 'vahid', 'единица'],
-    k_wants: ['wants', 'istəyir', 'просит'], k_summary: ['summary (as the AI wrote it)', 'xülasə (AI-ın yazdığı kimi)', 'кратко (как написал ИИ)'], k_language: ['language', 'dil', 'язык'],
-    k_supplier: ['supplier', 'təchizatçı', 'поставщик'], k_invoiceNo: ['invoice no.', 'qaimə №', 'счёт №'], k_date: ['date', 'tarix', 'дата'], k_net: ['net', 'ƏDV-siz', 'без НДС'],
-    k_vat: ['ƏDV', 'ƏDV', 'НДС'], k_total: ['total', 'cəmi', 'итого'], k_note: ['note', 'qeyd', 'примечание'], k_signedBy: ['signed by', 'imza', 'подпись'], k_day: ['day', 'gün', 'день'], k_amount: ['amount', 'məbləğ', 'сумма'],
-    ckLine: [p => p.q + ' ' + p.u + ' × ' + p.p + ' = ' + p.a + ' · ' + p.name, p => p.q + ' ' + p.u + ' × ' + p.p + ' = ' + p.a + ' · ' + p.name, p => p.q + ' ' + p.u + ' × ' + p.p + ' = ' + p.a + ' · ' + p.name],
-    ckTotal: [p => 'Total ' + p.net + ' + ƏDV 18% ' + p.vat + ' = ' + p.total + ' AZN', p => 'Cəmi ' + p.net + ' + ƏDV 18% ' + p.vat + ' = ' + p.total + ' AZN', p => 'Итого ' + p.net + ' + НДС 18% ' + p.vat + ' = ' + p.total + ' AZN'],
-    ckShort: [p => p.name + ': ' + p.have + ' ' + p.u + ' in stock, ' + p.later + ' ' + p.u + (p.when ? ' on ' + p.when + '\'s truck' : ' to order'), p => p.name + ': anbarda ' + p.have + ' ' + p.u + ', ' + p.later + ' ' + p.u + (p.when ? ' ' + p.when + ' günü maşınla' : ' sifarişlə'), p => p.name + ': на складе ' + p.have + ' ' + p.u + ', ' + p.later + ' ' + p.u + (p.when ? ' придут в ' + p.whenAcc : ' под заказ')],
-    ckCredit: [p => 'Credit: ' + p.open + ' open + ' + p.total + ' = ' + p.after + ' against a limit of ' + p.limit + (p.over ? ' · over by ' + p.over : ''), p => 'Kredit: açıq ' + p.open + ' + ' + p.total + ' = ' + p.after + ', limit ' + p.limit + (p.over ? ' · ' + p.over + ' artıq' : ''), p => 'Кредит: открыто ' + p.open + ' + ' + p.total + ' = ' + p.after + ' при лимите ' + p.limit + (p.over ? ' · превышение ' + p.over : '')],
-    ckInvOk: ['Matches the agreed prices, sums and ƏDV', 'Razılaşdırılmış qiymətlərə, cəmlərə və ƏDV-yə uyğundur', 'Совпадает с согласованными ценами, суммами и НДС'],
-    ckInvTot: [p => 'Totals recomputed: ' + p.net + ' + ƏDV ' + p.vat + ' = ' + p.total, p => 'Cəmlər yenidən hesablandı: ' + p.net + ' + ƏDV ' + p.vat + ' = ' + p.total, p => 'Итоги пересчитаны: ' + p.net + ' + НДС ' + p.vat + ' = ' + p.total],
-    ckDmg: [p => p.q + ' × ' + p.p + ' = ' + p.v + ' AZN' + (p.pal ? ' (' + p.pal + ' to a pallet)' : '') + ' · with ƏDV ' + p.g, p => p.q + ' × ' + p.p + ' = ' + p.v + ' AZN' + (p.pal ? ' (paletdə ' + p.pal + ')' : '') + ' · ƏDV ilə ' + p.g, p => p.q + ' × ' + p.p + ' = ' + p.v + ' AZN' + (p.pal ? ' (' + p.pal + ' на поддоне)' : '') + ' · с НДС ' + p.g],
-    ckDmgRule: [p => 'Credits or free replacements above ' + p.r + ' AZN go to ' + p.name, p => p.r + ' AZN-dən yuxarı kreditlər və pulsuz əvəzetmələr ' + p.name + ' tərəfindən təsdiqlənir', p => 'Кредиты и бесплатные замены свыше ' + p.r + ' AZN согласует ' + p.name],
-    ckOnce: [p => 'Made good once: a free replacement or a credit, never both' + (p.c ? ' · chosen: ' + (p.c === 'replace' ? 'replacement' : 'credit') : ''), p => 'Bir dəfə ödənilir: ya pulsuz əvəzetmə, ya kredit, ikisi birlikdə yox' + (p.c ? ' · seçilib: ' + (p.c === 'replace' ? 'əvəzetmə' : 'kredit') : ''), p => 'Возмещается один раз: замена или кредит, не оба' + (p.c ? ' · выбрано: ' + (p.c === 'replace' ? 'замена' : 'кредит') : '')],
-    ckPromise: [p => 'Promise: ' + p.a + ' AZN on ' + p.day + ' (message at ' + p.at + ')', p => 'Vəd: ' + p.day + ' günü ' + p.a + ' AZN (mesaj: ' + p.at + ')', p => 'Обещание: ' + p.a + ' AZN в ' + p.dayAcc + ' (сообщение в ' + p.at + ')'],
-    ckOverdue: [p => p.inv + ' is ' + p.late + ' days overdue · no reminder, because he had already promised', p => p.inv + ' ' + p.late + ' gün gecikib · xatırlatma yoxdur, çünki artıq vəd edib', p => p.inv + ' просрочен на ' + p.late + ' дн. · без напоминания, так как он уже обещал'],
-    ckMatch: ['Books is told to match the payment when it lands', 'Mühasibata ödəniş daxil olanda uyğunlaşdırmaq tapşırılıb', 'Бухгалтерии поручено сопоставить платёж, когда он поступит'],
-    ckRoute: [p => 'Friday\'s delivery list: ' + p.driver + ' drives the ' + p.route + ' route', p => 'Cümə günü çatdırılma siyahısı: ' + p.route + ' marşrutunu ' + p.driver + ' sürür', p => 'План доставки на пятницу: рейс «' + p.route + '» ведёт ' + p.driver],
-    ckNoRoute: ['No route on that day', 'O gün marşrut yoxdur', 'В этот день рейсов нет'],
-    workHandled: ['Work it handled', 'Gördüyü işlər', 'Выполненная работа'], msgsWith: ['Messages with other roles', 'Digər rollarla mesajlar', 'Сообщения с другими ролями'],
-    stepsIn: ['Its steps in the Record', 'Jurnaldakı addımları', 'Её шаги в журнале'], noneYet: ['None yet.', 'Hələ yoxdur.', 'Пока нет.'],
-    briefTitle: ['Owner\'s Brief · for Aysel', 'Rəhbər üçün icmal · Aysel üçün', 'Сводка владельцу · для Айсель'], liveAt: [p => 'Live at ' + p.t, p => 'Canlı, ' + p.t, p => 'Вживую, ' + p.t],
-    askNowAI: ['Ask NowAI about today', 'Bu gün haqqında NowAI-dan soruşun', 'Спросите NowAI о сегодняшнем дне'],
-    askPh: ['Ask about today, e.g. what is waiting for Nigar?', 'Bu gün haqqında soruşun, məs. Nigarı nə gözləyir?', 'Спросите о сегодняшнем дне, например: что ждёт Нигяр?'],
-    ask: ['Ask', 'Soruş', 'Спросить'], thinking: ['Thinking…', 'Düşünür…', 'Думает…'],
-    factsOnly: ['Answers come only from the day\'s facts on this page.', 'Cavablar yalnız bu səhifədəki günün faktlarından gəlir.', 'Ответы — только по фактам дня на этой странице.'],
-    noAIAnswer: ['In test mode there is no AI to answer questions.', 'Test rejimində suallara cavab verən süni intellekt yoxdur.', 'В тестовом режиме ИИ не отвечает на вопросы.'],
-    decisionsTaken: ['Decisions taken', 'Verilmiş qərarlar', 'Принятые решения'],
-    recordTitle: ['The Record', 'Jurnal', 'Журнал'],
-    recordIntro: ['Every step, in order. Each line is sealed with a fingerprint (SHA-256) of the line before, so a changed line breaks the chain. The Record shows tampering; it does not prevent it.', 'Hər addım ardıcıllıqla. Hər sətir əvvəlki sətrin barmaq izi (SHA-256) ilə möhürlənir, ona görə dəyişdirilmiş sətir zənciri qırır. Jurnal saxtakarlığı göstərir, qarşısını almır.', 'Каждый шаг по порядку. Каждая строка запечатана отпечатком (SHA-256) предыдущей, поэтому изменённая строка рвёт цепочку. Журнал показывает подделку, но не предотвращает её.'],
-    checkSeals: ['Check the seals', 'Möhürləri yoxla', 'Проверить печати'], brokenAt: [p => 'Broken at line ' + p.n + '.', p => 'Zəncir qırılıb: sətir ' + p.n + '.', p => 'Разрыв на строке ' + p.n + '.'],
-    sealsOk: [p => 'All ' + p.n + ' seals check out.', p => 'Bütün ' + p.n + ' möhür düzgündür.', p => 'Все печати (' + p.n + ') в порядке.'], nSteps: [p => p.n + ' steps', p => p.n + ' addım', p => 'шагов: ' + p.n],
-    supplierLbl: ['supplier', 'təchizatçı', 'поставщик'], signOut: ['Sign out', 'Çıxış', 'Выйти'], gone: ['Gone with the day.', 'Günlə birlikdə getdi.', 'Ушло вместе с днём.']
-  };
+  const UI = {};   // the old screen's words; this screen's are in ui_text.js
   function ui(lang, key, p) {
     const e = UI[key]; if (!e) return key;
     const v = e[LANGS.indexOf(lang)] != null ? e[LANGS.indexOf(lang)] : e[0];
